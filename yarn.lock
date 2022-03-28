@@ -1407,7 +1407,14 @@
     escape-html "^1.0.3"
     imgix-url-builder "^0.0.3"
 
-"@prismicio/react@^2.1.2":
+"@prismicio/next@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@prismicio/next/-/next-0.1.0.tgz#d582a48de437ed02e37f7a8e5f5f496e31622145"
+  integrity sha512-brjvoC9wgGkcTbI5yBEeevLCq51nN3GJc2y11ZdYMqmJkP13VDbGAwXzWSD6id3TmbcecaSj6/G9g4BUL8973w==
+  dependencies:
+    "@prismicio/react" "^2.0.2"
+
+"@prismicio/react@^2.0.2", "@prismicio/react@^2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@prismicio/react/-/react-2.1.2.tgz#03529fa639cdbe9ce37d025482f06d91a08dd41e"
   integrity sha512-O84yQLsGzHb4QuCuDRcHBVMdK/nAICuCNC61V5/mccsHEnaT/vMTdd86UT3HOzjiBY4ZJ5TjdPJfbBzoV9ZKWA==
