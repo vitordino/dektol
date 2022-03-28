@@ -1,26 +1,26 @@
 {
-  "id": "single_image",
-  "type": "SharedSlice",
-  "name": "SingleImage",
-  "description": "SingleImage",
-  "variations": [
-    {
-      "id": "default",
-      "name": "Default",
-      "docURL": "...",
-      "version": "sktwi1xtmkfgx8626",
-      "description": "SingleImage",
-      "primary": {},
-      "items": {
-        "image": {
-          "config": {
-            "label": "Image",
-            "constraint": {},
-            "thumbnails": []
-          },
-          "type": "Image"
-        }
-      }
-    }
-  ]
+	"id": "single_image",
+	"type": "SharedSlice",
+	"name": "SingleImage",
+	"description": "SingleImage",
+	"variations": [
+		{
+			"id": "default",
+			"name": "Default",
+			"docURL": "...",
+			"version": "sktwi1xtmkfgx8626",
+			"description": "SingleImage",
+			"primary": {},
+			"items": {
+				"image": {
+					"config": {
+						"label": "Image",
+						"constraint": {},
+						"thumbnails": []
+					},
+					"type": "Image"
+				}
+			}
+		}
+	]
 }

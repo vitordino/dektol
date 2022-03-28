@@ -1,9 +1,9 @@
 {
-  "slices": {
-    "SingleImage": {
-      "default": {
-        "primary": {}
-      }
-    }
-  }
+	"slices": {
+		"SingleImage": {
+			"default": {
+				"primary": {}
+			}
+		}
+	}
 }

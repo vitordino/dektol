@@ -1,5 +1,5 @@
-import SingleImageMock from "../.slicemachine/assets/slices/SingleImage/mocks.json";
+import SingleImageMock from '../.slicemachine/assets/slices/SingleImage/mocks.json'
 
 export type SingleImageSliceProps = {
-  slice: Partial<typeof SingleImageMock[number]>;
-};
+	slice: Partial<typeof SingleImageMock[number]> & { id?: string }
+}
