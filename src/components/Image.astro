@@ -1,10 +1,8 @@
 ---
-import memoize from 'p-memoize'
 import type { SingleImageSlice } from '~/slices/types'
 import { memoizedBlurhash } from '~/utils/blurhash'
 
 export type Props = SingleImageSlice['items'][number]['image']
-
 const props = Astro.props as Props
 const { url, dimensions } = props
 
@@ -12,7 +10,38 @@ const src = `${url}&h=600`
 const blurHash = await memoizedBlurhash(`${url}&h=128`, dimensions)
 ---
 
-<div>
-  {blurHash && <img src={blurHash} aria-hidden="true" />}
-  <img src={src} loading="lazy" data-loaded="false" alt={Astro.props.alt} />
+<div class='image-wrapper'>
+  {blurHash && <img class="image-blurhash" src={blurHash} aria-hidden="true" />}
+  <img class="image-main" src={src} loading="lazy" data-loaded="false" alt={Astro.props.alt} />
 </div>
+
+<style global>
+  .image-wrapper {
+    display: inline-flex;
+    position: relative;
+    overflow: hidden;
+  }
+  .image-blurhash {
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
+    object-fit: cover;
+    filter: blur(10px);
+    max-width: none;
+  }
+
+  .image-main {
+    position: relative;
+    transition: 0.5s opacity;
+  }
+
+  html[data-js="true"] .image-main[data-loaded="false"] {
+    opacity: 0;
+  }
+
+  html[data-js="true"] .image-main[data-loaded="true"] {
+    opacity: 1;
+  }
+</style>
