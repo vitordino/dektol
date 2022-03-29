@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@prismicio/client": "^6.4.2",
-    "@prismicio/helpers": "^2.2.1"
+    "@prismicio/helpers": "^2.2.1",
+    "blurhash": "^1.1.5",
+    "canvas": "^2.9.1",
+    "sharp": "^0.30.3"
   },
   "devDependencies": {
+    "@types/sharp": "^0.30.0",
     "astro": "^0.25.4",
     "eslint": "^8.12.0",
     "eslint-plugin-node": "^11.1.0",

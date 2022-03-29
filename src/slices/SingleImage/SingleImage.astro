@@ -1,10 +1,10 @@
 ---
 import type { SingleImageSlice } from '~/slices/types'
-
 export type Props = { slice: SingleImageSlice }
+import Image from '~/components/Image.astro'
 
 const data: SingleImageSlice = Astro.props.slice
 ---
 
-{data.items.map(x => <img src={`${x.image.url}&h=600`} loading='lazy' />)}
+{data.items.map(x => <Image {...x.image} />)}
 

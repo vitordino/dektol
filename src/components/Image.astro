@@ -1,0 +1,17 @@
+---
+import type { SingleImageSlice } from '~/slices/types'
+import { getBlurhashURIFromUrl } from '~/utils/blurhash'
+
+export type Props = SingleImageSlice['items'][number]['image']
+
+const props = Astro.props as Props
+const { url, dimensions } = props
+
+const src = `${url}&h=600`
+const blurHash = await getBlurhashURIFromUrl(src, dimensions)
+---
+
+<div>
+  {blurHash && <img src={blurHash} aria-hidden="true" />}
+  <img src={src} loading="lazy" alt={Astro.props.alt} />
+</div>
