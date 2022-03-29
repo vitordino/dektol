@@ -1,7 +1,7 @@
 import * as prismic from '@prismicio/client'
 import { LinkResolverFunction } from '@prismicio/helpers'
-import { enableAutoPreviews } from '@prismicio/next'
-import sm from './sm.json'
+
+import sm from '../sm.json'
 
 export const endpoint = sm.apiEndpoint
 export const repositoryName = prismic.getRepositoryName(endpoint)
@@ -17,21 +17,7 @@ export const linkResolver: LinkResolverFunction = doc => {
   }
 }
 
-// This factory function allows smooth preview setup
-
-type CreateClientConfig = prismic.ClientConfig & {
-  previewData?: Record<string, unknown>
-  req?: prismic.HttpRequestLike
-}
-
-export function createClient(config: CreateClientConfig = {}) {
+export const createClient = (config: prismic.ClientConfig = {}) => {
   const client = prismic.createClient(endpoint, config)
-
-  enableAutoPreviews({
-    client,
-    previewData: config.previewData,
-    req: config.req,
-  })
-
   return client
 }
