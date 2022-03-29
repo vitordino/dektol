@@ -1,6 +1,7 @@
 ---
+import memoize from 'p-memoize'
 import type { SingleImageSlice } from '~/slices/types'
-import { getBlurhashURIFromUrl } from '~/utils/blurhash'
+import { memoizedBlurhash } from '~/utils/blurhash'
 
 export type Props = SingleImageSlice['items'][number]['image']
 
@@ -8,7 +9,7 @@ const props = Astro.props as Props
 const { url, dimensions } = props
 
 const src = `${url}&h=600`
-const blurHash = await getBlurhashURIFromUrl(`${url}&h=128`, dimensions)
+const blurHash = await memoizedBlurhash(`${url}&h=128`, dimensions)
 ---
 
 <div>
