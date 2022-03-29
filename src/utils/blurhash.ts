@@ -1,7 +1,10 @@
 import sharp from 'sharp'
 import { encode, decode } from 'blurhash'
-import { createCanvas, loadImage, Image } from 'canvas'
 import memoize from 'p-memoize'
+import type { Image } from 'canvas'
+import canvas from 'canvas'
+
+const { createCanvas, loadImage } = canvas
 
 type Dimensions = { width: number; height: number }
 type CanvasOptions = { size: number; quality: number; channels: 1 | 2 | 4 }
