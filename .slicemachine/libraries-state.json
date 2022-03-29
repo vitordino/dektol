@@ -65,9 +65,9 @@
           }
         },
         "meta": {
-          "fileName": "index",
+          "fileName": null,
           "isDirectory": true,
-          "extension": "js"
+          "extension": null
         },
         "screenshotPaths": {}
       }

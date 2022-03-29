@@ -1,5 +1,18 @@
-import SingleImageMock from '../.slicemachine/assets/slices/SingleImage/mocks.json'
+import type {
+  PrismicDocument,
+  KeyTextField,
+  SliceZone,
+  SharedSlice,
+  SharedSliceVariation,
+  ImageField,
+} from '@prismicio/types'
 
-export type SingleImageSliceProps = {
-  slice: Partial<typeof SingleImageMock[number]> & { id?: string }
-}
+export type SingleImageSlice = SharedSlice<
+  'SingleImage',
+  SharedSliceVariation<'Default', {}, { image: ImageField }>
+>
+
+export type CollectionDocument = PrismicDocument<{
+  name: KeyTextField
+  slices: SliceZone<SingleImageSlice>
+}>

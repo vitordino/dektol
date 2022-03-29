@@ -1,4 +1,9 @@
 ---
+import { createClient } from '~/prismic'
+import { SingleImage } from '~/slices/index.astro'
+import type { CollectionDocument } from '~/slices/types'
+const client = createClient()
+const collections = await client.getAllByType<CollectionDocument>('collection')
 ---
 
 <html lang="en">
@@ -8,6 +13,11 @@
     <title>Astro</title>
   </head>
   <body>
-    <h1>Astro</h1>
+    {collections.map(({ data }) => (
+      <>
+        <h2>{data.name}</h2>
+        {data.slices.map(slice => <SingleImage slice={slice} />)}
+      </>
+    ))}
   </body>
 </html>
