@@ -8,7 +8,7 @@ const props = Astro.props as Props
 const { url, dimensions } = props
 
 const src = `${url}&h=600`
-const blurHash = await getBlurhashURIFromUrl(src, dimensions)
+const blurHash = await getBlurhashURIFromUrl(`${url}&h=128`, dimensions)
 ---
 
 <div>
