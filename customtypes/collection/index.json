@@ -1,35 +1,35 @@
 {
-	"id": "collection",
-	"label": "collection",
-	"repeatable": true,
-	"status": true,
-	"json": {
-		"Main": {
-			"uid": {
-				"config": {
-					"label": "Uid",
-					"placeholder": ""
-				},
-				"type": "UID"
-			},
-			"name": {
-				"config": {
-					"label": "Name",
-					"placeholder": ""
-				},
-				"type": "Text"
-			},
-			"slices": {
-				"type": "Slices",
-				"fieldset": "Slice Zone",
-				"config": {
-					"choices": {
-						"single_image": {
-							"type": "SharedSlice"
-						}
-					}
-				}
-			}
-		}
-	}
+  "id": "collection",
+  "label": "collection",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "Uid",
+          "placeholder": ""
+        },
+        "type": "UID"
+      },
+      "name": {
+        "config": {
+          "label": "Name",
+          "placeholder": ""
+        },
+        "type": "Text"
+      },
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "single_image": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
+  }
 }

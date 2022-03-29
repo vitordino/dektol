@@ -1,8 +1,32 @@
 {
-	"extends": ["next/core-web-vitals"],
-	"plugins": ["prettier"],
-	"rules": {
-		"@next/next/no-img-element": 0,
-		"prettier/prettier": 1
-	}
+  "ignorePatterns": ["test/fixtures/**", "dist/**", "rollup.config.js"],
+  "plugins": ["prettier-doc"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:ava/recommended",
+    "plugin:prettier-doc/recommended",
+    "plugin:node/recommended"
+  ],
+  "astroAllowShorthand": false,
+  "rules": {
+    "curly": ["error", "multi-line"],
+    "node/no-unsupported-features/es-builtins": [
+      "error",
+      {
+        "version": "^12.20.0 || ^14.13.1 || >=16.0.0",
+        "ignores": []
+      }
+    ],
+    "node/no-unsupported-features/node-builtins": [
+      "error",
+      {
+        "version": "^12.20.0 || ^14.13.1 || >=16.0.0",
+        "ignores": []
+      }
+    ]
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  }
 }
