@@ -6,7 +6,7 @@ const client = createClient()
 const collections = await client.getAllByType<CollectionDocument>('collection')
 ---
 
-<html lang="en">
+<html lang="en" data-js="false">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -25,8 +25,16 @@ const collections = await client.getAllByType<CollectionDocument>('collection')
 
       const getAllImages = () => [...document.querySelectorAll('img[data-loaded="false"]')]
       const addLoadedAttributeToAllImg = () => getAllImages().forEach(addLoadedAttribute)
-      addLoadedAttributeToAllImg()
-      window.addEventListener('load', addLoadedAttributeToAllImg)
+
+      const switchDataJSAttribute = () => document.documentElement.setAttribute('data-js', 'true')
+
+      const onLoad = () => {
+        addLoadedAttributeToAllImg()
+        switchDataJSAttribute()
+      }
+
+      window.addEventListener('load', onLoad)
+      onLoad()
     </script>
   </body>
 </html>
