@@ -19,5 +19,14 @@ const collections = await client.getAllByType<CollectionDocument>('collection')
         {data.slices.map(slice => <SingleImage slice={slice} />)}
       </>
     ))}
+    <script lang="javascript">
+      const addLoadedAttribute = (element) =>
+        element.addEventListener('load', () => element.setAttribute('data-loaded', 'true'))
+
+      const getAllImages = () => [...document.querySelectorAll('img[data-loaded="false"]')]
+      const addLoadedAttributeToAllImg = () => getAllImages().forEach(addLoadedAttribute)
+      addLoadedAttributeToAllImg()
+      window.addEventListener('load', addLoadedAttributeToAllImg)
+    </script>
   </body>
 </html>
