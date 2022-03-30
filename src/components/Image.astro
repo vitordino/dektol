@@ -1,13 +1,13 @@
 ---
 import type { SingleImageSlice } from '~/slices/types'
-import { memoizedBlurhash } from '~/utils/blurhash'
+import { memoizedGetBase64FromImageUrl } from '~/utils/getBase64FromImageUrl'
 
 export type Props = SingleImageSlice['items'][number]['image']
 const props = Astro.props as Props
 const { url, dimensions } = props
 
 const src = `${url}&h=600`
-const blurHash = await memoizedBlurhash(`${url}&h=16`)
+const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
 ---
 
 <div class='image-wrapper'>
