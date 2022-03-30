@@ -23,13 +23,12 @@ const blurHash = await memoizedBlurhash(`${url}&h=16`)
   }
   .image-blurhash {
     position: absolute;
-    left: -15px;
-    top: -15px;
-    width: calc(100% + 30px);
-    height: calc(100% + 30px);
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 100%;
     object-fit: cover;
-    filter: blur(10px);
-    max-width: none;
+    image-rendering: pixelated;
   }
 
   .image-main {
