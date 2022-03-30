@@ -4,9 +4,28 @@ import { memoizedGetBase64FromImageUrl } from '~/utils/getBase64FromImageUrl'
 
 export type Props = SingleImageSlice['items'][number]['image']
 const props = Astro.props as Props
-const { url, dimensions } = props
+const { url, dimensions, alt } = props
+const ratio = dimensions ? dimensions.width / dimensions.height : 1
 
-const src = `${url}&h=600`
+const src = `${url}&w=1600&q=50`
+
+const sizes = ` 
+  (min-width: 720px) calc(calc(100vh - 128px) * ${ratio.toFixed(2)}),
+  100vw
+`
+
+const srcset = `
+  ${url}&w=400 400w,
+  ${url}&w=600 600w,
+  ${url}&w=800&q=70 800w,
+  ${url}&w=1000&q=70 1000w,
+  ${url}&w=1200&q=60 1200w,
+  ${url}&w=1600&q=50 1600w,
+  ${url}&w=2000&q=40 2000w,
+  ${url}&w=2400&q=40 2400w,
+  ${url}&w=3200&q=30 3200w,
+`
+
 const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
 ---
 
@@ -15,9 +34,11 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
   <img
     class="image-main"
     src={src}
+    sizes={sizes}
+    srcset={srcset}
     loading="lazy"
     data-loaded="false"
-    alt={Astro.props.alt}
+    alt={alt}
     {...dimensions}
     onload="handleImageLoad(this)"
   />
@@ -25,7 +46,6 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
 
 <style global>
   .image-wrapper {
-    display: inline-flex;
     position: relative;
     overflow: hidden;
   }
@@ -43,9 +63,8 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
   .image-main {
     position: relative;
     transition: 0.5s opacity;
-    height: calc(100vh - 128px);
-    width: auto;
-    max-width: none;
+    height: auto;
+    width: 100%;
   }
 
   html[data-js="true"] .image-main[data-loaded="false"] {
@@ -54,5 +73,16 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
 
   html[data-js="true"] .image-main[data-loaded="true"] {
     opacity: 1;
+  }
+
+  @media(min-width: 720px) {
+    .image-wrapper {
+      display: inline-flex;
+    }
+    .image-main {
+      height: calc(100vh - 128px);
+      width: auto;
+      max-width: none;
+    }
   }
 </style>
