@@ -37,6 +37,7 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
     height: 100%;
     object-fit: cover;
     image-rendering: pixelated;
+    max-width: none;
   }
 
   .image-main {
@@ -44,6 +45,7 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
     transition: 0.5s opacity;
     height: calc(100vh - 128px);
     width: auto;
+    max-width: none;
   }
 
   html[data-js="true"] .image-main[data-loaded="false"] {
