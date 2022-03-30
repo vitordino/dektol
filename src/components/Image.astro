@@ -4,10 +4,10 @@ import { memoizedBlurhash } from '~/utils/blurhash'
 
 export type Props = SingleImageSlice['items'][number]['image']
 const props = Astro.props as Props
-const { url, dimensions } = props
+const { url } = props
 
 const src = `${url}&h=600`
-const blurHash = await memoizedBlurhash(`${url}&h=128`, dimensions)
+const blurHash = await memoizedBlurhash(`${url}&h=16`)
 ---
 
 <div class='image-wrapper'>
