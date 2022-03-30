@@ -12,7 +12,14 @@ const blurHash = await memoizedBlurhash(`${url}&h=16`)
 
 <div class='image-wrapper'>
   {blurHash && <img class="image-blurhash" src={blurHash} aria-hidden="true" />}
-  <img class="image-main" src={src} loading="lazy" data-loaded="false" alt={Astro.props.alt} />
+  <img
+    class="image-main"
+    src={src}
+    loading="lazy"
+    data-loaded="false"
+    alt={Astro.props.alt}
+    onload="handleImageLoad(this)"
+  />
 </div>
 
 <style global>
