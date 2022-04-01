@@ -1,0 +1,78 @@
+---
+const x = Astro.props
+---
+
+<div class="horizontal-scroll-wrapper">
+  <div class="horizontal-scroll-middle">
+    <div class="horizontal-scroll-inner">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  const isElementInViewport = element => {
+    const rect = element.getBoundingClientRect()
+    return rect.top <= 0 && rect.bottom >= window.innerHeight
+  }
+
+  const wheelHandler =
+    ({ middle, inner }) =>
+    ({ deltaY }) => {
+      const containerInViewPort = [...document.querySelectorAll(middle)].find(isElementInViewport)
+
+      if (!containerInViewPort) return
+
+      containerInViewPort.querySelector(inner).scrollLeft += deltaY
+    }
+
+  const setStickyContainersSize = ({ middle, inner }) => {
+    console.log({ middle, inner })
+    document.querySelectorAll(middle).forEach(x => {
+      const stickyContainerHeight = x.querySelector(inner).scrollWidth - window.innerWidth
+      console.log({ x, stickyContainerHeight })
+      x.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
+    })
+  }
+
+  const horizontalScroll = ({ middle, inner }) => {
+    const onWheel = wheelHandler({ middle, inner })
+    const listen = () => {
+      window.addEventListener('wheel', onWheel)
+      setStickyContainersSize({ middle, inner })
+    }
+    const unlisten = () => window.removeEventListener('wheel', onWheel)
+    return [listen, unlisten]
+  }
+
+  const [listen, unlisten] = horizontalScroll({
+    middle: '.horizontal-scroll-middle',
+    inner: '.horizontal-scroll-inner',
+  })
+
+  window.addEventListener('load', listen)
+  window.addEventListener('resize', listen)
+</script>
+
+<style global>
+  .horizontal-scroll-wrapper {
+    position: relative;
+  }
+
+  .horizontal-scroll-wrapper .image-wrapper + .image-wrapper {
+    margin-left: 40px;
+  }
+
+  .horizontal-scroll-middle {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .horizontal-scroll-inner {
+    overflow-x: hidden;
+    display: flex;
+    position: sticky;
+    top: 0;
+  }
+</style>
