@@ -10,7 +10,7 @@ const x = Astro.props
   </div>
 </div>
 
-<script>
+<script hoist>
   const isElementInViewport = element => {
     const rect = element.getBoundingClientRect()
     return rect.top <= 0 && rect.bottom >= window.innerHeight
@@ -27,11 +27,15 @@ const x = Astro.props
     }
 
   const setStickyContainersSize = ({ middle, inner }) => {
-    console.log({ middle, inner })
     document.querySelectorAll(middle).forEach(x => {
       const stickyContainerHeight = x.querySelector(inner).scrollWidth - window.innerWidth
-      console.log({ x, stickyContainerHeight })
       x.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
+    })
+  }
+
+  const resetStickyContainersSize = ({ middle }) => {
+    document.querySelectorAll(middle).forEach(x => {
+      x.removeAttribute('style')
     })
   }
 
@@ -41,7 +45,10 @@ const x = Astro.props
       window.addEventListener('wheel', onWheel)
       setStickyContainersSize({ middle, inner })
     }
-    const unlisten = () => window.removeEventListener('wheel', onWheel)
+    const unlisten = () => {
+      window.removeEventListener('wheel', onWheel)
+      resetStickyContainersSize({ middle })
+    }
     return [listen, unlisten]
   }
 
@@ -51,28 +58,39 @@ const x = Astro.props
   })
 
   window.addEventListener('load', listen)
-  window.addEventListener('resize', listen)
+  window.addEventListener('resize', () => {
+    unlisten()
+    if (window.innerWidth < 720) return
+    listen()
+  })
 </script>
 
 <style global>
-  .horizontal-scroll-wrapper {
-    position: relative;
-  }
-
   .horizontal-scroll-wrapper .image-wrapper + .image-wrapper {
-    margin-left: 40px;
+    margin-top: 40px;
   }
 
-  .horizontal-scroll-middle {
-    position: relative;
-    z-index: 1;
-    pointer-events: none;
-  }
+  @media (min-width: 720px) {
+    .horizontal-scroll-wrapper {
+      position: relative;
+    }
 
-  .horizontal-scroll-inner {
-    overflow-x: hidden;
-    display: flex;
-    position: sticky;
-    top: 0;
+    .horizontal-scroll-wrapper .image-wrapper + .image-wrapper {
+      margin-top: 0px;
+      margin-left: 40px;
+    }
+
+    .horizontal-scroll-middle {
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .horizontal-scroll-inner {
+      overflow-x: hidden;
+      display: flex;
+      position: sticky;
+      top: 0;
+    }
   }
 </style>
