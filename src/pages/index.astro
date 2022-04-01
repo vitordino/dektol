@@ -4,6 +4,7 @@ import 'wipe.css'
 import { createClient } from '~/prismic'
 import { SingleImage } from '~/slices/index.astro'
 import type { CollectionDocument } from '~/slices/types'
+import HorizontalScroll from '~/components/HorizontalScroll.astro'
 const client = createClient()
 const collections = await client.getAllByType<CollectionDocument>('collection')
 ---
@@ -34,9 +35,17 @@ const collections = await client.getAllByType<CollectionDocument>('collection')
   <body>
     {collections.map(({ data }) => (
       <>
-        <h2>{data.name}</h2>
-        {data.slices.map(slice => <SingleImage slice={slice} />)}
+        <!-- <h2>{data.name}</h2> -->
+        <HorizontalScroll>
+          {data.slices.map(slice => <SingleImage slice={slice} />)}
+        </HorizontalScroll>
       </>
     ))}
   </body>
 </html>
+
+<style global>
+  html, body {
+    overscroll-behavior: none;
+  }
+</style>
