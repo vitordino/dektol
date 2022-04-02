@@ -10,7 +10,7 @@ const x = Astro.props
   </div>
 </div>
 
-<script>
+<script hoist>
   // const isElementInViewport = element => {
   //   const rect = element.getBoundingClientRect()
   //   return rect.top <= 0 && rect.bottom >= window.innerHeight
@@ -21,11 +21,9 @@ const x = Astro.props
     () => {
       document.querySelectorAll(middle).forEach(element => {
         const rect = element.getBoundingClientRect()
-        if (rect.y > 0) return console.log('outside1')
-        if (element.scrollWidth - element.scrollLeft - window.innerWidth)
-          return console.log('outside2')
-        console.log({ ...rect, element })
-        element.querySelector(inner).scrollLeft = Math.abs(rect.y)
+        if (rect.y > 0) return
+        if (element.scrollWidth - element.scrollLeft - window.innerWidth) return
+        element.querySelector(inner).scrollLeft = -rect.y
       })
     }
 
