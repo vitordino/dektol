@@ -1,7 +1,3 @@
----
-const x = Astro.props
----
-
 <div class="horizontal-scroll-wrapper">
   <div class="horizontal-scroll-middle">
     <div class="horizontal-scroll-inner">
@@ -11,60 +7,43 @@ const x = Astro.props
 </div>
 
 <script hoist>
-  // const isElementInViewport = element => {
-  //   const rect = element.getBoundingClientRect()
-  //   return rect.top <= 0 && rect.bottom >= window.innerHeight
-  // }
+  const middle = '.horizontal-scroll-middle'
+  const inner = '.horizontal-scroll-inner'
+  const isHorizontal = window.innerWidth < 720
 
-  const getWheelHandler =
-    ({ middle, inner }) =>
-    () => {
-      document.querySelectorAll(middle).forEach(element => {
-        const rect = element.getBoundingClientRect()
-        if (rect.y > 0) return
-        if (element.scrollWidth - element.scrollLeft - window.innerWidth) return
-        element.querySelector(inner).scrollLeft = -rect.y
-      })
-    }
+  const onWheel = () =>
+    document.querySelectorAll(middle).forEach(x => {
+      const { y } = x.getBoundingClientRect()
+      if (y > 0) return
+      if (x.scrollWidth - x.scrollLeft - window.innerWidth) return
+      x.querySelector(inner).scrollLeft = -y
+    })
 
-  const setStickyContainersSize = ({ middle, inner }) => {
+  const setStickyContainersSize = () =>
     document.querySelectorAll(middle).forEach(x => {
       const stickyContainerHeight =
         x.querySelector(inner).scrollWidth + window.innerHeight - window.innerWidth
       x.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
     })
-  }
 
-  const resetStickyContainersSize = ({ middle }) => {
+  const resetStickyContainersSize = () =>
     document.querySelectorAll(middle).forEach(x => {
       x.removeAttribute('style')
     })
-  }
 
-  const horizontalScroll = ({ middle, inner }) => {
-    const onWheel = getWheelHandler({ middle, inner })
-    const listen = () => {
-      if (window.innerWidth < 720) return
-      window.addEventListener('wheel', onWheel)
-      setStickyContainersSize({ middle, inner })
-    }
-    const unlisten = () => {
-      window.removeEventListener('wheel', onWheel)
-      resetStickyContainersSize({ middle })
-    }
-    return [listen, unlisten]
+  const listen = () => {
+    window.addEventListener('wheel', onWheel)
+    setStickyContainersSize()
   }
-
-  const [listen, unlisten] = horizontalScroll({
-    middle: '.horizontal-scroll-middle',
-    inner: '.horizontal-scroll-inner',
-  })
+  const unlisten = () => {
+    window.removeEventListener('wheel', onWheel)
+    resetStickyContainersSize({ middle })
+  }
 
   window.addEventListener('load', listen)
   window.addEventListener('resize', () => {
     unlisten()
-    if (window.innerWidth < 720) return
-    listen()
+    if (!isHorizontal) listen()
   })
 </script>
 
