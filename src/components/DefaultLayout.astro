@@ -1,0 +1,29 @@
+---
+import 'wipe.css'
+---
+
+<html lang="en" data-js="false">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Astro</title>
+    <script>
+      const onLoadImage = element => {
+        element.setAttribute('data-loaded', 'true')
+        element.removeEventListeneer(onLoadImage)
+      }
+      const handleImageLoad = element => {
+        if (element.complete) return element.setAttribute('data-loaded', 'true')
+        element.addEventListener('load', onLoadImage)
+      }
+      window.handleImageLoad = handleImageLoad
+    </script>
+    <script>
+      const switchDataJSAttribute = () => document.documentElement.setAttribute('data-js', 'true')
+      window.addEventListener('load', switchDataJSAttribute)
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
