@@ -65,5 +65,14 @@
       position: sticky;
       top: 0;
     }
+
+    .horizontal-scroll-inner::before,
+    .horizontal-scroll-inner::after {
+      content: '';
+      position: relative;
+      margin: 0 24px;
+      height: 100%;
+      background: red;
+    }
   }
 </style>

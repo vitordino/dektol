@@ -47,6 +47,7 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
 <style global>
   .image-wrapper {
     position: relative;
+    display: inline-block;
   }
 
   .image-blurhash {
@@ -80,8 +81,8 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
     display: none;
   }
 
-  .horizontal-scroll-wrapper .image-wrapper + .image-wrapper {
-    margin-top: 40px;
+  .horizontal-scroll-wrapper .image-wrapper {
+    margin: 20px 0;
   }
 
   @media(min-width: 720px) {
@@ -101,9 +102,8 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
       max-width: none;
     }
 
-    .horizontal-scroll-wrapper .image-wrapper + .image-wrapper {
-      margin-top: 0px;
-      margin-left: 40px;
+    .horizontal-scroll-wrapper .image-wrapper {
+      margin: 0 20px;
     }
   }
 </style>
