@@ -10,25 +10,29 @@ const x = Astro.props
   </div>
 </div>
 
-<script hoist>
-  const isElementInViewport = element => {
-    const rect = element.getBoundingClientRect()
-    return rect.top <= 0 && rect.bottom >= window.innerHeight
-  }
+<script>
+  // const isElementInViewport = element => {
+  //   const rect = element.getBoundingClientRect()
+  //   return rect.top <= 0 && rect.bottom >= window.innerHeight
+  // }
 
-  const wheelHandler =
+  const getWheelHandler =
     ({ middle, inner }) =>
-    ({ deltaY }) => {
-      const containerInViewPort = [...document.querySelectorAll(middle)].find(isElementInViewport)
-
-      if (!containerInViewPort) return
-
-      containerInViewPort.querySelector(inner).scrollLeft += deltaY
+    () => {
+      document.querySelectorAll(middle).forEach(element => {
+        const rect = element.getBoundingClientRect()
+        if (rect.y > 0) return console.log('outside1')
+        if (element.scrollWidth - element.scrollLeft - window.innerWidth)
+          return console.log('outside2')
+        console.log({ ...rect, element })
+        element.querySelector(inner).scrollLeft = Math.abs(rect.y)
+      })
     }
 
   const setStickyContainersSize = ({ middle, inner }) => {
     document.querySelectorAll(middle).forEach(x => {
-      const stickyContainerHeight = x.querySelector(inner).scrollWidth - window.innerWidth
+      const stickyContainerHeight =
+        x.querySelector(inner).scrollWidth + window.innerHeight - window.innerWidth
       x.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
     })
   }
@@ -40,8 +44,9 @@ const x = Astro.props
   }
 
   const horizontalScroll = ({ middle, inner }) => {
-    const onWheel = wheelHandler({ middle, inner })
+    const onWheel = getWheelHandler({ middle, inner })
     const listen = () => {
+      if (window.innerWidth < 720) return
       window.addEventListener('wheel', onWheel)
       setStickyContainersSize({ middle, inner })
     }
