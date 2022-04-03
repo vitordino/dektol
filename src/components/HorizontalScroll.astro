@@ -12,23 +12,26 @@
   const isVertical = window.innerWidth < 720
 
   const onScroll = () =>
-    document.querySelectorAll(middle).forEach(x => {
-      const { y } = x.getBoundingClientRect()
-      if (y > 0) return
-      if (x.scrollWidth - x.scrollLeft - window.innerWidth) return
-      x.querySelector(inner).scrollLeft = -y
+    document.querySelectorAll(middle).forEach(container => {
+      const { y } = container.getBoundingClientRect()
+      const isBeforeSection = y > 0
+      if (isBeforeSection) return
+      const innerElement = container.querySelector(inner)
+      const isAfterSection = -y > innerElement.scrollWidth - window.innerWidth
+      if (isAfterSection) return
+      innerElement.scrollLeft = -y
     })
 
   const setStickyContainersSize = () =>
-    document.querySelectorAll(middle).forEach(x => {
+    document.querySelectorAll(middle).forEach(container => {
       const stickyContainerHeight =
-        x.querySelector(inner).scrollWidth + window.innerHeight - window.innerWidth
-      x.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
+        container.querySelector(inner).scrollWidth + window.innerHeight - window.innerWidth
+      container.setAttribute('style', 'height: ' + stickyContainerHeight + 'px')
     })
 
   const resetStickyContainersSize = () =>
-    document.querySelectorAll(middle).forEach(x => {
-      x.removeAttribute('style')
+    document.querySelectorAll(middle).forEach(container => {
+      container.removeAttribute('style')
     })
 
   const listen = () => {
