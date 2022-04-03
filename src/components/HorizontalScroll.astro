@@ -11,7 +11,7 @@
   const inner = '.horizontal-scroll-inner'
   const isHorizontal = window.innerWidth < 720
 
-  const onWheel = () =>
+  const onScroll = () =>
     document.querySelectorAll(middle).forEach(x => {
       const { y } = x.getBoundingClientRect()
       if (y > 0) return
@@ -32,11 +32,11 @@
     })
 
   const listen = () => {
-    window.addEventListener('wheel', onWheel)
+    window.addEventListener('scroll', onScroll)
     setStickyContainersSize()
   }
   const unlisten = () => {
-    window.removeEventListener('wheel', onWheel)
+    window.removeEventListener('scroll', onScroll)
     resetStickyContainersSize({ middle })
   }
 
