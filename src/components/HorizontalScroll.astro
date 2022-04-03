@@ -9,7 +9,7 @@
 <script hoist>
   const middle = '.horizontal-scroll-middle'
   const inner = '.horizontal-scroll-inner'
-  const isHorizontal = window.innerWidth < 720
+  const isVertical = window.innerWidth < 720
 
   const onScroll = () =>
     document.querySelectorAll(middle).forEach(x => {
@@ -43,7 +43,7 @@
   window.addEventListener('load', listen)
   window.addEventListener('resize', () => {
     unlisten()
-    if (!isHorizontal) listen()
+    if (!isVertical) listen()
   })
 </script>
 
