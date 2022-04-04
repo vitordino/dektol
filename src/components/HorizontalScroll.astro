@@ -13,12 +13,17 @@
 
   const onScroll = () =>
     document.querySelectorAll(middle).forEach(container => {
-      const { y } = container.getBoundingClientRect()
-      const isBeforeSection = y > 0
-      if (isBeforeSection) return
       const innerElement = container.querySelector(inner)
+      const { y } = container.getBoundingClientRect()
+
+      const isBeforeSection = y > 0
+      const reachedLeftEnd = innerElement.scrollLeft === 0
+      if (isBeforeSection && reachedLeftEnd) return
+
       const isAfterSection = -y > innerElement.scrollWidth - window.innerWidth
-      if (isAfterSection) return
+      const reachedRihtEnd = innerElement.scrollLeft >= innerElement.scrollWidth
+      if (isAfterSection && reachedRihtEnd) return
+
       innerElement.scrollLeft = -y
     })
 
