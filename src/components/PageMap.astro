@@ -1,0 +1,83 @@
+<div class="page-map-wrapper">
+  <slot />
+  <div class="page-map-canvas-wrapper">
+    <canvas class="page-map-canvas"></canvas>
+  </div>
+</div>
+
+<script hoist>
+  const padding = 64
+  const y = 32
+  const height = 2
+  const wrapperSelector = '.page-map-wrapper'
+  const canvasSelector = '.page-map-canvas'
+  const itemSelector = '[data-map="item"]'
+  const containerSelector = '[data-map="container"]'
+
+  const getRelativeRect = (totalWidth, viewportWidth, { x, width }) => {
+    const paddedViewportWidth = viewportWidth - 2 * padding
+    const paddedTotalWidth = totalWidth - 2 * padding
+    const outputX = ((x - padding) / paddedTotalWidth) * paddedViewportWidth + padding
+    const outputWidth = (width / paddedTotalWidth) * paddedViewportWidth
+    return [outputX, y, outputWidth, height]
+  }
+
+  const wrappers = [...document.querySelectorAll(wrapperSelector)]
+
+  const draw = () => {
+    wrappers.forEach(wrapper => {
+      const canvas = wrapper.querySelector(canvasSelector)
+      const container = wrapper.querySelector(containerSelector)
+      const items = [...wrapper.querySelectorAll(itemSelector)]
+
+      const totalWidth = Math.max(container.scrollWidth, container.clientWidth)
+      const viewportWidth = canvas.clientWidth
+      const getRelativeContextRect = rect => getRelativeRect(totalWidth, viewportWidth, rect)
+
+      canvas.width = canvas.clientWidth
+      canvas.height = canvas.clientHeight
+      const context = canvas.getContext('2d')
+
+      const rects = items.map(x => getRelativeContextRect(x.getBoundingClientRect()))
+
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      context.fillStyle = '00ff00'
+
+      rects.forEach(rect => {
+        context.beginPath()
+        context.rect(...rect)
+        context.fill()
+      })
+    })
+  }
+
+  draw()
+  window.addEventListener('resize', draw)
+</script>
+
+<style global>
+  .page-map-canvas-wrapper {
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .page-map-wrapper {
+      position: relative;
+    }
+
+    .page-map-canvas-wrapper {
+      display: block;
+      position: sticky;
+      bottom: 0;
+      height: 0;
+      width: 100%;
+    }
+
+    .page-map-canvas,
+    .page-map-svg {
+      position: absolute;
+      bottom: 0;
+      height: 64px;
+      width: 100%;
+    }
+  }
+</style>
