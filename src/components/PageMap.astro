@@ -70,6 +70,7 @@
       bottom: 0;
       height: 0;
       width: 100%;
+      transition: 0.3s opacity;
     }
 
     .page-map-canvas,
@@ -78,6 +79,15 @@
       bottom: 0;
       height: 64px;
       width: 100%;
+    }
+    .horizontal-scroll-wrapper[data-sticky='false'] ~ .page-map-canvas-wrapper {
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.15s opacity;
+    }
+    .horizontal-scroll-wrapper[data-sticky='true'] ~ .page-map-canvas-wrapper {
+      pointer-events: auto;
+      opacity: 1;
     }
   }
 </style>
