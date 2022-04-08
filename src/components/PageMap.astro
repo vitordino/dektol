@@ -2,6 +2,8 @@
   <slot />
   <div class="page-map-canvas-wrapper">
     <canvas class="page-map-canvas"></canvas>
+    <div class="page-map-brush-left"></div>
+    <div class="page-map-brush-right"></div>
   </div>
 </div>
 
@@ -13,6 +15,9 @@
   const canvasSelector = '.page-map-canvas'
   const itemSelector = '[data-map="item"]'
   const containerSelector = '[data-map="container"]'
+  const leftBrushSelector = '.page-map-brush-left'
+  const rightBrushSelector = '.page-map-brush-right'
+  const middleSelector = '.horizontal-scroll-middle'
 
   const getRelativeRect = (totalWidth, viewportWidth, { x, width }) => {
     const paddedViewportWidth = viewportWidth - 2 * padding
@@ -24,7 +29,7 @@
 
   const wrappers = [...document.querySelectorAll(wrapperSelector)]
 
-  const draw = () => {
+  const drawLines = () => {
     wrappers.forEach(wrapper => {
       const canvas = wrapper.querySelector(canvasSelector)
       const container = wrapper.querySelector(containerSelector)
@@ -51,8 +56,34 @@
     })
   }
 
-  draw()
-  window.addEventListener('resize', draw)
+  const normalizeScale = n => Math.min(Math.max(n, 0), 1)
+
+  const drawBrushes = () => {
+    wrappers.forEach(wrapper => {
+      const container = wrapper.querySelector(containerSelector)
+      const middle = wrapper.querySelector(middleSelector)
+      const containerRect = container.getBoundingClientRect()
+      const initialY = containerRect.y
+      const { y } = middle.getBoundingClientRect()
+
+      const leftBrush = wrapper.querySelector(leftBrushSelector)
+      const rightBrush = wrapper.querySelector(rightBrushSelector)
+
+      const totalWidth = Math.max(container.scrollWidth, container.clientWidth)
+      const viewportWidth = window.innerWidth
+      const scaleLeft = (-y - initialY - padding) / (totalWidth - 2 * padding)
+      const scaleRight = 1 - viewportWidth / (totalWidth - 2 * padding) - scaleLeft
+
+      leftBrush.style.transform = `scaleX(${normalizeScale(scaleLeft)})`
+      rightBrush.style.transform = `scaleX(${normalizeScale(scaleRight)})`
+    })
+  }
+
+  drawLines()
+  window.addEventListener('resize', drawLines)
+
+  drawBrushes()
+  window.addEventListener('scroll', drawBrushes)
 </script>
 
 <style global>
@@ -73,8 +104,7 @@
       transition: 0.3s opacity;
     }
 
-    .page-map-canvas,
-    .page-map-svg {
+    .page-map-canvas {
       position: absolute;
       bottom: 0;
       height: 64px;
@@ -88,6 +118,21 @@
     .horizontal-scroll-wrapper[data-sticky='true'] ~ .page-map-canvas-wrapper {
       pointer-events: auto;
       opacity: 1;
+    }
+
+    .page-map-brush-left,
+    .page-map-brush-right {
+      position: absolute;
+      bottom: 0;
+      height: 64px;
+      width: calc(100% - 128px);
+      background: #fff;
+      transform-origin: left;
+      left: 64px;
+      opacity: 0.8;
+    }
+    .page-map-brush-right {
+      transform-origin: right;
     }
   }
 </style>
