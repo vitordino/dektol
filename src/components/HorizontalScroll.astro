@@ -17,6 +17,9 @@ import PageMap from '~/components/PageMap.astro'
   const inner = '.horizontal-scroll-inner'
   const isVertical = window.innerWidth < 720
 
+  const setParentSticky = (element, value) =>
+    element.parentElement.setAttribute('data-sticky', value.toString())
+
   const onScroll = () =>
     document.querySelectorAll(middle).forEach(container => {
       const innerElement = container.querySelector(inner)
@@ -24,13 +27,17 @@ import PageMap from '~/components/PageMap.astro'
 
       const isBeforeSection = y > 0
       const reachedLeftEnd = innerElement.scrollLeft === 0
-      if (isBeforeSection && reachedLeftEnd) return
 
       const isAfterSection = -y > innerElement.scrollWidth - window.innerWidth
-      const reachedRihtEnd = innerElement.scrollLeft >= innerElement.scrollWidth
-      if (isAfterSection && reachedRihtEnd) return
+      const reachedRihtEnd = innerElement.scrollLeft <= innerElement.scrollWidth
 
-      innerElement.scrollLeft = -y
+      const isOutOfBounds =
+        (isBeforeSection && reachedLeftEnd) || (isAfterSection && reachedRihtEnd)
+
+      const shouldBeSticky = !isOutOfBounds
+
+      setParentSticky(container, shouldBeSticky)
+      if (shouldBeSticky) innerElement.scrollLeft = -y
     })
 
   const setStickyContainersSize = () =>
