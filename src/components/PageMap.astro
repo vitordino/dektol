@@ -30,6 +30,7 @@
   const wrappers = [...document.querySelectorAll(wrapperSelector)]
 
   const drawLines = () => {
+    const dpi = window.devicePixelRatio
     wrappers.forEach(wrapper => {
       const canvas = wrapper.querySelector(canvasSelector)
       const container = wrapper.querySelector(containerSelector)
@@ -39,9 +40,10 @@
       const viewportWidth = canvas.clientWidth
       const getRelativeContextRect = rect => getRelativeRect(totalWidth, viewportWidth, rect)
 
-      canvas.width = canvas.clientWidth
-      canvas.height = canvas.clientHeight
       const context = canvas.getContext('2d')
+      canvas.width = canvas.clientWidth * dpi
+      canvas.height = canvas.clientHeight * dpi
+      context.scale(dpi, dpi)
 
       const rects = items.map(x => getRelativeContextRect(x.getBoundingClientRect()))
 
