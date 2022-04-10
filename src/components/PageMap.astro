@@ -4,7 +4,6 @@
     <canvas class="page-map-canvas"></canvas>
     <div class="page-map-brush-left"></div>
     <div class="page-map-brush-right"></div>
-    <div class="page-map-brush-handle"></div>
   </div>
 </div>
 
@@ -18,7 +17,6 @@
   const containerSelector = '[data-map="container"]'
   const leftBrushSelector = '.page-map-brush-left'
   const rightBrushSelector = '.page-map-brush-right'
-  const brushHandleSelector = '.page-map-brush-handle'
   const middleSelector = '.horizontal-scroll-middle'
 
   const getRelativeRect = (totalWidth, viewportWidth, { x, width }) => {
@@ -83,64 +81,6 @@
     })
   }
 
-  const brushMouseHandles = () => {
-    wrappers.forEach(wrapper => {
-      const container = wrapper.querySelector(containerSelector)
-      const middle = wrapper.querySelector(middleSelector)
-      const containerRect = container.getBoundingClientRect()
-      const initialY = containerRect.y
-      const totalWidth = Math.max(container.scrollWidth, container.clientWidth)
-      const viewportWidth = window.innerWidth
-      const { y } = middle.getBoundingClientRect()
-      const brushHandleElement = wrapper.querySelector(brushHandleSelector)
-
-      const getVerticalScroll = x =>
-        initialY +
-        (x / (viewportWidth - padding)) * (totalWidth - 2 * padding) +
-        ((x - initialY) / (viewportWidth - padding)) * padding * 2 -
-        (viewportWidth * viewportWidth) / viewportWidth / 2
-
-      const RightYBound = initialY + totalWidth - viewportWidth - 1
-      const getBoundedVerticalScroll = x =>
-        Math.min(Math.max(getVerticalScroll(x), initialY), RightYBound)
-
-      const onDrag = ({ clientX }) => {
-        console.log({ clientX, viewportWidth, totalWidth, y, initialY })
-        const newScroll = getBoundedVerticalScroll(clientX)
-        // console.log('onDrag', { clientX, newScroll })
-        document.documentElement.scrollTop = newScroll
-      }
-
-      const onDragEnd = () => {
-        brushHandleElement.style.cursor = 'grab'
-        document.documentElement.style.cursor = 'auto'
-        document.documentElement.style.pointerEvents = 'auto'
-        document.documentElement.removeEventListener('mouseup', onDragEnd)
-        document.documentElement.removeEventListener('mousemove', onDrag)
-        window.removeEventListener('mousemove', onDrag)
-        brushHandleElement.addEventListener('mouseup', onDragStart)
-        // console.log('onDragEnd')
-        wrapper.removeAttribute('data-dragging')
-      }
-
-      const onDragStart = ({ x }) => {
-        brushHandleElement.style.cursor = 'grabbing'
-        document.documentElement.style.cursor = 'grabbing'
-        document.documentElement.style.pointerEvents = 'none'
-        brushHandleElement.removeEventListener('mouseup', onDragStart)
-        document.documentElement.addEventListener('mouseup', onDragEnd)
-        document.documentElement.addEventListener('mousemove', onDrag)
-        window.addEventListener('mousemove', onDrag)
-        // console.log('onDragStart')
-        document.documentElement.scrollTop = getBoundedVerticalScroll(x)
-        wrapper.setAttribute('data-dragging', 'true')
-      }
-      brushHandleElement.addEventListener('mousedown', onDragStart)
-    })
-  }
-
-  brushMouseHandles()
-
   drawLines()
   window.addEventListener('resize', drawLines)
 
@@ -182,11 +122,6 @@
       opacity: 1;
     }
 
-    html[data-dragging='true'] ~ .page-map-canvas-wrapper {
-      pointer-events: auto;
-      opacity: 1;
-    }
-
     .page-map-brush-left,
     .page-map-brush-right {
       position: absolute;
@@ -200,15 +135,6 @@
     }
     .page-map-brush-right {
       transform-origin: right;
-    }
-
-    .page-map-brush-handle {
-      position: absolute;
-      bottom: 0;
-      height: 64px;
-      left: 0;
-      right: 0;
-      cursor: grab;
     }
   }
 </style>
