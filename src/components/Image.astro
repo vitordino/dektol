@@ -62,6 +62,7 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
     image-rendering: pixelated;
     max-width: none;
     transition: 0s display 0.75s;
+    user-select: none;
   }
 
   .image-main {
@@ -69,6 +70,7 @@ const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
     transition: 0.5s opacity;
     height: auto;
     width: 100%;
+    user-select: none;
   }
 
   html[data-js="true"] .image-main[data-loaded="false"] {
