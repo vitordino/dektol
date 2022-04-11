@@ -1,9 +1,7 @@
----
-import PageMap from '~/components/PageMap.astro'
----
+<script src="./HorizontalScroll.ts"></script>
 
-<PageMap>
-  <div class="horizontal-scroll-wrapper">
+<div class="horizontal-scroll-wrapper">
+  <div style="position: relative">
     <div class="horizontal-scroll-middle">
       <div class="horizontal-scroll-inner" data-map="container">
         <div class="horizontal-scroll-spacer"></div>
@@ -12,9 +10,12 @@ import PageMap from '~/components/PageMap.astro'
       </div>
     </div>
   </div>
-</PageMap>
-
-<script src="./HorizontalScroll.ts"></script>
+  <div class="horizontal-scroll-map-wrapper">
+    <canvas class="horizontal-scroll-map-canvas"></canvas>
+    <div class="horizontal-scroll-map-brush-left"></div>
+    <div class="horizontal-scroll-map-brush-right"></div>
+  </div>
+</div>
 
 <style is:global>
   @media (min-width: 720px) {
@@ -39,6 +40,55 @@ import PageMap from '~/components/PageMap.astro'
       display: block;
       position: relative;
       min-width: 44px;
+    }
+  }
+
+  .horizontal-scroll-map-wrapper {
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .page-map-wrapper {
+      position: relative;
+    }
+
+    .horizontal-scroll-map-wrapper {
+      display: block;
+      position: sticky;
+      bottom: 0;
+      height: 0;
+      width: 100%;
+      transition: 0.3s opacity;
+    }
+
+    .horizontal-scroll-map-canvas {
+      position: absolute;
+      bottom: 0;
+      height: 64px;
+      width: 100%;
+    }
+    .horizontal-scroll-wrapper[data-sticky='false'] .horizontal-scroll-map-wrapper {
+      pointer-events: none;
+      opacity: 0;
+      transition: 0.15s opacity;
+    }
+    .horizontal-scroll-wrapper[data-sticky='true'] .horizontal-scroll-map-wrapper {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .horizontal-scroll-map-brush-left,
+    .horizontal-scroll-map-brush-right {
+      position: absolute;
+      bottom: 0;
+      height: 64px;
+      width: calc(100% - 128px);
+      background: #fff;
+      transform-origin: left;
+      left: 64px;
+      opacity: 0.8;
+    }
+    .horizontal-scroll-map-brush-right {
+      transform-origin: right;
     }
   }
 </style>
