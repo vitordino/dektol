@@ -1,9 +1,7 @@
 import * as prismic from '@prismicio/client'
 import { LinkResolverFunction } from '@prismicio/helpers'
 
-import sm from '../sm.json'
-
-export const endpoint = sm.apiEndpoint
+export const endpoint = 'https://photo-vitordino.prismic.io/api/v2'
 export const repositoryName = prismic.getRepositoryName(endpoint)
 
 // Update the Link Resolver to match your project's route structure

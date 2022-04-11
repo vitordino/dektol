@@ -1,8 +1,8 @@
 ---
-import type { SingleImageSlice } from '~/slices/types'
+import type { ImageFieldImage } from '@prismicio/types'
 import { memoizedGetBase64FromImageUrl } from '~/utils/getBase64FromImageUrl'
 
-export type Props = SingleImageSlice['items'][number]['image']
+export type Props = ImageFieldImage
 const props = Astro.props as Props
 const { url, dimensions, alt } = props
 const ratio = dimensions ? dimensions.width / dimensions.height : 1
