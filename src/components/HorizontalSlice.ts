@@ -18,7 +18,7 @@ const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
 
-const updateHorizontalSlice = () =>
+const updateHorizontalScroll = () =>
   wrappers.forEach(wrapper => {
     const middle = wrapper.querySelector(middleSelector)
     const inner = wrapper.querySelector(innerSelector)
@@ -109,23 +109,23 @@ const drawBrushes = () => {
   })
 }
 
+const onScroll = () => {
+  updateHorizontalScroll()
+  drawBrushes()
+}
+
 const listen = () => {
-  window.addEventListener('scroll', updateHorizontalSlice)
   setStickyContainersSize()
+  drawLines()
+  drawBrushes()
+  window.addEventListener('scroll', onScroll)
 }
 const unlisten = () => {
-  window.removeEventListener('scroll', updateHorizontalSlice)
   resetStickyContainersSize()
+  window.removeEventListener('scroll', onScroll)
 }
 
-window.addEventListener('load', listen)
-window.addEventListener('resize', () => {
-  unlisten()
-  if (!isVertical) listen()
-})
+const init = () => (window.innerWidth < 720 ? unlisten() : listen())
 
-drawLines()
-window.addEventListener('resize', drawLines)
-
-drawBrushes()
-window.addEventListener('scroll', drawBrushes)
+window.addEventListener('load', init)
+window.addEventListener('resize', init)
