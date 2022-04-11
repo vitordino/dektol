@@ -1,24 +1,16 @@
 ---
 import { createClient } from '~/prismic'
-import { SingleImage } from '~/slices/index.astro'
-import type { CollectionDocument } from '~/slices/types'
 import HorizontalSlice from '~/components/HorizontalSlice.astro'
+import Image from '~/components/Image.astro'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 const client = createClient()
-const collections = await client.getAllByType<CollectionDocument>('collection')
+const pages = await client.getAllByType<any>('page')
 ---
 
 <DefaultLayout>
-  {collections.map(({ data }) => (
-    <>
-      <!-- <h2>{data.name}</h2> -->
+  {pages.map(x => x.data.body.map(y => (
       <HorizontalSlice>
-        {data.slices.map(slice => <SingleImage slice={slice} />)}
+        {y.items.map(z => <Image {...z.image} />)}
       </HorizontalSlice>
-      <HorizontalSlice>
-        {data.slices.map(slice => <SingleImage slice={slice} />)}
-        {data.slices.map(slice => <SingleImage slice={slice} />)}
-      </HorizontalSlice>
-    </>
-  ))}
+    )))}
 </DefaultLayout>

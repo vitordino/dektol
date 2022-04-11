@@ -1,9 +1,0 @@
-{
-  "src/slices": {
-    "SingleImage": {
-      "default": {
-        "primary": {}
-      }
-    }
-  }
-}
