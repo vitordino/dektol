@@ -6,7 +6,9 @@ import PageMap from '~/components/PageMap.astro'
   <div class="horizontal-scroll-wrapper">
     <div class="horizontal-scroll-middle">
       <div class="horizontal-scroll-inner" data-map="container">
+        <div class="horizontal-scroll-spacer"></div>
         <slot />
+        <div class="horizontal-scroll-spacer"></div>
       </div>
     </div>
   </div>
@@ -33,13 +35,10 @@ import PageMap from '~/components/PageMap.astro'
       top: 0;
     }
 
-    .horizontal-scroll-inner::before,
-    .horizontal-scroll-inner::after {
-      content: '';
+    .horizontal-scroll-spacer {
+      display: block;
       position: relative;
-      margin: 0 22px;
-      height: 100%;
-      background: red;
+      min-width: 44px;
     }
   }
 </style>
