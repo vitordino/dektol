@@ -4,21 +4,21 @@ const height = 2
 
 const isVertical = window.innerWidth < 720
 
-const wrapperSelector = '.horizontal-scroll-wrapper'
-const middleSelector = '.horizontal-scroll-middle'
-const innerSelector = '.horizontal-scroll-inner'
+const wrapperSelector = '.horizontal-slice-wrapper'
+const middleSelector = '.horizontal-slice-middle'
+const innerSelector = '.horizontal-slice-inner'
 
-const canvasSelector = '.horizontal-scroll-map-canvas'
+const canvasSelector = '.horizontal-slice-map-canvas'
 const containerSelector = '[data-map="container"]'
 const itemSelector = '[data-map="item"]'
-const leftBrushSelector = '.horizontal-scroll-map-brush-left'
-const rightBrushSelector = '.horizontal-scroll-map-brush-right'
+const leftBrushSelector = '.horizontal-slice-map-brush-left'
+const rightBrushSelector = '.horizontal-slice-map-brush-right'
 
 const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
 
-const updateHorizontalScroll = () =>
+const updateHorizontalSlice = () =>
   wrappers.forEach(wrapper => {
     const middle = wrapper.querySelector(middleSelector)
     const inner = wrapper.querySelector(innerSelector)
@@ -54,7 +54,7 @@ const getRelativeRect: GetRelativeRect = (totalWidth, viewportWidth, { x, width 
 const drawLines = async () => {
   const dpi = window.devicePixelRatio
   wrappers.forEach(wrapper => {
-    const inner = wrapper.querySelector?.('.horizontal-scroll-inner')
+    const inner = wrapper.querySelector?.('.horizontal-slice-inner')
     const canvas: HTMLCanvasElement | null = wrapper.querySelector(canvasSelector)
     const container = wrapper.querySelector(containerSelector)
     const items = Array.from(wrapper.querySelectorAll(itemSelector))
@@ -110,11 +110,11 @@ const drawBrushes = () => {
 }
 
 const listen = () => {
-  window.addEventListener('scroll', updateHorizontalScroll)
+  window.addEventListener('scroll', updateHorizontalSlice)
   setStickyContainersSize()
 }
 const unlisten = () => {
-  window.removeEventListener('scroll', updateHorizontalScroll)
+  window.removeEventListener('scroll', updateHorizontalSlice)
   resetStickyContainersSize()
 }
 

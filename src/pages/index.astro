@@ -2,7 +2,7 @@
 import { createClient } from '~/prismic'
 import { SingleImage } from '~/slices/index.astro'
 import type { CollectionDocument } from '~/slices/types'
-import HorizontalScroll from '~/components/HorizontalScroll.astro'
+import HorizontalSlice from '~/components/HorizontalSlice.astro'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 const client = createClient()
 const collections = await client.getAllByType<CollectionDocument>('collection')
@@ -12,13 +12,13 @@ const collections = await client.getAllByType<CollectionDocument>('collection')
   {collections.map(({ data }) => (
     <>
       <!-- <h2>{data.name}</h2> -->
-      <HorizontalScroll>
+      <HorizontalSlice>
         {data.slices.map(slice => <SingleImage slice={slice} />)}
-      </HorizontalScroll>
-      <HorizontalScroll>
+      </HorizontalSlice>
+      <HorizontalSlice>
         {data.slices.map(slice => <SingleImage slice={slice} />)}
         {data.slices.map(slice => <SingleImage slice={slice} />)}
-      </HorizontalScroll>
+      </HorizontalSlice>
     </>
   ))}
 </DefaultLayout>

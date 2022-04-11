@@ -1,49 +1,49 @@
-<script src="./HorizontalScroll.ts"></script>
+<script src="./HorizontalSlice.ts"></script>
 
-<div class="horizontal-scroll-wrapper">
+<div class="horizontal-slice-wrapper">
   <div style="position: relative">
-    <div class="horizontal-scroll-middle">
-      <div class="horizontal-scroll-inner" data-map="container">
-        <div class="horizontal-scroll-spacer"></div>
+    <div class="horizontal-slice-middle">
+      <div class="horizontal-slice-inner" data-map="container">
+        <div class="horizontal-slice-spacer"></div>
         <slot />
-        <div class="horizontal-scroll-spacer"></div>
+        <div class="horizontal-slice-spacer"></div>
       </div>
     </div>
   </div>
-  <div class="horizontal-scroll-map-wrapper">
-    <canvas class="horizontal-scroll-map-canvas"></canvas>
-    <div class="horizontal-scroll-map-brush-left"></div>
-    <div class="horizontal-scroll-map-brush-right"></div>
+  <div class="horizontal-slice-map-wrapper">
+    <canvas class="horizontal-slice-map-canvas"></canvas>
+    <div class="horizontal-slice-map-brush-left"></div>
+    <div class="horizontal-slice-map-brush-right"></div>
   </div>
 </div>
 
 <style is:global>
   @media (min-width: 720px) {
-    .horizontal-scroll-wrapper {
+    .horizontal-slice-wrapper {
       position: relative;
     }
 
-    .horizontal-scroll-middle {
+    .horizontal-slice-middle {
       position: relative;
       z-index: 1;
       pointer-events: none;
     }
 
-    .horizontal-scroll-inner {
+    .horizontal-slice-inner {
       overflow-x: hidden;
       display: flex;
       position: sticky;
       top: 0;
     }
 
-    .horizontal-scroll-spacer {
+    .horizontal-slice-spacer {
       display: block;
       position: relative;
       min-width: 44px;
     }
   }
 
-  .horizontal-scroll-map-wrapper {
+  .horizontal-slice-map-wrapper {
     display: none;
   }
   @media (min-width: 720px) {
@@ -51,7 +51,7 @@
       position: relative;
     }
 
-    .horizontal-scroll-map-wrapper {
+    .horizontal-slice-map-wrapper {
       display: block;
       position: sticky;
       bottom: 0;
@@ -60,24 +60,24 @@
       transition: 0.3s opacity;
     }
 
-    .horizontal-scroll-map-canvas {
+    .horizontal-slice-map-canvas {
       position: absolute;
       bottom: 0;
       height: 64px;
       width: 100%;
     }
-    .horizontal-scroll-wrapper[data-sticky='false'] .horizontal-scroll-map-wrapper {
+    .horizontal-slice-wrapper[data-sticky='false'] .horizontal-slice-map-wrapper {
       pointer-events: none;
       opacity: 0;
       transition: 0.15s opacity;
     }
-    .horizontal-scroll-wrapper[data-sticky='true'] .horizontal-scroll-map-wrapper {
+    .horizontal-slice-wrapper[data-sticky='true'] .horizontal-slice-map-wrapper {
       pointer-events: auto;
       opacity: 1;
     }
 
-    .horizontal-scroll-map-brush-left,
-    .horizontal-scroll-map-brush-right {
+    .horizontal-slice-map-brush-left,
+    .horizontal-slice-map-brush-right {
       position: absolute;
       bottom: 0;
       height: 64px;
@@ -87,7 +87,7 @@
       left: 64px;
       opacity: 0.8;
     }
-    .horizontal-scroll-map-brush-right {
+    .horizontal-slice-map-brush-right {
       transform-origin: right;
     }
   }
