@@ -7,88 +7,9 @@
   </div>
 </div>
 
-<script hoist>
-  const padding = 64
-  const y = 32
-  const height = 2
-  const wrapperSelector = '.page-map-wrapper'
-  const canvasSelector = '.page-map-canvas'
-  const itemSelector = '[data-map="item"]'
-  const containerSelector = '[data-map="container"]'
-  const leftBrushSelector = '.page-map-brush-left'
-  const rightBrushSelector = '.page-map-brush-right'
-  const middleSelector = '.horizontal-scroll-middle'
+<script src="./PageMap.ts"></script>
 
-  const getRelativeRect = (totalWidth, viewportWidth, { x, width }) => {
-    const paddedViewportWidth = viewportWidth - 2 * padding
-    const paddedTotalWidth = totalWidth - 2 * padding
-    const outputX = ((x - padding) / paddedTotalWidth) * paddedViewportWidth + padding
-    const outputWidth = (width / paddedTotalWidth) * paddedViewportWidth
-    return [outputX, y, outputWidth, height]
-  }
-
-  const wrappers = [...document.querySelectorAll(wrapperSelector)]
-
-  const drawLines = () => {
-    const dpi = window.devicePixelRatio
-    wrappers.forEach(wrapper => {
-      const canvas = wrapper.querySelector(canvasSelector)
-      const container = wrapper.querySelector(containerSelector)
-      const items = [...wrapper.querySelectorAll(itemSelector)]
-
-      const totalWidth = Math.max(container.scrollWidth, container.clientWidth)
-      const viewportWidth = canvas.clientWidth
-      const getRelativeContextRect = rect => getRelativeRect(totalWidth, viewportWidth, rect)
-
-      const context = canvas.getContext('2d')
-      canvas.width = canvas.clientWidth * dpi
-      canvas.height = canvas.clientHeight * dpi
-      context.scale(dpi, dpi)
-
-      const rects = items.map(x => getRelativeContextRect(x.getBoundingClientRect()))
-
-      context.clearRect(0, 0, canvas.width, canvas.height)
-      context.fillStyle = '00ff00'
-
-      rects.forEach(rect => {
-        context.beginPath()
-        context.rect(...rect)
-        context.fill()
-      })
-    })
-  }
-
-  const normalizeScale = n => Math.min(Math.max(n, 0), 1)
-
-  const drawBrushes = () => {
-    wrappers.forEach(wrapper => {
-      const container = wrapper.querySelector(containerSelector)
-      const middle = wrapper.querySelector(middleSelector)
-      const containerRect = container.getBoundingClientRect()
-      const initialY = containerRect.y
-      const { y } = middle.getBoundingClientRect()
-
-      const leftBrush = wrapper.querySelector(leftBrushSelector)
-      const rightBrush = wrapper.querySelector(rightBrushSelector)
-
-      const totalWidth = Math.max(container.scrollWidth, container.clientWidth)
-      const viewportWidth = window.innerWidth
-      const scaleLeft = (-y - initialY - padding) / (totalWidth - 2 * padding)
-      const scaleRight = 1 - viewportWidth / (totalWidth - 2 * padding) - scaleLeft
-
-      leftBrush.style.transform = `scaleX(${normalizeScale(scaleLeft)})`
-      rightBrush.style.transform = `scaleX(${normalizeScale(scaleRight)})`
-    })
-  }
-
-  drawLines()
-  window.addEventListener('resize', drawLines)
-
-  drawBrushes()
-  window.addEventListener('scroll', drawBrushes)
-</script>
-
-<style global>
+<style is:global>
   .page-map-canvas-wrapper {
     display: none;
   }

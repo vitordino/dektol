@@ -7,7 +7,7 @@ import 'wipe.css'
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Astro</title>
-    <script>
+    <script is:inline>
       const onLoadImage = element => {
         element.setAttribute('data-loaded', 'true')
         element.removeEventListeneer(onLoadImage)
@@ -18,7 +18,7 @@ import 'wipe.css'
       }
       window.handleImageLoad = handleImageLoad
     </script>
-    <script>
+    <script is:inline>
       const switchDataJSAttribute = () => document.documentElement.setAttribute('data-js', 'true')
       window.addEventListener('load', switchDataJSAttribute)
     </script>
