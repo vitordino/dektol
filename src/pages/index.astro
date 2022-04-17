@@ -1,16 +1,11 @@
 ---
-import { createClient } from '~/prismic'
-import HorizontalSlice from '~/components/HorizontalSlice.astro'
-import Image from '~/components/Image.astro'
+import getHomePageData from '~/utils/getHomePageData'
+import Slice from '~/components/Slice.astro'
 import DefaultLayout from '~/components/DefaultLayout.astro'
-const client = createClient()
-const pages = await client.getAllByType<any>('page')
+
+const pages = await getHomePageData()
 ---
 
 <DefaultLayout>
-  {pages.map(x => x.data.body.map(y => (
-      <HorizontalSlice>
-        {y.items.map(z => <Image {...z.image} />)}
-      </HorizontalSlice>
-    )))}
+  {pages.map(page => page.body.map(slice => <Slice {...slice} />))}
 </DefaultLayout>

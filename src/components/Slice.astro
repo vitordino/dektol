@@ -1,0 +1,9 @@
+---
+import type { Slice } from '~/types'
+import HorizontalSlice from '~/components/HorizontalSlice.astro'
+export type Props = Slice
+const props = Astro.props as Props
+const { type } = props
+---
+
+{type === 'horizontal' && <HorizontalSlice {...props} />}
