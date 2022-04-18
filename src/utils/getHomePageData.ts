@@ -1,3 +1,4 @@
+import memoize from 'p-memoize'
 import * as prismic from '@prismicio/client'
 import { gql } from 'graphql-request'
 import type { HomePage } from '~/types'
@@ -44,4 +45,4 @@ const getHomePageData = async () => {
   return body.data.allPages.edges.map(({ node }) => node)
 }
 
-export default getHomePageData
+export default memoize(getHomePageData)

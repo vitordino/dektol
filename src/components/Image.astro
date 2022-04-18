@@ -1,6 +1,6 @@
 ---
 import type { ImageFieldImage } from '@prismicio/types'
-import { memoizedGetBase64FromImageUrl } from '~/utils/getBase64FromImageUrl'
+import getBase64FromImageUrl from '~/utils/getBase64FromImageUrl'
 
 export type Props = ImageFieldImage
 const props = Astro.props as Props
@@ -26,7 +26,7 @@ const srcset = `
   ${url}&w=3200&q=30 3200w,
 `
 
-const blurHash = await memoizedGetBase64FromImageUrl(`${url}&h=16`)
+const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
 
 <div class='image-wrapper'>
