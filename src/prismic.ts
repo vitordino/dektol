@@ -1,8 +1,7 @@
 import * as prismic from '@prismicio/client'
 import { LinkResolverFunction } from '@prismicio/helpers'
 
-export const endpoint = 'https://photo-vitordino.prismic.io/api/v2'
-export const repositoryName = prismic.getRepositoryName(endpoint)
+export const repositoryName = 'photo-vitordino'
 
 // Update the Link Resolver to match your project's route structure
 export const linkResolver: LinkResolverFunction = doc => {
@@ -16,6 +15,6 @@ export const linkResolver: LinkResolverFunction = doc => {
 }
 
 export const createClient = (config: prismic.ClientConfig = {}) => {
-  const client = prismic.createClient(endpoint, config)
+  const client = prismic.createClient(repositoryName, config)
   return client
 }
