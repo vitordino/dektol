@@ -1,5 +1,4 @@
 import { ColorField, ImageField } from '@prismicio/types'
-export { ColorField, ImageField } from '@prismicio/types'
 
 export type Edges<T> = { edges: { node: T }[] }
 
