@@ -1,7 +1,7 @@
 import * as prismic from '@prismicio/client'
 import { gql } from 'graphql-request'
 import type { HomePage } from '~/types'
-import { createClient } from '~/prismic'
+import { createClient, repositoryName } from '~/prismic'
 
 const client = createClient()
 
@@ -34,7 +34,7 @@ const homePageQuery = gql`
   }
 `
 
-const endpoint = prismic.getGraphQLEndpoint('photo-vitordino')
+const endpoint = prismic.getGraphQLEndpoint(repositoryName)
 const url = `${endpoint}?query=${homePageQuery}`
 
 const getHomePageData = async () => {

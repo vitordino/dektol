@@ -1,0 +1,33 @@
+{
+  "Main": {
+    "uid": { "type": "UID", "config": { "label": "uid" } },
+    "background": { "type": "Color", "config": { "label": "background" } },
+    "foreground": { "type": "Color", "config": { "label": "foreground" } },
+    "body": {
+      "type": "Slices",
+      "fieldset": "Slice zone",
+      "config": {
+        "labels": {},
+        "choices": {
+          "horizontal": {
+            "type": "Slice",
+            "fieldset": "Horizontal",
+            "description": "horizontal scroll on larger devices",
+            "icon": "swap_horiz",
+            "display": "grid",
+            "non-repeat": {
+              "background": { "type": "Color", "config": { "label": "background" } },
+              "foreground": { "type": "Color", "config": { "label": "foreground" } }
+            },
+            "repeat": {
+              "image": {
+                "type": "Image",
+                "config": { "constraint": {}, "thumbnails": [], "label": "image" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

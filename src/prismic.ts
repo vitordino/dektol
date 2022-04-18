@@ -1,7 +1,12 @@
 import * as prismic from '@prismicio/client'
-import { LinkResolverFunction } from '@prismicio/helpers'
+import type { LinkResolverFunction } from '@prismicio/helpers'
+import config from '../.prismic.json'
 
-export const repositoryName = 'photo-vitordino'
+// @ts-expect-error
+const ENV_ENDPOINT = import.meta.env.PRISMIC_ENDPOINT
+const CONFIG_ENDPOINT = config.apiEndpoint
+export const endpoint = ENV_ENDPOINT || CONFIG_ENDPOINT
+export const repositoryName = prismic.getRepositoryName(endpoint)
 
 // Update the Link Resolver to match your project's route structure
 export const linkResolver: LinkResolverFunction = doc => {
