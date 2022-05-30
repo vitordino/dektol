@@ -3,9 +3,8 @@ import getHomePageData from '~/utils/getHomePageData'
 import Slice from '~/components/Slice.astro'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 
-const pages = await getHomePageData()
+const x = await getHomePageData()
 ---
-
 <DefaultLayout>
-  {pages.map(page => page.body.map(slice => <Slice {...slice} />))}
+  {x.map(page => page.data.body.map(slice => <Slice {...slice} />))}
 </DefaultLayout>

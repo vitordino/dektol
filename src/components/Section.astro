@@ -1,0 +1,25 @@
+---
+import { Colors } from '~/types'
+export type Props = { renderBackground: boolean } & Colors
+const { renderBackground, ...colorProps } = Astro.props as Props
+
+const reducer = (acc: string[], [k, v]: [string, string | null]) => {
+  if (!v) return acc
+  return [...acc, `--${k}: ${v}`]
+}
+
+const style = Object.entries(colorProps).reduce<string[]>(reducer, []).join('; ')
+---
+
+<section class="section" style={style} data-render-background={renderBackground}>
+  <slot />
+</section>
+
+<style is:global>
+  .section {
+    color: var(--color);
+  }
+  .section[data-render-background="true"] {
+    background-color: var(--background);
+  }
+</style>

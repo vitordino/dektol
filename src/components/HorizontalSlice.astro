@@ -1,9 +1,9 @@
 ---
-import type { HorizontalSlice } from '~/types'
 import Image from '~/components/Image.astro'
-export type Props = HorizontalSlice
+import { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
+export type Props = PageDocumentDataBodyHorizontalSlice
 const props = Astro.props as Props
-const { fields } = props
+const { items } = props
 ---
 
 <script src="./HorizontalSlice.ts"></script>
@@ -12,7 +12,7 @@ const { fields } = props
   <div class="horizontal-slice-middle">
     <div class="horizontal-slice-inner" data-map="container">
       <div class="horizontal-slice-spacer"></div>
-      {fields.map(({ image }) => image ? <Image {...image} /> : null )}
+      {items.map(({ image }) => image ? <Image {...image} /> : null )}
       <div class="horizontal-slice-spacer"></div>
     </div>
   </div>

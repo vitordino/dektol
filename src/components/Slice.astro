@@ -1,9 +1,8 @@
 ---
-import type { Slice } from '~/types'
 import HorizontalSlice from '~/components/HorizontalSlice.astro'
-export type Props = Slice
+import { PageDocument } from '~/prismic.generated'
+export type Props = PageDocument['data']['body'][0]
 const props = Astro.props as Props
-const { type } = props
 ---
 
-{type === 'horizontal' && <HorizontalSlice {...props} />}
+{props?.slice_type === 'horizontal' && <HorizontalSlice {...props} />}
