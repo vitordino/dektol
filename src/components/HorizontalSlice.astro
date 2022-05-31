@@ -1,27 +1,30 @@
 ---
+import Section from '~/components/Section.astro'
 import Image from '~/components/Image.astro'
 import { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
 export type Props = PageDocumentDataBodyHorizontalSlice
 const props = Astro.props as Props
-const { items } = props
+const { items, primary } = props
 ---
 
 <script src="./HorizontalSlice.ts"></script>
 
-<div class="horizontal-slice-wrapper">
-  <div class="horizontal-slice-middle">
-    <div class="horizontal-slice-inner" data-map="container">
-      <div class="horizontal-slice-spacer"></div>
-      {items.map(({ image }) => image ? <Image {...image} /> : null )}
-      <div class="horizontal-slice-spacer"></div>
+<Section foreground={primary.foreground} background={primary.background} renderBackground={true}>
+  <div class="horizontal-slice-wrapper">
+    <div class="horizontal-slice-middle">
+      <div class="horizontal-slice-inner" data-map="container">
+        <div class="horizontal-slice-spacer"></div>
+        {items.map(({ image }) => image ? <Image {...image} /> : null )}
+        <div class="horizontal-slice-spacer"></div>
+      </div>
+    </div>
+    <div class="horizontal-slice-map-wrapper">
+      <canvas class="horizontal-slice-map-canvas"></canvas>
+      <div class="horizontal-slice-map-brush-left"></div>
+      <div class="horizontal-slice-map-brush-right"></div>
     </div>
   </div>
-  <div class="horizontal-slice-map-wrapper">
-    <canvas class="horizontal-slice-map-canvas"></canvas>
-    <div class="horizontal-slice-map-brush-left"></div>
-    <div class="horizontal-slice-map-brush-right"></div>
-  </div>
-</div>
+</Section>
 
 <style is:global>
   @media (min-width: 720px) {
@@ -88,7 +91,7 @@ const { items } = props
       bottom: 0;
       height: 64px;
       width: calc(100% - 128px);
-      background: #fff;
+      background: var(--background, #fff);
       transform-origin: left;
       left: 64px;
       opacity: 0.8;

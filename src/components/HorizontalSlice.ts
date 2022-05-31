@@ -1,3 +1,5 @@
+import rgbToHex from 'rgb-hex'
+
 const padding = 64
 const y = 32
 const height = 2
@@ -17,6 +19,9 @@ const rightBrushSelector = '.horizontal-slice-map-brush-right'
 const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
+
+const getHexCurrentColor = (element?: Element | null) =>
+  element ? '#' + rgbToHex(getComputedStyle(element).color) : null
 
 const updateHorizontalScroll = () =>
   wrappers.forEach(wrapper => {
@@ -76,7 +81,7 @@ const drawLines = async () => {
     const rects = items.map(x => getRelativeContextRect(x.getBoundingClientRect()))
 
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.fillStyle = '000'
+    context.fillStyle = getHexCurrentColor(wrapper) || '#000'
 
     rects.forEach(rect => {
       context.beginPath()
