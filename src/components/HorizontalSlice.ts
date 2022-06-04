@@ -4,7 +4,7 @@ const padding = 64
 const y = 32
 const height = 2
 
-const isVertical = window.innerWidth < 720
+let isListening = false
 
 const wrapperSelector = '.horizontal-slice-wrapper'
 const middleSelector = '.horizontal-slice-middle'
@@ -130,11 +130,15 @@ const listen = () => {
   setStickyContainersSize()
   drawLines()
   drawBrushes()
+  if (isListening) return
+  isListening = true
   window.addEventListener('wheel', onWheel, { passive: false })
   window.addEventListener('scroll', onScroll)
 }
 const unlisten = () => {
   resetStickyContainersSize()
+  if (!isListening) return
+  isListening = false
   window.removeEventListener('wheel', onWheel)
   window.removeEventListener('scroll', onScroll)
 }
