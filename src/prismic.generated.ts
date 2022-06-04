@@ -150,15 +150,3 @@ type PageDocumentDataBodySlice = PageDocumentDataBodyHorizontalSlice | PageDocum
  * @typeParam Lang - Language API ID of the document.
  */
 export type PageDocument<Lang extends string = "en-us"> = prismicT.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
-/** Content for x documents */
-type XDocumentData = Record<string, never>;
-/**
- * x document from Prismic
- *
- * - **API ID**: `x`
- * - **Repeatable**: `true`
- * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
- *
- * @typeParam Lang - Language API ID of the document.
- */
-export type XDocument<Lang extends string = "en-us"> = prismicT.PrismicDocumentWithoutUID<Simplify<XDocumentData>, "x", Lang>;
