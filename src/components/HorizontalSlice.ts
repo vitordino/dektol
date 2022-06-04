@@ -24,9 +24,18 @@ const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
 
+// this is a non-passive event handler, if it gets expensive ux will suffer
 const onWheel = (event: WheelEvent) => {
   const isScrollingVertically = Math.abs(event.deltaY) > Math.abs(event.deltaX)
   if (isScrollingVertically) return
+
+  const isScrollingLeft = event.deltaX < 0
+  if (window.scrollY === 0 && isScrollingLeft) return
+
+  const { scrollHeight, scrollTop, clientHeight } = document.documentElement
+  const hasReachedScrollEnd = scrollHeight - scrollTop === clientHeight
+  if (hasReachedScrollEnd && !isScrollingLeft) return
+
   event.preventDefault()
   window.scroll(0, window.scrollY + event.deltaX)
 }
