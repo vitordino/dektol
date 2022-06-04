@@ -20,6 +20,13 @@ const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
 
+const onWheel = (event: WheelEvent) => {
+  const isScrollingVertically = Math.abs(event.deltaY) > Math.abs(event.deltaX)
+  if (isScrollingVertically) return
+  event.preventDefault()
+  window.scroll(0, window.scrollY + event.deltaX)
+}
+
 const getHexCurrentColor = (element?: Element | null) =>
   element ? '#' + rgbToHex(getComputedStyle(element).color) : null
 
@@ -123,10 +130,12 @@ const listen = () => {
   setStickyContainersSize()
   drawLines()
   drawBrushes()
+  window.addEventListener('wheel', onWheel, { passive: false })
   window.addEventListener('scroll', onScroll)
 }
 const unlisten = () => {
   resetStickyContainersSize()
+  window.removeEventListener('wheel', onWheel)
   window.removeEventListener('scroll', onScroll)
 }
 
