@@ -1,5 +1,9 @@
 import rgbToHex from 'rgb-hex'
 
+if (typeof window.queueMicrotask !== 'function') {
+  window.queueMicrotask = callback => Promise.resolve().then(callback)
+}
+
 const padding = 64
 const y = 32
 const height = 2
@@ -127,16 +131,26 @@ const onScroll = () => {
 }
 
 const listen = () => {
-  setStickyContainersSize()
-  drawLines()
-  drawBrushes()
+  let isUpdating = false
+  window.queueMicrotask(() => {
+    if (isUpdating) return
+    isUpdating = true
+    setStickyContainersSize()
+    drawLines()
+    drawBrushes()
+  })
   if (isListening) return
   isListening = true
   window.addEventListener('wheel', onWheel, { passive: false })
   window.addEventListener('scroll', onScroll)
 }
 const unlisten = () => {
-  resetStickyContainersSize()
+  let isUpdating = false
+  window.queueMicrotask(() => {
+    if (isUpdating) return
+    isUpdating = true
+    resetStickyContainersSize()
+  })
   if (!isListening) return
   isListening = false
   window.removeEventListener('wheel', onWheel)
