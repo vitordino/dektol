@@ -3,6 +3,8 @@ import { Colors } from '~/types'
 export type Props = { renderBackground?: boolean } & Colors
 const { renderBackground, ...colorProps } = Astro.props as Props
 
+const renderBackgroundString = (renderBackground || false)?.toString()
+
 const reducer = (acc: string[], [k, v]: [string, string | null]) => {
   if (!v) return acc
   return [...acc, `--${k}: ${v}`]
@@ -11,7 +13,7 @@ const reducer = (acc: string[], [k, v]: [string, string | null]) => {
 const style = Object.entries(colorProps).reduce<string[]>(reducer, []).join('; ')
 ---
 
-<section class="section" style={style} data-render-background={renderBackground}>
+<section class='section' style={style} data-render-background={renderBackgroundString}>
   <slot />
 </section>
 
@@ -19,7 +21,7 @@ const style = Object.entries(colorProps).reduce<string[]>(reducer, []).join('; '
   .section {
     color: var(--foreground);
   }
-  .section[data-render-background] {
+  .section[data-render-background='true'] {
     background-color: var(--background);
   }
 </style>
