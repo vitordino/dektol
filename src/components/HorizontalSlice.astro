@@ -30,10 +30,19 @@ const { items, primary } = props
   .horizontal-slice-map-wrapper {
     display: none;
   }
+
+  .horizontal-slice-wrapper {
+    padding: 64px 12px;
+  }
+
+  .horizontal-slice-wrapper .image-wrapper {
+    margin: 24px 0;
+  }
   
   @media (min-width: 720px) {
     .horizontal-slice-wrapper {
       position: relative;
+      padding: 0;
     }
 
     .horizontal-slice-middle {
@@ -97,6 +106,10 @@ const { items, primary } = props
     }
     .horizontal-slice-map-brush-right {
       transform-origin: right;
+    }
+
+    .horizontal-slice-wrapper .image-wrapper {
+      margin: 0 20px;
     }
   }
 </style>

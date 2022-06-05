@@ -49,7 +49,7 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 <style is:global>
   .image-wrapper {
     position: relative;
-    display: inline-block;
+    display: block;
   }
 
   .image-blurhash {
@@ -85,10 +85,6 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
     display: none;
   }
 
-  .horizontal-slice-wrapper .image-wrapper {
-    margin: 20px 0;
-  }
-
   @media(min-width: 720px) {
     .image-wrapper {
       padding: 64px 0;
@@ -104,10 +100,6 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
       height: calc(100vh - 128px);
       width: auto;
       max-width: none;
-    }
-
-    .horizontal-slice-wrapper .image-wrapper {
-      margin: 0 20px;
     }
   }
 </style>
