@@ -27,6 +27,10 @@ const { items, primary } = props
 </Section>
 
 <style is:global>
+  .horizontal-slice-map-wrapper {
+    display: none;
+  }
+  
   @media (min-width: 720px) {
     .horizontal-slice-wrapper {
       position: relative;
@@ -50,12 +54,7 @@ const { items, primary } = props
       position: relative;
       min-width: 44px;
     }
-  }
 
-  .horizontal-slice-map-wrapper {
-    display: none;
-  }
-  @media (min-width: 720px) {
     .page-map-wrapper {
       position: relative;
     }
