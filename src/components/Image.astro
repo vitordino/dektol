@@ -30,18 +30,18 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
 
 <div class='image-wrapper'>
-  <div data-map="item">
-    {blurHash && <img class="image-blurhash" src={blurHash} aria-hidden="true" />}
+  <div data-map='item'>
+    {blurHash && <img class='image-blurhash' src={blurHash} aria-hidden='true' />}
     <img
-      class="image-main"
+      class='image-main'
       src={src}
       sizes={sizes}
       srcset={srcset}
-      loading="lazy"
-      data-loaded="false"
+      loading='lazy'
+      data-loaded='false'
       alt={alt}
       {...dimensions}
-      onload="handleImageLoad(this)"
+      onload='handleImageLoad(this)'
     />
   </div>
 </div>
@@ -73,15 +73,15 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
     user-select: none;
   }
 
-  html[data-js="true"] .image-main[data-loaded="false"] {
+  html[data-js='true'] .image-main[data-loaded='false'] {
     opacity: 0;
   }
 
-  html[data-js="true"] .image-main[data-loaded="true"] {
+  html[data-js='true'] .image-main[data-loaded='true'] {
     opacity: 1;
   }
 
-  html[data-js="true"] .image-main[data-loaded="true"] ~ .image-blurhash {
+  html[data-js='true'] .image-main[data-loaded='true'] ~ .image-blurhash {
     display: none;
   }
 

@@ -7,21 +7,21 @@ const props = Astro.props as Props
 const { items, primary } = props
 ---
 
-<script src="./HorizontalSlice.ts"></script>
+<script src='./HorizontalSlice.ts'></script>
 
 <Section foreground={primary.foreground} background={primary.background} renderBackground={true}>
-  <div class="horizontal-slice-wrapper">
-    <div class="horizontal-slice-middle">
-      <div class="horizontal-slice-inner" data-map="container">
-        <div class="horizontal-slice-spacer"></div>
+  <div class='horizontal-slice-wrapper'>
+    <div class='horizontal-slice-middle'>
+      <div class='horizontal-slice-inner' data-map='container'>
+        <div class='horizontal-slice-spacer'></div>
         {items.map(({ image }) => image ? <Image {...image} /> : null )}
-        <div class="horizontal-slice-spacer"></div>
+        <div class='horizontal-slice-spacer'></div>
       </div>
     </div>
-    <div class="horizontal-slice-map-wrapper">
-      <canvas class="horizontal-slice-map-canvas"></canvas>
-      <div class="horizontal-slice-map-brush-left"></div>
-      <div class="horizontal-slice-map-brush-right"></div>
+    <div class='horizontal-slice-map-wrapper'>
+      <canvas class='horizontal-slice-map-canvas'></canvas>
+      <div class='horizontal-slice-map-brush-left'></div>
+      <div class='horizontal-slice-map-brush-right'></div>
     </div>
   </div>
 </Section>

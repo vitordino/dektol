@@ -11,8 +11,8 @@ const middleSelector = '.horizontal-slice-middle'
 const innerSelector = '.horizontal-slice-inner'
 
 const canvasSelector = '.horizontal-slice-map-canvas'
-const containerSelector = '[data-map="container"]'
-const itemSelector = '[data-map="item"]'
+const containerSelector = `[data-map='container']`
+const itemSelector = `[data-map='item']`
 const leftBrushSelector = '.horizontal-slice-map-brush-left'
 const rightBrushSelector = '.horizontal-slice-map-brush-right'
 
