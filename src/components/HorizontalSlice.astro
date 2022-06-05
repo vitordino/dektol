@@ -16,6 +16,7 @@ const { items, primary } = props
         <div class='horizontal-slice-spacer'></div>
         {items.map(({ image }) => image ? <Image {...image} /> : null )}
         <div class='horizontal-slice-spacer'></div>
+        <div class='horizontal-slice-drag-area'></div>
       </div>
     </div>
     <div class='horizontal-slice-map-wrapper'>
@@ -49,6 +50,21 @@ const { items, primary } = props
       display: block;
       position: relative;
       min-width: 44px;
+    }
+
+    .horizontal-slice-drag-area {
+      position: fixed;
+      top: 64px;
+      height: calc(100vh - 128px);
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      pointer-events: auto;
+      cursor: grab;
+    }
+
+    .horizontal-slice-wrapper[data-sticky='false'] .horizontal-slice-drag-area {
+      display: none;
     }
   }
 

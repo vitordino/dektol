@@ -5,10 +5,13 @@ const y = 32
 const height = 2
 
 let isListening = false
+let isDragging = false
+const getShouldBeHorizontal = () => window.innerWidth < 720
 
 const wrapperSelector = '.horizontal-slice-wrapper'
 const middleSelector = '.horizontal-slice-middle'
 const innerSelector = '.horizontal-slice-inner'
+const dragAreaSelector = '.horizontal-slice-drag-area'
 
 const canvasSelector = '.horizontal-slice-map-canvas'
 const containerSelector = `[data-map='container']`
@@ -19,6 +22,30 @@ const rightBrushSelector = '.horizontal-slice-map-brush-right'
 const wrappers = document.querySelectorAll(wrapperSelector)
 
 const normalizeScale = (n: number) => Math.min(Math.max(n, 0), 1)
+
+const onMouseMove = (event: Event) => {
+  const mouseEvent = event as MouseEvent
+  const element = event.target as Element | null
+  console.log('onMouseMove', mouseEvent)
+  const isVisible = element && getComputedStyle(element).display === 'block'
+  console.log(isVisible)
+  queueMicrotask(() => {
+    if (!isDragging || !isVisible) return
+    window.scroll(0, window.scrollY - mouseEvent.movementX)
+  })
+}
+
+const onMouseDown = (event: Event) => {
+  const element = event.target as HTMLElement | null
+  isDragging = true
+  element?.style.setProperty('cursor', 'grabbing')
+  element?.addEventListener('mousemove', onMouseMove)
+  document.documentElement.addEventListener('mouseup', () => {
+    isDragging = false
+    element?.style.removeProperty('cursor')
+    element?.removeEventListener('mousemove', onMouseMove)
+  })
+}
 
 // this is a non-passive event handler, if it gets expensive ux will suffer
 const onWheel = (event: WheelEvent) => {
@@ -48,6 +75,9 @@ const updateHorizontalScroll = () =>
     const shouldBeSticky = -y >= 0 && -y <= inner.scrollWidth - window.innerWidth
     wrapper.setAttribute('data-sticky', shouldBeSticky.toString())
     inner.scrollLeft = -y
+    const dragArea = wrapper.querySelector(dragAreaSelector)
+    const eventCall = shouldBeSticky ? 'addEventListener' : 'removeEventListener'
+    dragArea?.[eventCall]('mousedown', onMouseDown)
   })
 
 const setStickyContainersSize = () =>
@@ -143,12 +173,14 @@ const listen = () => {
     setStickyContainersSize()
     drawLines()
     drawBrushes()
+    updateHorizontalScroll()
   })
   if (isListening) return
   isListening = true
   window.addEventListener('wheel', onWheel, { passive: false })
   window.addEventListener('scroll', onScroll)
 }
+
 const unlisten = () => {
   let isUpdating = false
   window.queueMicrotask(() => {
@@ -162,7 +194,7 @@ const unlisten = () => {
   window.removeEventListener('scroll', onScroll)
 }
 
-const init = () => (window.innerWidth < 720 ? unlisten() : listen())
+const init = () => (getShouldBeHorizontal() ? unlisten() : listen())
 
 window.addEventListener('load', init)
 window.addEventListener('resize', init)
