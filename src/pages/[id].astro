@@ -1,0 +1,19 @@
+---
+import getAllPageDocuments from '~/utils/getAllPageDocuments'
+import getPageDocument from '~/utils/getPageDocument'
+import DefaultLayout from '~/components/DefaultLayout.astro'
+import Slice from '~/components/Slice.astro'
+
+export const getStaticPaths = async () => {
+  const allPageDocuments = await getAllPageDocuments()
+  return allPageDocuments.map(({ uid }) => ({ params: { id: uid } }))
+}
+
+if (!Astro.params.id) throw new Error('no id for pages/[id]')
+
+const { data } = await getPageDocument(Astro.params.id) 
+
+---
+<DefaultLayout>
+  {data?.body.map(slice => <Slice {...slice} />)}
+</DefaultLayout>

@@ -1,10 +1,9 @@
 ---
-import getHomePageData from '~/utils/getHomePageData'
-import Slice from '~/components/Slice.astro'
+import getAllPageDocuments from '~/utils/getAllPageDocuments'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 
-const x = await getHomePageData()
+const x = await getAllPageDocuments()
 ---
 <DefaultLayout>
-  {x.map(page => page.data.body.map(slice => <Slice {...slice} />))}
+  {x.map(({uid}) => <div><a href={`/${uid}`}>{uid}</a> </div>)}
 </DefaultLayout>

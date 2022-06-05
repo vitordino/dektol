@@ -5,6 +5,7 @@ import { createClient } from '~/prismic'
 
 const client = createClient()
 
-const getHomePageData = () => client.getAllByType<PageDocument>('page')
+const getPageDocument = (id: string | number) =>
+  client.getByUID<PageDocument>('page', id.toString())
 
-export default memoize(getHomePageData)
+export default memoize(getPageDocument)
