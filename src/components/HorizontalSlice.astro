@@ -32,11 +32,27 @@ const { items, primary } = props
   }
 
   .horizontal-slice-wrapper {
-    padding: 64px 12px;
+    padding: 4vw 2vw;
   }
 
-  .horizontal-slice-wrapper .image-wrapper {
-    margin: 24px 0;
+  .horizontal-slice-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4vw;
+    position: relative;
+  }
+  
+  .horizontal-slice-wrapper .image-wrapper[data-format="landscape"] {
+    flex-grow: 2;
+  }
+  
+  .horizontal-slice-wrapper .image-wrapper[data-format="portrait"] {
+    flex-basis: calc(50% - 2vw);
+    flex-grow: 1;
+  }
+
+  .horizontal-slice-spacer {
+    display: none;
   }
   
   @media (min-width: 720px) {
@@ -52,8 +68,9 @@ const { items, primary } = props
     }
 
     .horizontal-slice-inner {
+      flex-wrap: nowrap;
+      gap: 0;
       overflow-x: hidden;
-      display: flex;
       position: sticky;
       top: 0;
     }
@@ -110,6 +127,8 @@ const { items, primary } = props
 
     .horizontal-slice-wrapper .image-wrapper {
       margin: 0 20px;
+      flex: auto;
+      flex-basis: auto;
     }
   }
 </style>

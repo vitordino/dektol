@@ -7,6 +7,12 @@ const props = Astro.props as Props
 const { url, dimensions, alt } = props
 const ratio = dimensions ? dimensions.width / dimensions.height : 1
 
+const getFormat = (ratio: number) => {
+  if (ratio === 1) return 'square'
+  if (ratio > 1) return 'landscape'
+  return 'portrait'
+}
+
 const src = `${url}&w=1600&q=50`
 
 const sizes = ` 
@@ -29,7 +35,7 @@ const srcset = `
 const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
 
-<div class='image-wrapper'>
+<div class='image-wrapper' data-format={getFormat(ratio)}>
   <div data-map='item'>
     {blurHash && <img class='image-blurhash' src={blurHash} aria-hidden='true' />}
     <img
