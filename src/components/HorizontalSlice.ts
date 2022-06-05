@@ -1,9 +1,5 @@
 import rgbToHex from 'rgb-hex'
 
-if (typeof window.queueMicrotask !== 'function') {
-  window.queueMicrotask = callback => Promise.resolve().then(callback)
-}
-
 const padding = 64
 const y = 32
 const height = 2

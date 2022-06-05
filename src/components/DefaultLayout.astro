@@ -8,6 +8,11 @@ import 'wipe.css'
     <meta name="viewport" content="width=device-width" />
     <title>Astro</title>
     <script is:inline>
+      if (typeof window.queueMicrotask !== 'function') {
+        window.queueMicrotask = callback => Promise.resolve().then(callback)
+      }
+    </script>
+    <script is:inline>
       const onLoadImage = element => {
         element.setAttribute('data-loaded', 'true')
         element.removeEventListeneer(onLoadImage)
