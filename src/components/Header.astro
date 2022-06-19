@@ -1,0 +1,44 @@
+---
+export type Props = { title?: string | null }
+const props = Astro.props as Props
+const { title } = props
+---
+
+<header class='header'>
+  <a class='header-logo' aria-label='index' />
+  {title && <div class='header-title'><div class='header-title-text'>{title}</div></div>}
+</header>
+
+<style is:global>
+  .header {
+    position: fixed;
+    display: flex;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    align-items: center;
+    z-index: 2;
+    mix-blend-mode: difference;
+    color: white;
+  }
+
+  .header-logo {
+    margin: 18px;
+    width: 24px;
+    height: 24px;
+    background: currentColor;
+    pointer-events: auto;
+  }
+
+  .header-title {
+    pointer-events: auto;
+    line-height: 24px;
+  }
+  
+  .header-title-text {
+    line-height: 24px;
+    /* -webkit-text-fill-color: transparent;
+    color: transparent;
+    -webkit-background-clip: text; */
+  }
+</style>

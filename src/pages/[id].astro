@@ -12,8 +12,7 @@ export const getStaticPaths = async () => {
 if (!Astro.params.id) throw new Error('no id for pages/[id]')
 
 const { data } = await getPageDocument(Astro.params.id) 
-
 ---
-<DefaultLayout>
+<DefaultLayout headerTitle={data.title} background={data.background} foreground={data.foreground}>
   {data?.body.map(slice => <Slice {...slice} />)}
 </DefaultLayout>
