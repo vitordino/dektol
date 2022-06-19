@@ -26,6 +26,7 @@
     "eslint": "^8.12.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier-doc": "^1.1.0",
+    "execa": "^6.1.0",
     "node-fetch": "^3.2.5",
     "ora": "^6.1.0",
     "prettier": "^2.6.1",
