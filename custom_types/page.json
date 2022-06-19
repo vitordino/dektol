@@ -6,6 +6,12 @@
         "label": "uid"
       }
     },
+    "title": {
+      "type": "Text",
+      "config": {
+        "label": "title"
+      }
+    },
     "background": {
       "type": "Color",
       "config": {
@@ -77,7 +83,10 @@
               "container_size": {
                 "type": "Select",
                 "config": {
-                  "options": ["large", "medium"],
+                  "options": [
+                    "large",
+                    "medium"
+                  ],
                   "default_value": "large",
                   "label": "container size"
                 }

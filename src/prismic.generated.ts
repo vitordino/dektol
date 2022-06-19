@@ -8,6 +8,16 @@ type Simplify<T> = {
 /** Content for page documents */
 interface PageDocumentData {
     /**
+     * title field in *page*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: page.title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    title: prismicT.KeyTextField;
+    /**
      * background field in *page*
      *
      * - **Field Type**: Color
