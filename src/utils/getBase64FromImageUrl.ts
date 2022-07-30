@@ -1,4 +1,5 @@
 import memoize from 'p-memoize'
+import { encode } from 'base64-arraybuffer'
 
 const getImageId = (s?: string | null) => /(?=[^\/]+$).+(?=\?)/g.exec(s || '')?.[0] || s
 
@@ -8,9 +9,9 @@ const getBase64FromImageUrl: GetBase64FromImageUrl = async url => {
   console.log('[getBase64FromImageUrl]', getImageId(url))
   const imageData = await fetch(url)
   // @ts-ignore-error
-  const buffer = await imageData.buffer()
+  const buffer = await imageData.arrayBuffer()
   const contentType = await imageData.headers.get('content-type')
-  return `data:image/${contentType};base64,` + buffer.toString('base64')
+  return `data:image/${contentType};base64,` + encode(buffer)
 }
 
 export default memoize(getBase64FromImageUrl)
