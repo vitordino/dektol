@@ -5,5 +5,12 @@
     "label": "page",
     "repeatable": true,
     "value": "page.json"
+  },
+  {
+    "id": "home",
+    "name": "home",
+    "label": "home",
+    "repeatable": false,
+    "value": "home.json"
   }
 ]

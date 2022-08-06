@@ -5,6 +5,39 @@ import type * as prismicT from "@prismicio/types";
 type Simplify<T> = {
     [KeyType in keyof T]: T[KeyType];
 };
+/** Content for home documents */
+interface HomeDocumentData {
+    /**
+     * background field in *home*
+     *
+     * - **Field Type**: Color
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.background
+     * - **Documentation**: https://prismic.io/docs/core-concepts/color
+     *
+     */
+    background: prismicT.ColorField;
+    /**
+     * foreground field in *home*
+     *
+     * - **Field Type**: Color
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.foreground
+     * - **Documentation**: https://prismic.io/docs/core-concepts/color
+     *
+     */
+    foreground: prismicT.ColorField;
+}
+/**
+ * home document from Prismic
+ *
+ * - **API ID**: `home`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type HomeDocument<Lang extends string = "en-us"> = prismicT.PrismicDocumentWithoutUID<Simplify<HomeDocumentData>, "home", Lang>;
 /** Content for page documents */
 interface PageDocumentData {
     /**

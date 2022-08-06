@@ -1,0 +1,16 @@
+{
+  "Main": {
+    "background": {
+      "type": "Color",
+      "config": {
+        "label": "background"
+      }
+    },
+    "foreground": {
+      "type": "Color",
+      "config": {
+        "label": "foreground"
+      }
+    }
+  }
+}
