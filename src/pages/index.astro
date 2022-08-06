@@ -1,9 +1,12 @@
 ---
+import getHomeDocument from '~/utils/getHomeDocument';
 import getAllPageDocuments from '~/utils/getAllPageDocuments'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 
-const x = await getAllPageDocuments()
+const { background, foreground } = await getHomeDocument() || {}
+const pages = await getAllPageDocuments()
+
 ---
-<DefaultLayout>
-  {x.map(({uid}) => <div><a href={`/${uid}`}>{uid}</a> </div>)}
+<DefaultLayout background={background} foreground={foreground}>
+  {pages.map(({uid}) => <div><a href={`/${uid}`}>{uid}</a> </div>)}
 </DefaultLayout>
