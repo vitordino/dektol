@@ -5,7 +5,7 @@ const { title } = props
 ---
 
 <header class='header'>
-  <a class='header-logo' aria-label='index' />
+  <a href="/" class='header-logo' aria-label='index' />
   {title && <div class='header-title'><div class='header-title-text'>{title}</div></div>}
 </header>
 
@@ -37,8 +37,5 @@ const { title } = props
   
   .header-title-text {
     line-height: 24px;
-    /* -webkit-text-fill-color: transparent;
-    color: transparent;
-    -webkit-background-clip: text; */
   }
 </style>
