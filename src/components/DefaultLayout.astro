@@ -43,10 +43,15 @@ const wrapperStyle = [
       window.addEventListener('load', switchDataJSAttribute)
     </script>
   </head>
-  <body>
+  <body style={wrapperStyle}>
     <Header title={headerTitle} />
-    <div style={wrapperStyle}>
-      <slot />
-    </div>
+    <slot />
   </body>
 </html>
+
+<style is:global>
+  body {
+    color: var(--foreground);
+    background-color: var(--background);
+  }
+</style>
