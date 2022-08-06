@@ -8,5 +8,53 @@ const pages = await getAllPageDocuments()
 
 ---
 <DefaultLayout background={background} foreground={foreground}>
-  {pages.map(({uid}) => <div><a href={`/${uid}`}>{uid}</a> </div>)}
+  <main class='home'>
+    {pages.map(({uid, data}) => <a class='home-item' href={`/${uid}`}>{data.title || uid}</a>)}
+  </main>
 </DefaultLayout>
+
+<style is:global>
+  .home {
+    padding-top: 128px;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+
+  .home-item {
+    display: block;
+    position: relative;
+    box-shadow: ;
+    padding: 32px 128px;
+    font-size: 24px;
+    background: var(--background);
+    outline: none;
+  }
+
+  .home-item:before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    border-top: 1px solid var(--foreground);
+    opacity: 0.1;
+  }
+  
+  .home-item:last-of-type:before {
+    border-bottom: 1px solid var(--foreground);
+  }
+
+  .home-item:hover:before {
+    opacity: 0.25;
+    border-bottom: 1px solid var(--foreground);
+  }
+
+  .home-item:hover + .home-item:before {
+    border-top: none;
+  }
+
+  .home-item + .home-item {
+    margin-top: 1px;
+  }
+</style>
