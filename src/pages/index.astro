@@ -15,19 +15,22 @@ const pages = await getAllPageDocuments()
 
 <style is:global>
   .home {
-    padding-top: 128px;
-    overflow: hidden;
+    padding-top: 64px;
     min-height: 100vh;
+    width: 100%;
   }
-
+  
   .home-item {
     display: block;
     position: relative;
-    box-shadow: ;
-    padding: 32px 128px;
+    padding: 48px;
     font-size: 24px;
     background: var(--background);
     outline: none;
+  }
+
+  .home-item:hover {
+    z-index: 1;
   }
 
   .home-item:before {
@@ -35,7 +38,7 @@ const pages = await getAllPageDocuments()
     position: absolute;
     top: -1px;
     right: -1px;
-    bottom: -1px;
+    bottom: 0px;
     left: -1px;
     border-top: 1px solid var(--foreground);
     opacity: 0.1;
@@ -55,6 +58,51 @@ const pages = await getAllPageDocuments()
   }
 
   .home-item + .home-item {
-    margin-top: 1px;
+    margin-left: 1px;
+  }
+
+  @media (min-width: 720px) {
+    .home {
+      overflow: auto;
+      display: flex;
+    }
+
+    .home-item {
+      width: 33.33vw;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .home-item:before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      bottom: -1px;
+      left: -1px;
+      border-top: 1px solid var(--foreground);
+      border-left: 1px solid var(--foreground);
+      opacity: 0.1;
+    }
+    
+    .home-item:last-of-type:before {
+      border-right: 1px solid var(--foreground);
+    }
+
+    .home-item:hover:before {
+      opacity: 0.25;
+      border-right: 1px solid var(--foreground);
+    }
+
+    .home-item:hover + .home-item:before {
+      border-top: 1px solid var(--foreground);
+      border-left: none;
+    }
+
+    .home-item + .home-item {
+      margin-left: 1px;
+    }
   }
 </style>
