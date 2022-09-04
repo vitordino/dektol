@@ -90,22 +90,4 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
   html[data-js='true'] .image-main[data-loaded='true'] ~ .image-blurhash {
     display: none;
   }
-
-  @media(min-width: 720px) {
-    .image-wrapper {
-      padding: 64px 0;
-    }
-
-    .image-blurhash {
-      top: 64px;
-      bottom: 64px;
-      height: calc(100vh - 128px);
-    }
-
-    .image-main {
-      height: calc(100vh - 128px);
-      width: auto;
-      max-width: none;
-    }
-  }
 </style>

@@ -61,5 +61,21 @@ const { items, primary } = props
       flex: auto;
       flex-basis: auto;
     }
+
+    .horizontal-slice .image-wrapper {
+      padding: 64px 0;
+    }
+
+    .horizontal-slice .image-blurhash {
+      top: 64px;
+      bottom: 64px;
+      height: calc(100vh - 128px);
+    }
+
+    .horizontal-slice .image-main {
+      height: calc(100vh - 128px);
+      width: auto;
+      max-width: none;
+    }
   }
 </style>
