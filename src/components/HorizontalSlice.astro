@@ -2,130 +2,61 @@
 import Section from '~/components/Section.astro'
 import Image from '~/components/Image.astro'
 import { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
+import HorizontalScroll from './HorizontalScroll.astro'
 export type Props = PageDocumentDataBodyHorizontalSlice
 const props = Astro.props as Props
 const { items, primary } = props
 ---
 
-<script src='./HorizontalSlice.ts'></script>
-
-<Section foreground={primary.foreground} background={primary.background} renderBackground={true}>
-  <div class='horizontal-slice-wrapper'>
-    <div class='horizontal-slice-middle'>
-      <div class='horizontal-slice-inner' data-map='container'>
-        <div class='horizontal-slice-spacer'></div>
-        {items.map(({ image }) => image ? <Image {...image} /> : null )}
-        <div class='horizontal-slice-spacer'></div>
-      </div>
-    </div>
-    <div class='horizontal-slice-map-wrapper'>
-      <canvas class='horizontal-slice-map-canvas'></canvas>
-      <div class='horizontal-slice-map-brush-left'></div>
-      <div class='horizontal-slice-map-brush-right'></div>
-    </div>
-  </div>
+<Section class='horizontal-slice' foreground={primary.foreground} background={primary.background} renderBackground={true}>
+  <HorizontalScroll map>
+    {items.map(({ image }) => image ? <Image {...image} /> : null )}
+  </HorizontalScroll>
 </Section>
 
 <style is:global>
-  .horizontal-slice-map-wrapper {
-    display: none;
-  }
-
-  .horizontal-slice-wrapper {
+  .horizontal-slice .horizontal-scroll-wrapper {
     padding: 4vw 2vw;
   }
 
-  .horizontal-slice-inner {
+  .horizontal-slice .horizontal-scroll-inner {
     display: flex;
     flex-wrap: wrap;
     gap: 4vw;
-    position: relative;
   }
   
-  .horizontal-slice-wrapper .image-wrapper[data-format="landscape"] {
+  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format="landscape"] {
     flex-grow: 2;
   }
   
-  .horizontal-slice-wrapper .image-wrapper[data-format="portrait"] {
+  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format="portrait"] {
     flex-basis: calc(50% - 2vw);
     flex-grow: 1;
   }
 
-  .horizontal-slice-spacer {
-    display: none;
-  }
-  
   @media (min-width: 720px) {
-    .horizontal-slice-wrapper {
-      position: relative;
+    .horizontal-slice .horizontal-scroll-wrapper {
       padding: 0;
     }
 
-    .horizontal-slice-middle {
+    .horizontal-slice .horizontal-scroll-middle {
       position: relative;
       z-index: 1;
       pointer-events: none;
     }
 
-    .horizontal-slice-inner {
+    .horizontal-slice .horizontal-scroll-inner {
       flex-wrap: nowrap;
       gap: 0;
       overflow-x: hidden;
       position: sticky;
-      top: 0;
     }
 
-    .horizontal-slice-spacer {
-      display: block;
-      position: relative;
+    .horizontal-slice .horizontal-scroll-spacer {
       min-width: 44px;
     }
 
-    .page-map-wrapper {
-      position: relative;
-    }
-
-    .horizontal-slice-map-wrapper {
-      display: block;
-      position: sticky;
-      bottom: 0;
-      height: 0;
-      width: 100%;
-      transition: 0.3s opacity;
-    }
-
-    .horizontal-slice-map-canvas {
-      position: absolute;
-      bottom: 0;
-      height: 64px;
-      width: 100%;
-    }
-    .horizontal-slice-wrapper[data-sticky='false'] .horizontal-slice-map-wrapper {
-      pointer-events: none;
-      opacity: 0;
-      transition: 0.15s opacity;
-    }
-    .horizontal-slice-wrapper[data-sticky='true'] .horizontal-slice-map-wrapper {
-      pointer-events: auto;
-      opacity: 1;
-    }
-
-    .horizontal-slice-map-brush-left,
-    .horizontal-slice-map-brush-right {
-      position: absolute;
-      bottom: 0;
-      height: 64px;
-      width: calc(100% - 128px);
-      background: var(--background, #fff);
-      transform-origin: left;
-      left: 64px;
-      opacity: 0.8;
-    }
-    .horizontal-slice-map-brush-right {
-      transform-origin: right;
-    }
-
-    .horizontal-slice-wrapper .image-wrapper {
+    .horizontal-slice .horizontal-scroll-wrapper .image-wrapper {
       margin: 0 20px;
       flex: auto;
       flex-basis: auto;

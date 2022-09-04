@@ -6,15 +6,15 @@ const height = 2
 
 let isListening = false
 
-const wrapperSelector = '.horizontal-slice-wrapper'
-const middleSelector = '.horizontal-slice-middle'
-const innerSelector = '.horizontal-slice-inner'
+const wrapperSelector = '.horizontal-scroll-wrapper'
+const middleSelector = '.horizontal-scroll-middle'
+const innerSelector = '.horizontal-scroll-inner'
 
-const canvasSelector = '.horizontal-slice-map-canvas'
+const canvasSelector = '.horizontal-scroll-map-canvas'
 const containerSelector = `[data-map='container']`
 const itemSelector = `[data-map='item']`
-const leftBrushSelector = '.horizontal-slice-map-brush-left'
-const rightBrushSelector = '.horizontal-slice-map-brush-right'
+const leftBrushSelector = '.horizontal-scroll-map-brush-left'
+const rightBrushSelector = '.horizontal-scroll-map-brush-right'
 
 const wrappers = document.querySelectorAll(wrapperSelector)
 
@@ -75,7 +75,7 @@ const getRelativeRect: GetRelativeRect = (totalWidth, viewportWidth, { x, width 
 const drawLines = async () => {
   const dpi = window.devicePixelRatio
   wrappers.forEach(wrapper => {
-    const inner = wrapper.querySelector?.('.horizontal-slice-inner')
+    const inner = wrapper.querySelector?.('.horizontal-scroll-inner')
     const canvas: HTMLCanvasElement | null = wrapper.querySelector(canvasSelector)
     const container = wrapper.querySelector(containerSelector)
     const items = Array.from(wrapper.querySelectorAll(itemSelector))
