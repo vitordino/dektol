@@ -1,16 +1,11 @@
 ---
 import { Colors } from '~/types'
+import generateCssVariables from '~/utils/generateCssVariables'
 export type Props = { renderBackground?: boolean, class?: string } & Colors
 const { renderBackground, foreground, background, ...props } = Astro.props as Props
 
 const renderBackgroundString = (renderBackground || false)?.toString()
-
-const reducer = (acc: string[], [k, v]: [string, string | null]) => {
-  if (!v) return acc
-  return [...acc, `--${k}: ${v}`]
-}
-
-const style = Object.entries({foreground, background}).reduce<string[]>(reducer, []).join('; ')
+const style = generateCssVariables({ background, foreground })
 ---
 
 <section

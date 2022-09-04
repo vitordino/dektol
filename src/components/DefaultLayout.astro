@@ -1,6 +1,7 @@
 ---
 import 'wipe.css'
 import Header from '~/components/Header.astro'
+import generateCssVariables from '~/utils/generateCssVariables'
 
 export type Props = {
   headerTitle?: string | null
@@ -11,10 +12,7 @@ export type Props = {
 const props = Astro.props as Props
 const { headerTitle, background, foreground } = props
 
-const wrapperStyle = [
-  background && `--background: ${background}`,
-  foreground && `--foreground: ${foreground}`,
-].filter(Boolean).join('; ')
+const wrapperStyle = generateCssVariables({ background, foreground })
 ---
 
 <html lang='en' data-js='false'>
