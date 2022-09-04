@@ -1,15 +1,58 @@
 ---
 import type { PageDocument } from '~/prismic.generated'
+import Image from '~/components/Image.astro'
 export type Props = PageDocument
-const { uid, data } = Astro.props
+const { uid, data } = Astro.props as Props
+const { background, foreground } = data
+
+const images = data.body
+  .flatMap(({ items }) => items)
+  .map(({ image }) => image)
+  .filter(({ url }) => url)
+
 ---
-<a class='home-item' href={`/${uid}`}>{data.title || uid} <slot/></a>
+<a class='home-item' href={`/${uid}`}>
+  <div class='home-item-images'>
+    {images.map(image => <Image {...image} />)}
+  </div>
+  <div class='home-item-title'>{data.title || uid} <slot/></div>
+</a>
 <script>
+  const HOME_ITEM_INTERVAL = 250
+
   const focusIfHTML = (target: EventTarget | null) => {
     if (target instanceof HTMLElement) target.scrollIntoView(false)
   }
+
   [...document.querySelectorAll('.home-item')].forEach(item => {
     item.addEventListener('focus', e => focusIfHTML(e.target))
+
+    let currentIndex: number | null = null
+    let intervalHandle: number | null = null
+
+    const onMouseEnter = ({ target }: Event) => {
+      if(!(target instanceof HTMLElement)) return
+      const images = [...target.querySelectorAll('.image-wrapper')]
+      const totalImages = images.length
+      if (currentIndex === null) {
+        currentIndex = 0
+        images[currentIndex].setAttribute('data-active', 'true')
+      }
+  
+      intervalHandle = window.setInterval(() => {
+        const startIndex = images.findIndex(x => x.getAttribute('data-active'))
+        images.forEach(x => x.removeAttribute('data-active'))
+        const nextIndex = startIndex + 1 >= totalImages ? 0 : startIndex + 1
+        images[nextIndex].setAttribute('data-active', 'true')
+      }, HOME_ITEM_INTERVAL)
+    }
+
+    const onMouseLeave = () => window.clearInterval(intervalHandle || undefined)
+
+    item.addEventListener('mouseenter', onMouseEnter)
+    item.addEventListener('focus', onMouseEnter)
+    item.addEventListener('mouseleave', onMouseLeave)
+    item.addEventListener('blur', onMouseLeave)
   })
 </script>
 
@@ -51,6 +94,41 @@ const { uid, data } = Astro.props
     margin-top: -1px;
   }
 
+  .home-item-images {
+    opacity: 0;
+  }
+
+  .home-item:hover .home-item-images,
+  .home-item:focus .home-item-images {
+    opacity: 1;
+  }
+
+  .home-item-images .image-wrapper {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    right: 0;
+    bottom: 1px;
+    opacity: 0;
+  }
+
+  .home-item-images .image-wrapper .image-wrapper-inner,
+  .home-item-images .image-wrapper .image-blurhash,
+  .home-item-images .image-wrapper .image-main {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .home-item-images .image-wrapper[data-active] {
+    opacity: 1;
+  }
+
+  .home-item-title {
+    position: relative;
+    mix-blend-mode: difference;
+  }
+
   @media (min-width: 720px) {
     .home-item {
       flex-basis: calc(50vw + 0.5px);
@@ -70,7 +148,7 @@ const { uid, data } = Astro.props
       left: 0;
       opacity: 0.1;
     }
-    
+
     .home-item:last-of-type {
       margin-right: 1px;
     }
@@ -83,6 +161,10 @@ const { uid, data } = Astro.props
     .home-item + .home-item {
       margin-top: 64px;
       margin-left: -1px;
+    }
+
+    .home-item-images .image-wrapper {
+      bottom: 0;
     }
   }
   @media (min-width: 1280px) {

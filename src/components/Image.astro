@@ -36,7 +36,7 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
 
 <div class='image-wrapper' data-format={getFormat(ratio)}>
-  <div data-map='item'>
+  <div class='image-wrapper-inner' data-map='item'>
     {blurHash && <img class='image-blurhash' src={blurHash} aria-hidden='true' />}
     <img
       class='image-main'
