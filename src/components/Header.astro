@@ -1,15 +1,29 @@
 ---
+import Logo from "~/components/Logo.astro";
+
 export type Props = { title?: string | null }
 const props = Astro.props as Props
 const { title } = props
 ---
 
 <header class='header'>
-  <a href="/" class='header-logo' aria-label='index' />
-  {title && <div class='header-title'><div class='header-title-text'>{title}</div></div>}
+  <a href="/" class='header-logo' aria-label='index'>
+    <Logo />
+  </a>
+  {title && (
+    <div class='header-title'>
+      <div class='header-title-text'>{title}</div>
+    </div>
+  )}
 </header>
 
 <style is:global>
+  @keyframes header-logo-rotate {
+    to {
+      transform: rotate(-72deg);
+    }
+  }
+
   .header {
     position: fixed;
     display: flex;
@@ -26,8 +40,14 @@ const { title } = props
     margin: 18px;
     width: 24px;
     height: 24px;
-    background: currentColor;
+    color: currentColor;
     pointer-events: auto;
+    outline: none;
+  }
+
+  .header-logo:hover,
+  .header-logo:focus {
+    animation: 0.25s header-logo-rotate forwards;
   }
 
   .header-title {
