@@ -27,7 +27,39 @@ interface HomeDocumentData {
      *
      */
     foreground: prismicT.ColorField;
+    /**
+     * Slice Zone (`body`) field in *home*
+     *
+     * - **Field Type**: Slice Zone
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.body[]
+     * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+     *
+     */
+    body: prismicT.SliceZone<HomeDocumentDataBodySlice>;
 }
+/**
+ * Item in home → Slice Zone (`body`) → home items → Items
+ *
+ */
+export interface HomeDocumentDataBodyHomeItemsSliceItem {
+    /**
+     * items field in *home → Slice Zone (`body`) → home items → Items*
+     *
+     * - **Field Type**: Content Relationship
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.body[].home_items.items[].items
+     * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+     *
+     */
+    items: prismicT.RelationField<"page">;
+}
+export type HomeDocumentDataBodyHomeItemsSlice = prismicT.Slice<"home_items", Record<string, never>, Simplify<HomeDocumentDataBodyHomeItemsSliceItem>>;
+/**
+ * Slice for *home → Slice Zone (`body`)*
+ *
+ */
+type HomeDocumentDataBodySlice = HomeDocumentDataBodyHomeItemsSlice;
 /**
  * home document from Prismic
  *

@@ -11,6 +11,34 @@
       "config": {
         "label": "foreground"
       }
+    },
+    "body": {
+      "type": "Slices",
+      "fieldset": "Slice zone",
+      "config": {
+        "labels": {},
+        "choices": {
+          "home_items": {
+            "type": "Slice",
+            "fieldset": "home items",
+            "description": "horizontal gallery with slideshow effect",
+            "icon": "photo_album",
+            "non-repeat": {},
+            "repeat": {
+              "items": {
+                "type": "Link",
+                "config": {
+                  "select": "document",
+                  "customtypes": [
+                    "page"
+                  ],
+                  "label": "items"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
