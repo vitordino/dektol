@@ -3,6 +3,7 @@ import getAllPageDocuments from '~/utils/getAllPageDocuments'
 import getPageDocument from '~/utils/getPageDocument'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 import Slice from '~/components/Slice.astro'
+import getHomeDocument from '~/utils/getHomeDocument'
 
 export const getStaticPaths = async () => {
   const allPageDocuments = await getAllPageDocuments()
@@ -11,8 +12,15 @@ export const getStaticPaths = async () => {
 
 if (!Astro.params.id) throw new Error('no id for pages/[id]')
 
-const { data } = await getPageDocument(Astro.params.id) 
+const { data, uid } = await getPageDocument(Astro.params.id) 
+const homeData = await getHomeDocument()
+
+const layoutProps = {
+  headerTitle: data.title || uid,
+  background: data.background || homeData?.background,
+  foreground: data.foreground || homeData?.foreground,
+}
 ---
-<DefaultLayout headerTitle={data.title} background={data.background} foreground={data.foreground}>
+<DefaultLayout {...layoutProps}>
   {data?.body.map(slice => <Slice {...slice} />)}
 </DefaultLayout>
