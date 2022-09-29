@@ -5,18 +5,23 @@ import DefaultLayout from '~/components/DefaultLayout.astro'
 import HorizontalScroll from '~/components/HorizontalScroll.astro';
 import HomeItem from '~/components/HomeItem.astro';
 
-const { background, foreground } = await getHomeDocument() || {}
+const { background, foreground, body } = await getHomeDocument() || {}
 const pages = await getAllPageDocuments()
+const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
+
+// @ts-ignore-next-line
+const homeItems = body?.map(x => x.items.map(x => getPageData(x.items.id)))
 
 ---
 <DefaultLayout background={background} foreground={foreground}>
   <main class='home'>
-    <HorizontalScroll>
-      {pages.map(x => <HomeItem {...x}>1</HomeItem>)}
-      {pages.map(x => <HomeItem {...x}>2</HomeItem>)}
-      {pages.map(x => <HomeItem {...x}>3</HomeItem>)}
-      {pages.map(x => <HomeItem {...x}>4</HomeItem>)}
-    </HorizontalScroll>
+    {homeItems?.map(x => (
+      <HorizontalScroll>
+        {// @ts-ignore-next-line
+          x.map(x => <HomeItem {...x} />)
+        }
+      </HorizontalScroll>
+    ))}
   </main>
 </DefaultLayout>
 
