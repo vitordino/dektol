@@ -1,5 +1,5 @@
 {
-  "Main": {
+  "main": {
     "background": {
       "type": "Color",
       "config": {
@@ -38,6 +38,28 @@
             }
           }
         }
+      }
+    }
+  },
+  "seo": {
+    "meta_title": {
+      "type": "Text",
+      "config": {
+        "label": "meta title"
+      }
+    },
+    "meta_description": {
+      "type": "Text",
+      "config": {
+        "label": "meta description"
+      }
+    },
+    "meta_image": {
+      "type": "Image",
+      "config": {
+        "constraint": {},
+        "thumbnails": [],
+        "label": "meta image"
       }
     }
   }

@@ -37,6 +37,36 @@ interface HomeDocumentData {
      *
      */
     body: prismicT.SliceZone<HomeDocumentDataBodySlice>;
+    /**
+     * meta title field in *home*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.meta_title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_title: prismicT.KeyTextField;
+    /**
+     * meta description field in *home*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.meta_description
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_description: prismicT.KeyTextField;
+    /**
+     * meta image field in *home*
+     *
+     * - **Field Type**: Image
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.meta_image
+     * - **Documentation**: https://prismic.io/docs/core-concepts/image
+     *
+     */
+    meta_image: prismicT.ImageField<null>;
 }
 /**
  * Item in home → Slice Zone (`body`) → home items → Items
@@ -112,6 +142,36 @@ interface PageDocumentData {
      *
      */
     body: prismicT.SliceZone<PageDocumentDataBodySlice>;
+    /**
+     * meta title field in *page*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: page.meta_title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_title: prismicT.KeyTextField;
+    /**
+     * meta description field in *page*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: page.meta_description
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_description: prismicT.KeyTextField;
+    /**
+     * meta image field in *page*
+     *
+     * - **Field Type**: Image
+     * - **Placeholder**: *None*
+     * - **API ID Path**: page.meta_image
+     * - **Documentation**: https://prismic.io/docs/core-concepts/image
+     *
+     */
+    meta_image: prismicT.ImageField<null>;
 }
 /**
  * Primary content in page → Slice Zone (`body`) → Horizontal → Primary
