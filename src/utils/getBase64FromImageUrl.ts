@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import { readFile, appendFile, writeFile } from 'node:fs/promises'
 import { encode } from 'base64-arraybuffer'
 
-const isDev = process.env.NODE_ENV === 'development'
+const isCI = !!process.env.CI
 // tab separated
 const SEPARATOR = '\t'
 const LINE_BREAK = '\n'
@@ -52,7 +52,7 @@ type GetBase64FromImageUrl = (url?: string | null) => Promise<string | undefined
 const getBase64FromImageUrl: GetBase64FromImageUrl = async url => {
   const id = getImageId(url)
   if (!url || !id) return
-  if (isDev) {
+  if (!isCI) {
     const valueInCache = await getIdValueInCache(id)
     if (valueInCache) return valueInCache
   }
@@ -62,7 +62,7 @@ const getBase64FromImageUrl: GetBase64FromImageUrl = async url => {
   const buffer = await imageData.arrayBuffer()
   const contentType = await imageData.headers.get('content-type')
   const value = `data:image/${contentType};base64,` + encode(buffer)
-  if (isDev) await saveKeyValueInCache(id, value)
+  if (!isCI) await saveKeyValueInCache(id, value)
   return value
 }
 
