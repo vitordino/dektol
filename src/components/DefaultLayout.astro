@@ -20,6 +20,12 @@ const wrapperStyle = generateCssVariables({ background, foreground })
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width' />
     <title>Astro</title>
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+
     <script is:inline>
       if (typeof window.queueMicrotask !== 'function') {
         window.queueMicrotask = callback => Promise.resolve().then(callback)
