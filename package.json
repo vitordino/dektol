@@ -23,6 +23,7 @@
     "@prismicio/types": "^0.2.3",
     "@tsconfig/node14": "^1.0.1",
     "astro": "^1.4.2",
+    "astro-webmanifest": "^0.4.1",
     "dotenv": "^16.0.3",
     "eslint": "^8.24.0",
     "eslint-plugin-node": "^11.1.0",
