@@ -3,8 +3,6 @@ export type Props = { map?: boolean }
 const { map } = Astro.props
 ---
 
-<script src='./HorizontalScroll.ts'></script>
-
 <div class='horizontal-scroll-wrapper'>
   <div class='horizontal-scroll-middle'>
     <div class='horizontal-scroll-inner' data-map='container'>
@@ -21,6 +19,8 @@ const { map } = Astro.props
     </div>
   )}
 </div>
+
+<script src='./HorizontalScroll.ts' />
 
 <style is:global>
   .horizontal-scroll-map-wrapper {
