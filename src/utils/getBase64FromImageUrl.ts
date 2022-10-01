@@ -1,13 +1,13 @@
-import memoize from 'p-memoize'
 import { resolve } from 'node:path'
-import { readFile, appendFile, writeFile } from 'node:fs/promises'
+import { readFile, appendFile, mkdir } from 'node:fs/promises'
+import memoize from 'p-memoize'
 import { encode } from 'base64-arraybuffer'
 
-const isCI = !!process.env.CI
 // tab separated
 const SEPARATOR = '\t'
 const LINE_BREAK = '\n'
-const CACHE_PATH = resolve('.', '.cache', 'base64.txt')
+const CACHE_FOLDER = resolve(process.env.PWD || '.', 'node_modules', '.cache')
+const CACHE_FILE = resolve(CACHE_FOLDER, 'base64.txt')
 const FILE_OPTIONS = { encoding: 'utf-8' } as const
 
 const getImageId = (s?: string | null) => {
@@ -15,18 +15,10 @@ const getImageId = (s?: string | null) => {
   return paths?.[paths?.length - 1].split('_')[0] || s
 }
 
-const getCache = async () => {
-  try {
-    await appendFile(CACHE_PATH, '', FILE_OPTIONS)
-    return await readFile(CACHE_PATH, FILE_OPTIONS)
-  } catch {
-    try {
-      await writeFile(CACHE_PATH, '', FILE_OPTIONS)
-      return await ''
-    } catch {
-      return await ''
-    }
-  }
+const getCache = async (): Promise<string> => {
+  await mkdir(resolve(CACHE_FOLDER), { recursive: true })
+  await appendFile(CACHE_FILE, '', FILE_OPTIONS)
+  return await readFile(CACHE_FILE, FILE_OPTIONS)
 }
 
 const getIdValueInCache = async (id: string) => {
@@ -45,24 +37,22 @@ const getIdValueInCache = async (id: string) => {
 
 const saveKeyValueInCache = async (key: string, value: string) => {
   console.log('[getBase64FromImageUrl]: CACHE SAVE: ', key)
-  await appendFile(CACHE_PATH, [key, value].join(SEPARATOR) + LINE_BREAK, FILE_OPTIONS)
+  await appendFile(CACHE_FILE, [key, value].join(SEPARATOR) + LINE_BREAK, FILE_OPTIONS)
 }
 
 type GetBase64FromImageUrl = (url?: string | null) => Promise<string | undefined>
 const getBase64FromImageUrl: GetBase64FromImageUrl = async url => {
   const id = getImageId(url)
   if (!url || !id) return
-  if (!isCI) {
-    const valueInCache = await getIdValueInCache(id)
-    if (valueInCache) return valueInCache
-  }
+  const valueInCache = await getIdValueInCache(id)
+  if (valueInCache) return valueInCache
 
   const imageData = await fetch(url)
   console.log('[getBase64FromImageUrl]: FETCH: ', id)
   const buffer = await imageData.arrayBuffer()
   const contentType = await imageData.headers.get('content-type')
   const value = `data:image/${contentType};base64,` + encode(buffer)
-  if (!isCI) await saveKeyValueInCache(id, value)
+  await saveKeyValueInCache(id, value)
   return value
 }
 
