@@ -523,7 +523,7 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@prismicio/client@^6.6", "@prismicio/client@^6.7.1":
+"@prismicio/client@^6.4.3", "@prismicio/client@^6.7.1":
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/@prismicio/client/-/client-6.7.1.tgz#2c4a514a6e3865008716e3d2cbabaa0cb919090b"
   integrity sha512-XIFSZtLjxnpQavu2R7jIqmnFvUqRRzHwjXHt/fb0N550rFLQM4tnwDuSR3VY6k/TG+M5zvH+PHJuXGNnv73qUQ==
@@ -605,13 +605,13 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@ts-morph/common@~0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@ts-morph/common/-/common-0.16.0.tgz#57e27d4b3fd65a4cd72cb36679ed08acb40fa3ba"
-  integrity sha512-SgJpzkTgZKLKqQniCjLaE3c2L2sdL7UShvmTmPBejAKd2OKV/yfMpQ2IWpAuA+VY5wy7PkSUaEObIqEK6afFuw==
+"@ts-morph/common@~0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@ts-morph/common/-/common-0.13.0.tgz#77dea1565baaf002d1bc2c20e05d1fb3349008a9"
+  integrity sha512-fEJ6j7Cu8yiWjA4UmybOBH9Efgb/64ZTWuvCF4KysGu4xz8ettfyaqFt8WZ1btCxXsGZJjZ2/3svOF6rL+UFdQ==
   dependencies:
     fast-glob "^3.2.11"
-    minimatch "^5.1.0"
+    minimatch "^5.0.1"
     mkdirp "^1.0.4"
     path-browserify "^1.0.1"
 
@@ -746,6 +746,11 @@
   integrity sha512-3TGCfOcy8R8mMQ4CNSNOe3PG66HttvjcLzCoOpvXvDtfWOTi+uT/rxeOKm/qEwbM4SNe1O/PjdiBK2YcTjU4OQ==
   dependencies:
     "@types/unist" "*"
+
+"@types/node@16":
+  version "16.11.62"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.62.tgz#bab2e6208531321d147eda20c38e389548cd5ffc"
+  integrity sha512-K/ggecSdwAAy2NUW4WKmF4Rc03GKbsfP+k326UWgckoS+Rzd2PaWbjk76dSmqdLQvLTJAO9axiTUJ6488mFsYQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2527,7 +2532,7 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
-jiti@^1.14.0:
+jiti@^1.13.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.16.0.tgz#f72065954446ad1866fa8d6bcc3bed3cc1cebdaa"
   integrity sha512-L3BJStEf5NAqNuzrpfbN71dp43mYIcBUlCRea/vdyv5dW/AYa1d4bpelko4SHdY3I6eN9Wzyasxirj1/vv5kmg==
@@ -2889,7 +2894,7 @@ mdurl@^1.0.0:
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
   integrity sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==
 
-meow@^10.1.3:
+meow@^10.1.2:
   version "10.1.4"
   resolved "https://registry.yarnpkg.com/meow/-/meow-10.1.4.tgz#aa95b9039d3a46c460066fdec6c20fc3a94ee0ad"
   integrity sha512-FAlXANqPxtd6Od1kTzm39cHbhYn5t/TI0pP5yV9bmzteII7+couYcU+T9sgbzCgi0KVdiw85aRie9UBUfucYvQ==
@@ -3279,7 +3284,7 @@ minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@^5.1.0:
+minimatch@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
   integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
@@ -3377,7 +3382,7 @@ node-domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
   integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
 
-node-fetch@^3.2.10, node-fetch@^3.2.5:
+node-fetch@^3.2.4, node-fetch@^3.2.5:
   version "3.2.10"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-3.2.10.tgz#e8347f94b54ae18b57c9c049ef641cef398a85c8"
   integrity sha512-MhuzNwdURnZ1Cp4XTazr69K0BTizsBroX7Zx3UgDSVcZYKF/6p0CBe4EUb/hLqmzVhl0UpYfgRljQ4yxE+iCxA==
@@ -3695,28 +3700,27 @@ prettier-plugin-astro@^0.5.5:
     sass-formatter "^0.7.5"
     synckit "^0.7.0"
 
-prettier@^2.6.1, prettier@^2.7.1:
+prettier@^2.6.1, prettier@^2.6.2, prettier@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
 
-prismic-ts-codegen@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/prismic-ts-codegen/-/prismic-ts-codegen-0.1.5.tgz#75d6933c881f8c436b7f778e0c54591952256953"
-  integrity sha512-7yd5VjMl/K8TDQFDbZbH7NgvCct9F5YKvWsEbNwPpMFb2lJPmDiCCKvfGGM5STpLAQc72+YpL8kDPy/UfwVGxg==
+prismic-ts-codegen@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/prismic-ts-codegen/-/prismic-ts-codegen-0.0.3.tgz#3b40b4bc0294137f82077ec0ed9354927fb72e7e"
+  integrity sha512-GNBQ+MfRaUD/wHoG40PxNrnUViyslCvPti0dor9CozqTpwkGrB+wnHBOnKoOnYvlpfO3uJxpQFNSR3/pHtmp8g==
   dependencies:
+    "@prismicio/client" "^6.4.3"
     "@prismicio/custom-types-client" "^0.0.7"
     common-tags "^1.8.2"
     fast-glob "^3.2.11"
-    jiti "^1.14.0"
+    jiti "^1.13.0"
     joi "^17.6.0"
-    meow "^10.1.3"
-    node-fetch "^3.2.10"
+    meow "^10.1.2"
+    node-fetch "^3.2.4"
     pascal-case "^3.1.2"
-    prettier "^2.7.1"
-    ts-morph "^15.1.0"
-  optionalDependencies:
-    "@prismicio/client" "^6.6"
+    prettier "^2.6.2"
+    ts-morph "^14.0.0"
 
 prismjs@^1.28.0:
   version "1.28.0"
@@ -4405,18 +4409,18 @@ trough@^2.0.0:
   resolved "https://registry.yarnpkg.com/trough/-/trough-2.1.0.tgz#0f7b511a4fde65a46f18477ab38849b22c554876"
   integrity sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==
 
-ts-morph@^15.1.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-15.1.0.tgz#53deea5296d967ff6eba8f15f99d378aa7074a4e"
-  integrity sha512-RBsGE2sDzUXFTnv8Ba22QfeuKbgvAGJFuTN7HfmIRUkgT/NaVLfDM/8OFm2NlFkGlWEXdpW5OaFIp1jvqdDuOg==
+ts-morph@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/ts-morph/-/ts-morph-14.0.0.tgz#6bffb7e4584cf6a9aebce2066bf4258e1d03f9fa"
+  integrity sha512-tO8YQ1dP41fw8GVmeQAdNsD8roZi1JMqB7YwZrqU856DvmG5/710e41q2XauzTYrygH9XmMryaFeLo+kdCziyA==
   dependencies:
-    "@ts-morph/common" "~0.16.0"
+    "@ts-morph/common" "~0.13.0"
     code-block-writer "^11.0.0"
 
-ts-node@^10.8.0:
-  version "10.9.1"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
-  integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
+ts-node@10.8.0:
+  version "10.8.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.8.0.tgz#3ceb5ac3e67ae8025c1950626aafbdecb55d82ce"
+  integrity sha512-/fNd5Qh+zTt8Vt1KbYZjRHCE9sI5i7nqfD/dzBBRDeVXZXS6kToW6R7tTU6Nd4XavFs0mAVCg29Q//ML7WsZYA==
   dependencies:
     "@cspotcode/source-map-support" "^0.8.0"
     "@tsconfig/node10" "^1.0.7"
