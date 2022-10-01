@@ -1,9 +1,13 @@
+import 'dotenv/config'
 import * as prismic from '@prismicio/client'
 import type { LinkResolverFunction } from '@prismicio/helpers'
 import config from '../.prismic.json'
+import fetch from 'node-fetch'
 
-// @ts-expect-error
-const ENV_ENDPOINT = prismic.getRepositoryEndpoint(import.meta.env.PRISMIC_REPO)
+const ENV_ENDPOINT = prismic.getRepositoryEndpoint(
+  // @ts-expect-error
+  import.meta.env.PRISMIC_REPO || process.env.PRISMIC_REPO,
+)
 const CONFIG_ENDPOINT = config.apiEndpoint
 export const endpoint = ENV_ENDPOINT || CONFIG_ENDPOINT
 export const repositoryName = prismic.getRepositoryName(endpoint)
@@ -21,6 +25,6 @@ export const linkResolver: LinkResolverFunction = doc => {
 }
 
 export const createClient = (config: prismic.ClientConfig = {}) => {
-  const client = prismic.createClient(repositoryName, config)
+  const client = prismic.createClient(repositoryName, { ...config, fetch })
   return client
 }
