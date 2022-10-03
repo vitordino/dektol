@@ -2,15 +2,48 @@
 import 'wipe.css'
 import Header from '~/components/Header.astro'
 import generateCssVariables from '~/utils/generateCssVariables'
+import getHomeDocument from '~/utils/getHomeDocument'
+import { AstroSeo } from '@astrolib/seo'
+
+type AstroSeoProps = Parameters<typeof AstroSeo>[0]
+type OpenGraphMedia = NonNullable<NonNullable<NonNullable<AstroSeoProps>['openGraph']>['images']>[number]
 
 export type Props = {
-  headerTitle?: string | null
-  background?: string | null
-  foreground?: string | null
+  headerTitle?: string
+  metaTitle?: string
+  metaDescription?: string
+  metaImage?: OpenGraphMedia
+  background?: string
+  foreground?: string
 }
 
 const props = Astro.props as Props
-const { headerTitle, background, foreground } = props
+const { headerTitle } = props
+
+const homeDocument = await getHomeDocument()
+
+const background = props.background || homeDocument?.background 
+const foreground = props.foreground || homeDocument?.foreground 
+
+const seoProps: AstroSeoProps = {
+  title: props.metaTitle || homeDocument?.meta_title || undefined,
+  description: props.metaDescription || homeDocument?.meta_description || undefined,
+  openGraph: { 
+    title: props.metaTitle || homeDocument?.meta_title || undefined,
+    description: props.metaDescription || homeDocument?.meta_description || undefined,
+    images:
+      props.metaImage
+        ? [props.metaImage]
+        : homeDocument?.meta_image?.url
+          ? [
+            {
+              url: homeDocument.meta_image.url,
+              alt: homeDocument.meta_image.alt || undefined,
+              ...homeDocument.meta_image.dimensions,
+            }]
+          : undefined
+  }
+}
 
 const wrapperStyle = generateCssVariables({ background, foreground })
 ---
@@ -19,7 +52,7 @@ const wrapperStyle = generateCssVariables({ background, foreground })
   <head>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width' />
-    <title>Astro</title>
+    <AstroSeo {...seoProps} />
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">

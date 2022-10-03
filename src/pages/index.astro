@@ -13,7 +13,7 @@ const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
 const homeItems = body?.map(x => x.items.map(x => getPageData(x.items.id)))
 
 ---
-<DefaultLayout background={background} foreground={foreground}>
+<DefaultLayout background={background || undefined} foreground={foreground || undefined}>
   <main class='home'>
     {homeItems?.map(x => (
       <HorizontalScroll class='home-items'>
