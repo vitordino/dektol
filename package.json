@@ -12,6 +12,7 @@
     "get-custom-types": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"esnext\", \"target\": \"es2017\", \"lib\": [\"esnext\"]}' ts-node --esm scripts/get-custom-types.ts"
   },
   "dependencies": {
+    "@astrolib/seo": "^0.2.1",
     "@prismicio/client": "^6.7.1",
     "@prismicio/helpers": "^2.3.5",
     "@types/node": "16",
