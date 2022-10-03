@@ -16,7 +16,7 @@ const homeItems = body?.map(x => x.items.map(x => getPageData(x.items.id)))
 <DefaultLayout background={background} foreground={foreground}>
   <main class='home'>
     {homeItems?.map(x => (
-      <HorizontalScroll>
+      <HorizontalScroll class='home-items'>
         {// @ts-ignore-next-line
           x.map(x => <HomeItem {...x} />)
         }

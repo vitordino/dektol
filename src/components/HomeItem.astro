@@ -3,7 +3,6 @@ import type { PageDocument } from '~/prismic.generated'
 import Image from '~/components/Image.astro'
 export type Props = PageDocument
 const { uid, data } = Astro.props as Props
-const { background, foreground } = data
 
 const images = data.body
   .flatMap(({ items }) => items)
@@ -20,39 +19,27 @@ const images = data.body
 <script>
   const HOME_ITEM_INTERVAL = 250
 
-  const focusIfHTML = (target: EventTarget | null) => {
+  const focusIfHTML = ({ target }: Event) => {
     if (target instanceof HTMLElement) target.scrollIntoView(false)
   }
 
   [...document.querySelectorAll('.home-item')].forEach(item => {
-    item.addEventListener('focus', e => focusIfHTML(e.target))
+    item.addEventListener('focus', focusIfHTML)
 
-    let currentIndex: number | null = null
-    let intervalHandle: number | null = null
+    const images = [...item.querySelectorAll('.image-wrapper')]
+    const totalImages = images.length
+    
+    images[0].setAttribute('data-active', 'true')
 
-    const onMouseEnter = ({ target }: Event) => {
-      if(!(target instanceof HTMLElement)) return
-      const images = [...target.querySelectorAll('.image-wrapper')]
-      const totalImages = images.length
-      if (currentIndex === null) {
-        currentIndex = 0
-        images[currentIndex].setAttribute('data-active', 'true')
-      }
-  
-      intervalHandle = window.setInterval(() => {
-        const startIndex = images.findIndex(x => x.getAttribute('data-active'))
-        images.forEach(x => x.removeAttribute('data-active'))
-        const nextIndex = startIndex + 1 >= totalImages ? 0 : startIndex + 1
-        images[nextIndex].setAttribute('data-active', 'true')
-      }, HOME_ITEM_INTERVAL)
-    }
-
-    const onMouseLeave = () => window.clearInterval(intervalHandle || undefined)
-
-    item.addEventListener('mouseenter', onMouseEnter)
-    item.addEventListener('focus', onMouseEnter)
-    item.addEventListener('mouseleave', onMouseLeave)
-    item.addEventListener('blur', onMouseLeave)
+    window.setInterval(() => {
+      const someItemHasFocus = [...document.querySelectorAll('.home-item')].some(x => x?.matches(':focus'))
+      if (someItemHasFocus && !item.matches(':focus')) return
+      if (!someItemHasFocus && !item.matches(':hover')) return
+      const startIndex = images.findIndex(x => x.getAttribute('data-active'))
+      images.forEach(x => x.removeAttribute('data-active'))
+      const nextIndex = startIndex + 1 >= totalImages ? 0 : startIndex + 1
+      images[nextIndex].setAttribute('data-active', 'true')
+    }, HOME_ITEM_INTERVAL)
   })
 </script>
 
@@ -69,7 +56,7 @@ const images = data.body
     overflow: hidden;
   }
 
-  .home-item:hover,
+  .home-items:not(:focus-within) .home-item:hover,
   .home-item:focus {
     z-index: 1;
   }
@@ -85,7 +72,7 @@ const images = data.body
     opacity: 0.1;
   }
   
-  .home-item:hover:before,
+  .home-items:not(:focus-within) .home-item:hover:before,
   .home-item:focus:before {
     opacity: 0.25;
   }
@@ -98,7 +85,7 @@ const images = data.body
     opacity: 0;
   }
 
-  .home-item:hover .home-item-images,
+  .home-items:not(:focus-within) .home-item:hover .home-item-images,
   .home-item:focus .home-item-images {
     opacity: 1;
   }
@@ -153,7 +140,7 @@ const images = data.body
       margin-right: 1px;
     }
 
-    .home-item:hover:before,
+    .home-items:not(:focus-within) .home-item:hover:before,
     .home-item:focus:before {
       opacity: 0.25;
     }

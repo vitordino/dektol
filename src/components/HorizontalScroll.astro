@@ -1,9 +1,14 @@
 ---
-export type Props = { map?: boolean }
+export type Props = { map?: boolean, class?: string }
 const { map } = Astro.props
+
+const className = [
+  'horizontal-scroll-wrapper',
+  Astro.props.class
+].filter(Boolean).join(' ')
 ---
 
-<div class='horizontal-scroll-wrapper'>
+<div class={className}>
   <div class='horizontal-scroll-middle'>
     <div class='horizontal-scroll-inner' data-map='container'>
       <div class='horizontal-scroll-spacer'></div>
