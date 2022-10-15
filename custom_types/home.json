@@ -62,5 +62,28 @@
         "label": "meta image"
       }
     }
+  },
+  "header": {
+    "header_links": {
+      "type": "Group",
+      "config": {
+        "fields": {
+          "text": {
+            "type": "Text",
+            "config": {
+              "label": "text"
+            }
+          },
+          "link": {
+            "type": "Link",
+            "config": {
+              "label": "url",
+              "select": null
+            }
+          }
+        },
+        "label": "header links"
+      }
+    }
   }
 }

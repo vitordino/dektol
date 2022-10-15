@@ -67,6 +67,16 @@ interface HomeDocumentData {
      *
      */
     meta_image: prismicT.ImageField<null>;
+    /**
+     * header links field in *home*
+     *
+     * - **Field Type**: Group
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.header_links[]
+     * - **Documentation**: https://prismic.io/docs/core-concepts/group
+     *
+     */
+    header_links: prismicT.GroupField<Simplify<HomeDocumentDataHeaderLinksItem>>;
 }
 /**
  * Item in home → Slice Zone (`body`) → home items → Items
@@ -90,6 +100,32 @@ export type HomeDocumentDataBodyHomeItemsSlice = prismicT.Slice<"home_items", Re
  *
  */
 type HomeDocumentDataBodySlice = HomeDocumentDataBodyHomeItemsSlice;
+/**
+ * Item in home → header links
+ *
+ */
+export interface HomeDocumentDataHeaderLinksItem {
+    /**
+     * text field in *home → header links*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.header_links[].text
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    text: prismicT.KeyTextField;
+    /**
+     * url field in *home → header links*
+     *
+     * - **Field Type**: Link
+     * - **Placeholder**: *None*
+     * - **API ID Path**: home.header_links[].link
+     * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+     *
+     */
+    link: prismicT.LinkField;
+}
 /**
  * home document from Prismic
  *
