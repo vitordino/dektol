@@ -8,7 +8,7 @@ const props = Astro.props as Props
 const { items, primary } = props
 ---
 
-<Section class='horizontal-slice' foreground={primary.foreground} background={primary.background} renderBackground={true}>
+<Section class='slice horizontal-slice' foreground={primary.foreground} background={primary.background} renderBackground={true}>
   <HorizontalScroll map>
     {items.map(({ image }) => image ? <Image {...image} /> : null )}
   </HorizontalScroll>

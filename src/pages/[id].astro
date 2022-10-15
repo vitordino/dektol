@@ -4,6 +4,8 @@ import getPageDocument from '~/utils/getPageDocument'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 import Slice from '~/components/Slice.astro'
 import getHomeDocument from '~/utils/getHomeDocument'
+import HorizontalScroll from '~/components/HorizontalScroll.astro';
+import HomeItem from '~/components/HomeItem.astro';
 
 export const getStaticPaths = async () => {
   const allPageDocuments = await getAllPageDocuments()
@@ -17,10 +19,28 @@ const homeData = await getHomeDocument()
 
 const layoutProps = {
   headerTitle: data.title || uid,
-  background: data.background || homeData?.background,
-  foreground: data.foreground || homeData?.foreground,
+  background: data.background || homeData?.background || undefined,
+  foreground: data.foreground || homeData?.foreground || undefined,
 }
+
+const pages = await getAllPageDocuments()
+const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
+
+const paginationItems = homeData?.body
+  // @ts-ignore-next-line
+  ?.flatMap(x => x.items.map(x => getPageData(x.items.id)))
+  // @ts-ignore-next-line
+  ?.filter(({ uid }) => uid !== Astro.params.id)
+
 ---
 <DefaultLayout {...layoutProps}>
   {data?.body.map(slice => <Slice {...slice} />)}
+  <div style="padding-top: 100vh" />
+  <div style="position: fixed; top: 0; bottom: 0; left: 0; right: 0;">
+    <HorizontalScroll class='home-items'>
+      {// @ts-ignore-next-line
+        paginationItems.map(x => <HomeItem {...x} />)
+      }
+    </HorizontalScroll>
+  </div>
 </DefaultLayout>
