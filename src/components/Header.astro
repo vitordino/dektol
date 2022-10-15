@@ -1,24 +1,50 @@
 ---
-import Logo from "~/components/Logo.astro";
+import getHomeDocument from '~/utils/getHomeDocument';
+import Logo from '~/components/Logo.astro';
 
 export type Props = { title?: string | null }
 const props = Astro.props as Props
 const { title } = props
+
+const homeData = await getHomeDocument()
+
+if (!homeData) return;
+
+
+const headerLinks = homeData.header_links
+.map(({ text, link }) => ({
+  text,
+    // @ts-expect-error
+    url: link.uid ? `/${link.uid}` : link.url,
+    // @ts-expect-error
+    external: !!link.uid,
+  }))
+  .filter(x => x.text && x.url)
+
 ---
 
 <header class='header'>
-  <a href="/" class='header-logo' aria-label='index'>
-    <Logo />
-  </a>
-  {title && (
-    <div class='header-title'>
-      <div class='header-title-text'>{title}</div>
-    </div>
-  )}
+  <div class='header-left'>
+    <a href='/' class='header-logo' aria-label='index'>
+      <div class='header-logo-image'>
+        <Logo />
+      </div>
+    </a>
+    {title && (
+      <div class='header-title'>
+        <div class='header-title-text'>{title}</div>
+      </div>
+    )}
+  </div>
+  <div class='header-right'>
+    {headerLinks.map(({ text, url }) => (
+      <a class='header-link' href={url}>{text}</a>
+    ))}  
+  </div>
 </header>
 
 <style is:global>
-  @keyframes header-logo-rotate {
+  @keyframes header-logo-image-rotate {
     to {
       transform: rotate(-72deg);
     }
@@ -32,31 +58,51 @@ const { title } = props
     top: 0;
     pointer-events: none;
     align-items: center;
+    justify-content: space-between;
     z-index: 2;
     mix-blend-mode: difference;
     color: white;
+    line-height: 24px;
+  }
+
+  .header-left,
+  .header-right {
+    display: flex;
+    align-items: center;
   }
 
   .header-logo {
-    margin: 18px;
-    width: 24px;
-    height: 24px;
+    padding: 20px;
     color: currentColor;
     pointer-events: auto;
     outline: none;
   }
+  
+  .header-logo-image {
+    width: 24px;
+    height: 24px;
+  }
 
-  .header-logo:hover,
-  .header-logo:focus {
-    animation: 0.25s header-logo-rotate forwards;
+  .header-logo:hover .header-logo-image,
+  .header-logo:focus .header-logo-image {
+    animation: 0.25s header-logo-image-rotate forwards;
   }
 
   .header-title {
     pointer-events: auto;
-    line-height: 24px;
   }
-  
-  .header-title-text {
-    line-height: 24px;
+
+  .header-link {
+    padding: 20px;
+    cursor: pointer;
+    pointer-events: auto;
+    outline: none;
+    opacity: 0.5;
+    mix-blend-mode: difference;
+  }
+
+  .header-link:hover,
+  .header-link:focus {
+    opacity: 1;
   }
 </style>
