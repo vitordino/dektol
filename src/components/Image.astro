@@ -4,7 +4,7 @@ import getBase64FromImageUrl from '~/utils/getBase64FromImageUrl'
 
 export type Props = ImageFieldImage
 const props = Astro.props as Props
-const { url, dimensions, alt } = props
+const { url, dimensions } = props
 const ratio = dimensions ? dimensions.width / dimensions.height : 1
 
 const getFormat = (ratio: number) => {
@@ -32,6 +32,26 @@ const srcset = `
   ${url}&w=3200&q=30 3200w,
 `
 
+const filename = decodeURIComponent(new URL(props.url || '').pathname)
+  ?.split('_')
+  ?.splice(1)
+  ?.join(',')
+  ?.replaceAll('+', ' ')
+  ?.replaceAll(',,,,', '____')
+  ?.replace(/\.jpe?g$/i, '')
+
+const getPhotoMetaArray = (x: string) =>
+  x.split(', ')?.map(x => x.trim())?.filter(Boolean) 
+  || []
+
+const hasValidPhotoMeta = getPhotoMetaArray(filename).length >= 7
+
+const photoMeta = getPhotoMetaArray(filename)
+
+const alt = props.alt || hasValidPhotoMeta
+  ? photoMeta.join('\n')
+  : ''
+
 const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
 
@@ -56,6 +76,7 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
   .image-wrapper {
     position: relative;
     display: block;
+    pointer-events: auto;
   }
 
   .image-blurhash {
@@ -77,6 +98,10 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
     height: auto;
     width: 100%;
     user-select: none;
+  }
+
+  .image-main img {
+    pointer-events: auto;
   }
 
   html[data-js='true'] .image-main[data-loaded='false'] {
