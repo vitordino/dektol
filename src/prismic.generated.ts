@@ -8,6 +8,16 @@ type Simplify<T> = {
 /** Content for about documents */
 interface AboutDocumentData {
     /**
+     * title field in *about*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    title: prismicT.KeyTextField;
+    /**
      * background field in *about*
      *
      * - **Field Type**: Color
@@ -57,6 +67,36 @@ interface AboutDocumentData {
      *
      */
     body: prismicT.SliceZone<AboutDocumentDataBodySlice>;
+    /**
+     * meta title field in *about*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.meta_title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_title: prismicT.KeyTextField;
+    /**
+     * meta description field in *about*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.meta_description
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    meta_description: prismicT.KeyTextField;
+    /**
+     * meta image field in *about*
+     *
+     * - **Field Type**: Image
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.meta_image
+     * - **Documentation**: https://prismic.io/docs/core-concepts/image
+     *
+     */
+    meta_image: prismicT.ImageField<null>;
 }
 /**
  * Primary content in about → Slice Zone (`body`) → about section → Primary
