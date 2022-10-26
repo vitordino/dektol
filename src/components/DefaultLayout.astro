@@ -25,11 +25,13 @@ const homeDocument = await getHomeDocument()
 const background = props.background || homeDocument?.background 
 const foreground = props.foreground || homeDocument?.foreground 
 
+const title = props.metaTitle ? `${props.metaTitle} ⸬ ${homeDocument?.meta_title}` : homeDocument?.meta_title || undefined
+
 const seoProps: AstroSeoProps = {
-  title: props.metaTitle || homeDocument?.meta_title || undefined,
+  title,
   description: props.metaDescription || homeDocument?.meta_description || undefined,
   openGraph: { 
-    title: props.metaTitle || homeDocument?.meta_title || undefined,
+    title,
     description: props.metaDescription || homeDocument?.meta_description || undefined,
     images:
       props.metaImage
