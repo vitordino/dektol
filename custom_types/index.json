@@ -12,5 +12,12 @@
     "label": "home",
     "repeatable": false,
     "value": "home.json"
+  },
+  {
+    "id": "about",
+    "name": "about",
+    "label": "about",
+    "repeatable": false,
+    "value": "about.json"
   }
 ]

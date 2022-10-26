@@ -5,6 +5,137 @@ import type * as prismicT from "@prismicio/types";
 type Simplify<T> = {
     [KeyType in keyof T]: T[KeyType];
 };
+/** Content for about documents */
+interface AboutDocumentData {
+    /**
+     * background field in *about*
+     *
+     * - **Field Type**: Color
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.background
+     * - **Documentation**: https://prismic.io/docs/core-concepts/color
+     *
+     */
+    background: prismicT.ColorField;
+    /**
+     * foreground field in *about*
+     *
+     * - **Field Type**: Color
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.foreground
+     * - **Documentation**: https://prismic.io/docs/core-concepts/color
+     *
+     */
+    foreground: prismicT.ColorField;
+    /**
+     * introduction field in *about*
+     *
+     * - **Field Type**: Rich Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.introduction
+     * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+     *
+     */
+    introduction: prismicT.RichTextField;
+    /**
+     * profile field in *about*
+     *
+     * - **Field Type**: Image
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.profile
+     * - **Documentation**: https://prismic.io/docs/core-concepts/image
+     *
+     */
+    profile: prismicT.ImageField<null>;
+    /**
+     * Slice Zone (`body`) field in *about*
+     *
+     * - **Field Type**: Slice Zone
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[]
+     * - **Documentation**: https://prismic.io/docs/core-concepts/slices
+     *
+     */
+    body: prismicT.SliceZone<AboutDocumentDataBodySlice>;
+}
+/**
+ * Primary content in about → Slice Zone (`body`) → about section → Primary
+ *
+ */
+interface AboutDocumentDataBodyAboutSectionSlicePrimary {
+    /**
+     * title field in *about → Slice Zone (`body`) → about section → Primary*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[].about_section.primary.title
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    title: prismicT.KeyTextField;
+    /**
+     * image field in *about → Slice Zone (`body`) → about section → Primary*
+     *
+     * - **Field Type**: Image
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[].about_section.primary.image
+     * - **Documentation**: https://prismic.io/docs/core-concepts/image
+     *
+     */
+    image: prismicT.ImageField<null>;
+    /**
+     * description field in *about → Slice Zone (`body`) → about section → Primary*
+     *
+     * - **Field Type**: Rich Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[].about_section.primary.description
+     * - **Documentation**: https://prismic.io/docs/core-concepts/rich-text-title
+     *
+     */
+    description: prismicT.RichTextField;
+}
+/**
+ * Item in about → Slice Zone (`body`) → about section → Items
+ *
+ */
+export interface AboutDocumentDataBodyAboutSectionSliceItem {
+    /**
+     * link text field in *about → Slice Zone (`body`) → about section → Items*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[].about_section.items[].link_text
+     * - **Documentation**: https://prismic.io/docs/core-concepts/key-text
+     *
+     */
+    link_text: prismicT.KeyTextField;
+    /**
+     * link url field in *about → Slice Zone (`body`) → about section → Items*
+     *
+     * - **Field Type**: Link
+     * - **Placeholder**: *None*
+     * - **API ID Path**: about.body[].about_section.items[].link_url
+     * - **Documentation**: https://prismic.io/docs/core-concepts/link-content-relationship
+     *
+     */
+    link_url: prismicT.LinkField;
+}
+export type AboutDocumentDataBodyAboutSectionSlice = prismicT.Slice<"about_section", Simplify<AboutDocumentDataBodyAboutSectionSlicePrimary>, Simplify<AboutDocumentDataBodyAboutSectionSliceItem>>;
+/**
+ * Slice for *about → Slice Zone (`body`)*
+ *
+ */
+type AboutDocumentDataBodySlice = AboutDocumentDataBodyAboutSectionSlice;
+/**
+ * about document from Prismic
+ *
+ * - **API ID**: `about`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/core-concepts/custom-types
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type AboutDocument<Lang extends string = "en-us"> = prismicT.PrismicDocumentWithUID<Simplify<AboutDocumentData>, "about", Lang>;
 /** Content for home documents */
 interface HomeDocumentData {
     /**
