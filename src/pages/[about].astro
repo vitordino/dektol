@@ -1,0 +1,182 @@
+---
+import { asHTML } from '@prismicio/helpers'
+import DefaultLayout from '~/components/DefaultLayout.astro'
+import type { Props as DefaultLayoutProps } from '~/components/DefaultLayout.astro'
+import getHomeDocument from '~/utils/getHomeDocument'
+import getAboutDocument from '~/utils/getAboutDocument'
+
+export const getStaticPaths = async () => {
+  const aboutDocument = await getAboutDocument()
+  if(!aboutDocument?.uid) return []
+  return [{ params: { about: aboutDocument.uid } }]
+}
+
+if (!Astro.params.about) throw new Error('no uid for pages/[about]')
+
+const aboutDocument = await getAboutDocument()
+const homeData = await getHomeDocument()
+
+if (!aboutDocument) throw new Error('no about page data')
+
+const layoutProps: DefaultLayoutProps = {
+  headerTitle: aboutDocument.title || aboutDocument.meta_title || aboutDocument.uid,
+  background: aboutDocument.background || homeData?.background || undefined,
+  foreground: aboutDocument.foreground || homeData?.foreground || undefined,
+  metaTitle: aboutDocument.meta_title || undefined,
+  metaDescription: aboutDocument.meta_description || undefined,
+  metaImage: aboutDocument.meta_image.url
+    ? {
+      url: aboutDocument.meta_image.url,
+      alt: aboutDocument.meta_image.alt || undefined,
+      ...aboutDocument.meta_image.dimensions,
+    }
+    : undefined,
+}
+
+---
+<DefaultLayout {...layoutProps}>
+  <div class='about-top-spacer' />
+  {aboutDocument.body.map(({ primary, items }) => (
+    <div class='about-section'>
+      <div class='about-container'>
+        <div class='about-section-inner'>
+          <div class='about-section-column about-section-left'>
+            {primary.title && <h2 class='about-section-title'>{primary.title}</h2>}
+          </div>
+          <div class='about-section-column about-section-right'>
+            {primary.description && <div class='about-section-description' set:html={asHTML(primary.description)} />}
+            {items.length && (
+              <ul class='about-section-links'>
+                {items.map(({ link_text, link_url }) => (
+                  <li class='about-section-link-item'>
+                    {/* @ts-expect-error */}
+                    <a href={link_url?.url} target='_blank'>
+                      {link_text || link_url}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</DefaultLayout>
+
+<style is:global>
+  .about-top-spacer {
+    padding-top: 200px;
+    padding-top: max(30vmin, 200px);
+  }
+
+  .about-section {
+    position: relative;
+  }
+
+  .about-section:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--foreground);
+    opacity: 0.25;
+  }
+
+  .about-container {
+    padding: 0 16px;
+    padding: 0 max(16px, 4.5vmax);
+  }
+
+  .about-section-left {
+    padding: 16px 0;
+  }
+  .about-section-right {
+    padding: 16px 0;
+  }
+
+  .about-section-title {
+    font-size: max(2em, 2.5vmax);
+    line-height: 2.5;
+  }
+  
+  .about-section-description {
+    font-size: max(1em, 1vmax);
+    line-height: 1.5;
+    max-width: 30em;
+  }
+
+  .about-section-description a {
+    text-decoration: underline;
+    outline: none;
+  }
+
+  .about-section-description a:hover,
+  .about-section-description a:focus {
+    text-decoration-thickness: 3px;
+  }
+
+  .about-section-links {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: max(0.875em, 0.75vmax);
+    line-height: 1.25;
+    margin-top: max(1em, 0.75vmax);
+    max-width: 30em;
+    gap: max(0.5em, 0.5vmax);
+  }
+  
+  .about-section-link-item {
+    position: relative;
+  }
+
+  .about-section-link-item a:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--foreground);
+    opacity: 0.05;
+    border-radius: 0.25em;
+  }
+
+  .about-section-link-item a:hover:before,
+  .about-section-link-item a:focus:before {
+    opacity: 0.1;
+  }
+
+  .about-section-link-item a {
+    position: relative;
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+    outline: none;
+  }
+
+  @media (min-width: 720px) {
+    .about-section-inner {
+      display: flex;
+      align-items: baseline;
+      gap: 8vmax;
+    }
+
+    .about-section-left {
+      position: sticky;
+      top: 64px;
+      padding: 0;
+      flex: 1;
+    }
+    
+    .about-section-right {
+      flex: 2;
+    }
+  }
+
+  @media(min-width: 1280px) {
+    .about-section-column {
+      flex: 1;
+    }
+  }
+</style>
