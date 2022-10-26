@@ -1,0 +1,93 @@
+{
+  "Main": {
+    "uid": {
+      "type": "UID",
+      "config": {
+        "label": "uid"
+      }
+    },
+    "background": {
+      "type": "Color",
+      "config": {
+        "label": "background"
+      }
+    },
+    "foreground": {
+      "type": "Color",
+      "config": {
+        "label": "foreground"
+      }
+    },
+    "introduction": {
+      "type": "StructuredText",
+      "config": {
+        "multi": "paragraph,strong,em,hyperlink",
+        "allowTargetBlank": true,
+        "label": "introduction"
+      }
+    },
+    "profile": {
+      "type": "Image",
+      "config": {
+        "constraint": {},
+        "thumbnails": [],
+        "label": "profile"
+      }
+    },
+    "body": {
+      "type": "Slices",
+      "fieldset": "Slice zone",
+      "config": {
+        "labels": null,
+        "choices": {
+          "about_section": {
+            "type": "Slice",
+            "fieldset": "about section",
+            "description": "title + description + links",
+            "icon": "account_circle",
+            "display": "list",
+            "non-repeat": {
+              "title": {
+                "type": "Text",
+                "config": {
+                  "label": "title"
+                }
+              },
+              "image": {
+                "type": "Image",
+                "config": {
+                  "constraint": {},
+                  "thumbnails": [],
+                  "label": "image"
+                }
+              },
+              "description": {
+                "type": "StructuredText",
+                "config": {
+                  "multi": "paragraph,strong,em,hyperlink",
+                  "allowTargetBlank": true,
+                  "label": "description"
+                }
+              }
+            },
+            "repeat": {
+              "link_text": {
+                "type": "Text",
+                "config": {
+                  "label": "link text"
+                }
+              },
+              "link_url": {
+                "type": "Link",
+                "config": {
+                  "label": "link url",
+                  "select": null
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
