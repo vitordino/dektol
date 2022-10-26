@@ -8,17 +8,15 @@ const { title } = props
 
 const homeData = await getHomeDocument()
 
-if (!homeData) return;
-
-
-const headerLinks = homeData.header_links
-.map(({ text, link }) => ({
-  text,
-    // @ts-expect-error
-    url: link.uid ? `/${link.uid}` : link.url,
-    // @ts-expect-error
-    external: !!link.uid,
-  }))
+const headerLinks = homeData
+  ?.header_links
+  ?.map(({ text, link }) => ({
+    text,
+      // @ts-expect-error
+      url: link.uid ? `/${link.uid}` : link.url,
+      // @ts-expect-error
+      external: !!link.uid,
+    }))
   .filter(x => x.text && x.url)
 
 ---
@@ -37,7 +35,7 @@ const headerLinks = homeData.header_links
     )}
   </div>
   <div class='header-right'>
-    {headerLinks.map(({ text, url }) => (
+    {headerLinks?.map(({ text, url }) => (
       <a class='header-link' href={url}>{text}</a>
     ))}  
   </div>

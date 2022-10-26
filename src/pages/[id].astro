@@ -13,9 +13,7 @@ export const getStaticPaths = async () => {
   return allPageDocuments.map(({ uid }) => ({ params: { id: uid } }))
 }
 
-if (!Astro.params.id) throw new Error('no id for pages/[id]')
-
-const { data, uid } = await getPageDocument(Astro.params.id) 
+const { data, uid } = await getPageDocument(Astro.params.id || '') 
 const homeData = await getHomeDocument()
 
 const layoutProps: DefaultLayoutProps = {

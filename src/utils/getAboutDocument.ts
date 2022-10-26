@@ -9,7 +9,7 @@ type GetAboutDocument = () => Promise<(AboutDocument['data'] & { uid: string }) 
 
 const getAboutDocument: GetAboutDocument = async () => {
   const { results } = await client.getByType<AboutDocument>('about')
-  return { ...results?.[0]?.data, uid: results[0].uid } ?? null
+  return { ...results?.[0]?.data, uid: results?.[0]?.uid } ?? null
 }
 
 export default memoize(getAboutDocument)
