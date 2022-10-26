@@ -2,6 +2,7 @@
 import getAllPageDocuments from '~/utils/getAllPageDocuments'
 import getPageDocument from '~/utils/getPageDocument'
 import DefaultLayout from '~/components/DefaultLayout.astro'
+import type { Props as DefaultLayoutProps } from '~/components/DefaultLayout.astro'
 import Slice from '~/components/Slice.astro'
 import getHomeDocument from '~/utils/getHomeDocument'
 import HorizontalScroll from '~/components/HorizontalScroll.astro';
@@ -17,10 +18,19 @@ if (!Astro.params.id) throw new Error('no id for pages/[id]')
 const { data, uid } = await getPageDocument(Astro.params.id) 
 const homeData = await getHomeDocument()
 
-const layoutProps = {
+const layoutProps: DefaultLayoutProps = {
   headerTitle: data.title || uid,
   background: data.background || homeData?.background || undefined,
   foreground: data.foreground || homeData?.foreground || undefined,
+  metaTitle: data.meta_title || undefined,
+  metaDescription: data.meta_description || undefined,
+  metaImage: data.meta_image.url
+    ? {
+      url: data.meta_image.url,
+      alt: data.meta_image.alt || undefined,
+      ...data.meta_image.dimensions,
+    }
+    : undefined,
 }
 
 const pages = await getAllPageDocuments()
@@ -35,8 +45,8 @@ const paginationItems = homeData?.body
 ---
 <DefaultLayout {...layoutProps}>
   {data?.body.map(slice => <Slice {...slice} />)}
-  <div style="padding-top: 100vh" />
-  <div style="position: fixed; top: 0; bottom: 0; left: 0; right: 0;">
+  <div style='padding-top: 100vh' />
+  <div style='position: fixed; top: 0; bottom: 0; left: 0; right: 0;'>
     <HorizontalScroll class='home-items'>
       {// @ts-ignore-next-line
         paginationItems.map(x => <HomeItem {...x} />)
