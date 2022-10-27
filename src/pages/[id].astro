@@ -42,9 +42,11 @@ const paginationItems = homeData?.body
 
 ---
 <DefaultLayout {...layoutProps}>
-  {data?.body.map(slice => <Slice {...slice} />)}
-  <div style='padding-top: 100vh' />
-  <div style='position: fixed; top: 0; bottom: 0; left: 0; right: 0;'>
+  <div class='page-content'>
+    {data?.body.map(slice => <Slice {...slice} />)}
+  </div>
+  <div class='pagination-spacer' />
+  <div class='pagination-wrapper'>
     <HorizontalScroll class='home-items'>
       {// @ts-ignore-next-line
         paginationItems.map(x => <HomeItem {...x} />)
@@ -52,3 +54,27 @@ const paginationItems = homeData?.body
     </HorizontalScroll>
   </div>
 </DefaultLayout>
+
+<style is:global>
+  .page-content {
+    padding: 48px 0 64px;
+  }
+
+  @media (min-width: 720px) {
+    .page-content {
+      padding: 0;
+    }
+
+    .pagination-spacer {
+      padding-top: 100vh;
+    }
+
+    .pagination-wrapper {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+</style>

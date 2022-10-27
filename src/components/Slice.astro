@@ -13,14 +13,16 @@ const props = Astro.props as Props
     z-index: 1;
   }
   
-  .slice:last-of-type:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    border-bottom: 1px solid var(--foreground);
-    opacity: 0.1;
+  @media (min-width: 720px) {
+    .slice:last-of-type:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid var(--foreground);
+      opacity: 0.1;
+    }
   }
 </style>
