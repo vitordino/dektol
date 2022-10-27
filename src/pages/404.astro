@@ -1,0 +1,33 @@
+---
+import getHomeDocument from '~/utils/getHomeDocument';
+import DefaultLayout from '~/components/DefaultLayout.astro'
+
+const { background, foreground } = await getHomeDocument() || {}
+---
+<DefaultLayout background={background || undefined} foreground={foreground || undefined}>
+  <main class='page-not-found'>
+    <h1>404</h1>
+    <a href='/'>go back home</a>
+  </main>
+</DefaultLayout>
+
+<style is:global>
+  .page-not-found {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-not-found h1 {
+    font-size: 40vmin;
+    line-height: 1;
+    opacity: 0.1;
+    pointer-events: none;
+    user-select: none;
+  }
+  .page-not-found a {
+    font-size: max(1em, 2vmin);
+    line-height: 1.5;
+  }
+</style>
