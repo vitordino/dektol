@@ -89,9 +89,18 @@ const wrapperStyle = generateCssVariables({ background, foreground })
 </html>
 
 <style is:global>
+  @font-face {
+    font-family: 'Redaction 20';
+    src: url('/fonts/Redaction_20-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+  }
+
+
   body {
     color: var(--foreground);
     background-color: var(--background);
-    font-family: sans-serif;
+    font-family: 'Redaction 20', Georgia, 'Times New Roman', Times, serif;
   }
 </style>
