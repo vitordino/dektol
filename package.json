@@ -10,8 +10,14 @@
     "preview": "astro preview",
     "get-custom-types": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"esnext\", \"target\": \"es2017\", \"lib\": [\"esnext\"]}' ts-node --esm scripts/get-custom-types.ts",
     "format": "prettier --ignore-path .gitignore . -wu",
-    "lint": "eslint 'src/**/*.{js,ts,tsx,astro}'",
-    "type-check": "astro check && tsc --noemit"
+    "lint": "eslint 'src/**/*.{js,ts,tsx,astro}' --fix",
+    "type-check": "astro check && tsc --noemit",
+    "check:type": "tsc --noEmit",
+    "check:astro": "astro check",
+    "check:format": "prettier --ignore-path .gitignore . -uc",
+    "check:lint": "eslint 'src/**/*.{js,ts,tsx,astro}'",
+    "husky:pre-commit": "concurrently \"npm:check:*\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@astrolib/seo": "^0.2.1",
