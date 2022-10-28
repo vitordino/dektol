@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config'
 import webmanifest from 'astro-webmanifest'
-// @ts-ignore-next-line
+// @ts-expect-error for some reason is not getting the path properly
 import getHomeDocument from './src/utils/getHomeDocument.ts'
 
 export default defineConfig({

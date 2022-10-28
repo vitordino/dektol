@@ -8,8 +8,10 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "get-custom-types": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"esnext\", \"target\": \"es2017\", \"lib\": [\"esnext\"]}' ts-node --esm scripts/get-custom-types.ts",
     "format": "prettier --ignore-path .gitignore . -wu",
-    "get-custom-types": "TS_NODE_COMPILER_OPTIONS='{\"module\": \"esnext\", \"target\": \"es2017\", \"lib\": [\"esnext\"]}' ts-node --esm scripts/get-custom-types.ts"
+    "lint": "eslint 'src/**/*.{js,ts,tsx,astro}'",
+    "type-check": "astro check && tsc --noemit"
   },
   "dependencies": {
     "@astrolib/seo": "^0.2.1",
@@ -24,17 +26,20 @@
   "devDependencies": {
     "@prismicio/types": "^0.2.3",
     "@tsconfig/node14": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
     "astro": "^1.4.2",
     "astro-webmanifest": "^0.4.1",
     "dotenv": "^16.0.3",
     "eslint": "^8.24.0",
+    "eslint-plugin-astro": "^0.20.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier-doc": "^1.1.0",
     "execa": "^6.1.0",
     "node-fetch": "^3.2.5",
     "ora": "^6.1.0",
     "prettier": "^2.6.1",
-    "prettier-plugin-astro": "^0.5.5",
+    "prettier-plugin-astro": "^0.6.0",
     "prismic-ts-codegen": "^0.0.3",
     "prompts": "^2.4.2",
     "ts-node": "10.8.0",

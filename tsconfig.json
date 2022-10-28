@@ -1,13 +1,13 @@
 {
+  "extends": "astro/tsconfigs/base",
+  "types": ["astro/client"],
   "compilerOptions": {
-    "moduleResolution": "node",
     "baseUrl": ".",
     "strict": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "module": "esnext",
+    "importsNotUsedAsValues": "error",
     "paths": {
       "~/*": ["src/*"]
     }
-  }
+  },
+  "include": ["src/*"]
 }
