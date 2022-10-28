@@ -30,6 +30,7 @@
     "@typescript-eslint/parser": "^5.41.0",
     "astro": "^1.4.2",
     "astro-webmanifest": "^0.4.1",
+    "concurrently": "^7.5.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.24.0",
     "eslint-plugin-astro": "^0.20.0",
