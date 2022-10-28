@@ -1,16 +1,21 @@
 ---
 import Section from '~/components/Section.astro'
 import Image from '~/components/Image.astro'
-import { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
+import type { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
 import HorizontalScroll from './HorizontalScroll.astro'
 export type Props = PageDocumentDataBodyHorizontalSlice
 const props = Astro.props as Props
 const { items, primary } = props
 ---
 
-<Section class='slice horizontal-slice' foreground={primary.foreground} background={primary.background} renderBackground={true}>
+<Section
+  class='slice horizontal-slice'
+  foreground={primary.foreground}
+  background={primary.background}
+  renderBackground={true}
+>
   <HorizontalScroll map>
-    {items.map(({ image }) => image ? <Image {...image} /> : null )}
+    {items.map(({ image }) => (image ? <Image {...image} /> : null))}
   </HorizontalScroll>
 </Section>
 
@@ -24,12 +29,12 @@ const { items, primary } = props
     flex-wrap: wrap;
     gap: 4vw;
   }
-  
-  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format="landscape"] {
+
+  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format='landscape'] {
     flex-grow: 2;
   }
-  
-  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format="portrait"] {
+
+  .horizontal-slice .horizontal-scroll-wrapper .image-wrapper[data-format='portrait'] {
     flex-basis: calc(50% - 2vw);
     flex-grow: 1;
   }

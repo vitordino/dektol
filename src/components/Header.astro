@@ -1,6 +1,6 @@
 ---
-import getHomeDocument from '~/utils/getHomeDocument';
-import Logo from '~/components/Logo.astro';
+import getHomeDocument from '~/utils/getHomeDocument'
+import Logo from '~/components/Logo.astro'
 
 export type Props = { title?: string | null }
 const props = Astro.props as Props
@@ -8,17 +8,15 @@ const { title } = props
 
 const homeData = await getHomeDocument()
 
-const headerLinks = homeData
-  ?.header_links
+const headerLinks = homeData?.header_links
   ?.map(({ text, link }) => ({
     text,
-      // @ts-expect-error
-      url: link.uid ? `/${link.uid}` : link.url,
-      // @ts-expect-error
-      external: !!link.uid,
-    }))
+    // @ts-expect-error type missing uid
+    url: link.uid ? `/${link.uid}` : link.url,
+    // @ts-expect-error type missing uid
+    external: !!link.uid,
+  }))
   .filter(x => x.text && x.url)
-
 ---
 
 <header class='header'>
@@ -28,16 +26,22 @@ const headerLinks = homeData
         <Logo />
       </div>
     </a>
-    {title && (
-      <div class='header-title'>
-        <div class='header-title-text'>{title}</div>
-      </div>
-    )}
+    {
+      title && (
+        <div class='header-title'>
+          <div class='header-title-text'>{title}</div>
+        </div>
+      )
+    }
   </div>
   <div class='header-right'>
-    {headerLinks?.map(({ text, url }) => (
-      <a class='header-link' href={url}>{text}</a>
-    ))}  
+    {
+      headerLinks?.map(({ text, url }) => (
+        <a class='header-link' href={url}>
+          {text}
+        </a>
+      ))
+    }
   </div>
 </header>
 
@@ -75,7 +79,7 @@ const headerLinks = homeData
     pointer-events: auto;
     outline: none;
   }
-  
+
   .header-logo-image {
     width: 24px;
     height: 24px;

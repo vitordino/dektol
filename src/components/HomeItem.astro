@@ -8,13 +8,13 @@ const images = data.body
   .flatMap(({ items }) => items)
   .map(({ image }) => image)
   .filter(({ url }) => url)
-
 ---
+
 <a class='home-item' href={`/${uid}`}>
   <div class='home-item-images'>
     {images.map(image => <Image {...image} />)}
   </div>
-  <div class='home-item-title'>{data.title || uid} <slot/></div>
+  <div class='home-item-title'>{data.title || uid} <slot /></div>
 </a>
 <script>
   const HOME_ITEM_INTERVAL = 250
@@ -23,16 +23,18 @@ const images = data.body
     if (target instanceof HTMLElement) target.scrollIntoView(false)
   }
 
-  [...document.querySelectorAll('.home-item')].forEach(item => {
+  ;[...document.querySelectorAll('.home-item')].forEach(item => {
     item.addEventListener('focus', focusIfHTML)
 
     const images = [...item.querySelectorAll('.image-wrapper')]
     const totalImages = images.length
-    
+
     images[0].setAttribute('data-active', 'true')
 
     window.setInterval(() => {
-      const someItemHasFocus = [...document.querySelectorAll('.home-item')].some(x => x?.matches(':focus'))
+      const someItemHasFocus = [...document.querySelectorAll('.home-item')].some(x =>
+        x?.matches(':focus'),
+      )
       if (someItemHasFocus && !item.matches(':focus')) return
       if (!someItemHasFocus && !item.matches(':hover')) return
       const startIndex = images.findIndex(x => x.getAttribute('data-active'))
@@ -71,7 +73,7 @@ const images = data.body
     box-shadow: inset 0 0 0 1px var(--foreground);
     opacity: 0.1;
   }
-  
+
   .home-items:not(:focus-within) .home-item:hover:before,
   .home-item:focus:before {
     opacity: 0.25;

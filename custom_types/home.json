@@ -29,9 +29,7 @@
                 "type": "Link",
                 "config": {
                   "select": "document",
-                  "customtypes": [
-                    "page"
-                  ],
+                  "customtypes": ["page"],
                   "label": "items"
                 }
               }

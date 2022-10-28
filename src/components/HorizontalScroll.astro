@@ -1,11 +1,8 @@
 ---
-export type Props = { map?: boolean, class?: string }
+export type Props = { map?: boolean; class?: string }
 const { map } = Astro.props
 
-const className = [
-  'horizontal-scroll-wrapper',
-  Astro.props.class
-].filter(Boolean).join(' ')
+const className = ['horizontal-scroll-wrapper', Astro.props.class].filter(Boolean).join(' ')
 ---
 
 <div class={className}>
@@ -16,16 +13,18 @@ const className = [
       <div class='horizontal-scroll-spacer'></div>
     </div>
   </div>
-  {map && (
-    <div class='horizontal-scroll-map-wrapper'>
-      <canvas class='horizontal-scroll-map-canvas'></canvas>
-      <div class='horizontal-scroll-map-brush-left'></div>
-      <div class='horizontal-scroll-map-brush-right'></div>
-    </div>
-  )}
+  {
+    map && (
+      <div class='horizontal-scroll-map-wrapper'>
+        <canvas class='horizontal-scroll-map-canvas' />
+        <div class='horizontal-scroll-map-brush-left' />
+        <div class='horizontal-scroll-map-brush-right' />
+      </div>
+    )
+  }
 </div>
 
-<script src='./HorizontalScroll.ts' />
+<script src='./HorizontalScroll.ts'></script>
 
 <style is:global>
   .horizontal-scroll-map-wrapper {
@@ -37,11 +36,11 @@ const className = [
     flex-wrap: wrap;
     position: relative;
   }
-  
+
   .horizontal-scroll-spacer {
     display: none;
   }
-  
+
   @media (min-width: 720px) {
     .horizontal-scroll-wrapper {
       position: relative;

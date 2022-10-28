@@ -5,15 +5,15 @@ import DefaultLayout from '~/components/DefaultLayout.astro'
 import type { Props as DefaultLayoutProps } from '~/components/DefaultLayout.astro'
 import Slice from '~/components/Slice.astro'
 import getHomeDocument from '~/utils/getHomeDocument'
-import HorizontalScroll from '~/components/HorizontalScroll.astro';
-import HomeItem from '~/components/HomeItem.astro';
+import HorizontalScroll from '~/components/HorizontalScroll.astro'
+import HomeItem from '~/components/HomeItem.astro'
 
 export const getStaticPaths = async () => {
   const allPageDocuments = await getAllPageDocuments()
   return allPageDocuments.map(({ uid }) => ({ params: { id: uid } }))
 }
 
-const { data, uid } = await getPageDocument(Astro.params.id || '') 
+const { data, uid } = await getPageDocument(Astro.params.id || '')
 const homeData = await getHomeDocument()
 
 const layoutProps: DefaultLayoutProps = {
@@ -24,10 +24,10 @@ const layoutProps: DefaultLayoutProps = {
   metaDescription: data.meta_description || undefined,
   metaImage: data.meta_image.url
     ? {
-      url: data.meta_image.url,
-      alt: data.meta_image.alt || undefined,
-      ...data.meta_image.dimensions,
-    }
+        url: data.meta_image.url,
+        alt: data.meta_image.alt || undefined,
+        ...data.meta_image.dimensions,
+      }
     : undefined,
 }
 
@@ -35,21 +35,22 @@ const pages = await getAllPageDocuments()
 const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
 
 const paginationItems = homeData?.body
-  // @ts-ignore-next-line
+  // @ts-expect-error auto generated types is missing the id
   ?.flatMap(x => x.items.map(x => getPageData(x.items.id)))
-  // @ts-ignore-next-line
+  // @ts-expect-error auto generated types is missing the uid
   ?.filter(({ uid }) => uid !== Astro.params.id)
-
 ---
+
 <DefaultLayout {...layoutProps}>
   <div class='page-content'>
     {data?.body.map(slice => <Slice {...slice} />)}
   </div>
-  <div class='pagination-spacer' />
+  <div class='pagination-spacer'></div>
   <div class='pagination-wrapper'>
     <HorizontalScroll class='home-items'>
-      {// @ts-ignore-next-line
-        paginationItems.map(x => <HomeItem {...x} />)
+      {
+        // @ts-expect-error possible mismatch on types
+        paginationItems?.map(x => <HomeItem {...x} />)
       }
     </HorizontalScroll>
   </div>

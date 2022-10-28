@@ -1,9 +1,10 @@
 ---
-import getHomeDocument from '~/utils/getHomeDocument';
+import getHomeDocument from '~/utils/getHomeDocument'
 import DefaultLayout from '~/components/DefaultLayout.astro'
 
-const { background, foreground } = await getHomeDocument() || {}
+const { background, foreground } = (await getHomeDocument()) || {}
 ---
+
 <DefaultLayout background={background || undefined} foreground={foreground || undefined}>
   <main class='page-not-found'>
     <h1>404</h1>

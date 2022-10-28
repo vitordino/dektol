@@ -83,10 +83,7 @@
               "container_size": {
                 "type": "Select",
                 "config": {
-                  "options": [
-                    "large",
-                    "medium"
-                  ],
+                  "options": ["large", "medium"],
                   "default_value": "large",
                   "label": "container size"
                 }

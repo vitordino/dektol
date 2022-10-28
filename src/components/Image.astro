@@ -41,16 +41,16 @@ const filename = decodeURIComponent(new URL(props.url || '').pathname)
   ?.replace(/\.jpe?g$/i, '')
 
 const getPhotoMetaArray = (x: string) =>
-  x.split(', ')?.map(x => x.trim())?.filter(Boolean) 
-  || []
+  x
+    .split(', ')
+    ?.map(x => x.trim())
+    ?.filter(Boolean) || []
 
 const hasValidPhotoMeta = getPhotoMetaArray(filename).length >= 7
 
 const photoMeta = getPhotoMetaArray(filename)
 
-const alt = props.alt || hasValidPhotoMeta
-  ? photoMeta.join('\n')
-  : ''
+const alt = props.alt || hasValidPhotoMeta ? photoMeta.join('\n') : ''
 
 const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---

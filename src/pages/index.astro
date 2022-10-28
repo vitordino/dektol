@@ -1,27 +1,30 @@
 ---
-import getHomeDocument from '~/utils/getHomeDocument';
+import getHomeDocument from '~/utils/getHomeDocument'
 import getAllPageDocuments from '~/utils/getAllPageDocuments'
 import DefaultLayout from '~/components/DefaultLayout.astro'
-import HorizontalScroll from '~/components/HorizontalScroll.astro';
-import HomeItem from '~/components/HomeItem.astro';
+import HorizontalScroll from '~/components/HorizontalScroll.astro'
+import HomeItem from '~/components/HomeItem.astro'
 
-const { background, foreground, body } = await getHomeDocument() || {}
+const { background, foreground, body } = (await getHomeDocument()) || {}
 const pages = await getAllPageDocuments()
 const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
 
-// @ts-ignore-next-line
+// @ts-expect-error auto generated types is missing the id
 const homeItems = body?.map(x => x.items.map(x => getPageData(x.items.id)))
-
 ---
+
 <DefaultLayout background={background || undefined} foreground={foreground || undefined}>
   <main class='home'>
-    {homeItems?.map(x => (
-      <HorizontalScroll class='home-items'>
-        {// @ts-ignore-next-line
-          x.map(x => <HomeItem {...x} />)
-        }
-      </HorizontalScroll>
-    ))}
+    {
+      homeItems?.map(x => (
+        <HorizontalScroll class='home-items'>
+          {x?.map(x => (
+            // @ts-expect-error possible mismatch types
+            <HomeItem {...x} />
+          ))}
+        </HorizontalScroll>
+      ))
+    }
   </main>
 </DefaultLayout>
 

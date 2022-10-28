@@ -1,7 +1,10 @@
 ---
-import { Colors } from '~/types'
+import type { Colors } from '~/types'
 import generateCssVariables from '~/utils/generateCssVariables'
-export type Props = { renderBackground?: boolean, class?: string } & Colors
+export type Props = Colors & {
+  renderBackground?: boolean
+  class?: string
+}
 const { renderBackground, foreground, background, ...props } = Astro.props as Props
 
 const renderBackgroundString = (renderBackground || false)?.toString()
