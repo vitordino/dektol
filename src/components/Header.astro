@@ -1,6 +1,7 @@
 ---
 import getHomeDocument from '~/utils/getHomeDocument'
 import Logo from '~/components/Logo.astro'
+import VDLogo from '~/components/VDLogo.astro'
 
 export type Props = { title?: string | null }
 const props = Astro.props as Props
@@ -21,7 +22,7 @@ const headerLinks = homeData?.header_links
 
 <header class='header'>
   <div class='header-left'>
-    <a href='/' class='header-logo' aria-label='index'>
+    <a href='/' class='header-logo header-logo-home' aria-label='index'>
       <div class='header-logo-image'>
         <Logo />
       </div>
@@ -42,11 +43,16 @@ const headerLinks = homeData?.header_links
         </a>
       ))
     }
+    <a href='https://vitordino.com' class='header-logo' aria-label='index' target='_blank'>
+      <div class='header-logo-image'>
+        <VDLogo />
+      </div>
+    </a>
   </div>
 </header>
 
 <style is:global>
-  @keyframes header-logo-image-rotate {
+  @keyframes header-logo-home-image-rotate {
     to {
       transform: rotate(-72deg);
     }
@@ -78,6 +84,9 @@ const headerLinks = homeData?.header_links
     color: currentColor;
     pointer-events: auto;
     outline: none;
+    &:focus-visible {
+      box-shadow: 0 0 0 1px currentColor;
+    }
   }
 
   .header-logo-image {
@@ -85,9 +94,9 @@ const headerLinks = homeData?.header_links
     height: 24px;
   }
 
-  .header-logo:hover .header-logo-image,
-  .header-logo:focus .header-logo-image {
-    animation: 0.25s header-logo-image-rotate forwards;
+  .header-logo-home:hover .header-logo-image,
+  .header-logo-home:focus .header-logo-image {
+    animation: 0.25s header-logo-home-image-rotate forwards;
   }
 
   .header-title {
@@ -101,6 +110,9 @@ const headerLinks = homeData?.header_links
     outline: none;
     opacity: 0.5;
     mix-blend-mode: difference;
+    &:focus-visible {
+      box-shadow: 0 0 0 1px currentColor;
+    }
   }
 
   .header-link:hover,
