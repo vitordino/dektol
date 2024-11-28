@@ -5,7 +5,6 @@ import config from '../.prismic.json'
 import fetch from 'node-fetch'
 
 export const repositoryName =
-  // @ts-expect-error ts env is missing meta.env
   import.meta.env.PRISMIC_REPO || process.env.PRISMIC_REPO || config.prismicRepo
 
 console.log({ repositoryName })

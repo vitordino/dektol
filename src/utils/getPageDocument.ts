@@ -1,7 +1,7 @@
 import memoize from 'p-memoize'
 
-import type { PageDocument } from '~/prismic.generated'
-import { createClient } from '~/prismic'
+import type { PageDocument } from 'src/prismic.generated'
+import { createClient } from 'src/prismic'
 
 const client = createClient()
 

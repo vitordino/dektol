@@ -1,0 +1,47 @@
+import { serve, file } from 'bun'
+import { join } from 'node:path'
+import directoryTree, { DirectoryTree } from 'directory-tree'
+
+// [TODO]: receive cli arg
+const BASE_PATH = 'input.example'
+const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
+
+type FlattenedItem = { path: string; name: string; isDirectory: boolean }
+
+const flatten = ({ path, name, children }: DirectoryTree): FlattenedItem[] => {
+  if (!children) return [{ path, name, isDirectory: false }]
+  return [{ path, name, isDirectory: true }, ...children.flatMap(flatten)]
+}
+
+const tree = directoryTree(BASE_PATH, { exclude: /.*\/\./g })
+const flattened = flatten(tree)
+
+serve({
+  port: 3000,
+  fetch: async req => {
+    const pathname = new URL(req.url).pathname
+    const depth = pathname.split('/').filter(x => !!x).length
+    const pathType = PATH_TYPE_BY_DEPTH[depth]
+    const fsPath = pathType === 'root' ? join(BASE_PATH) : join(BASE_PATH, pathname)
+    switch (pathType) {
+      case 'root':
+        const pages = tree.children
+        return new Response(JSON.stringify(pages, null, 2))
+      case 'page':
+        const sections = tree.children?.find(x => x.path.startsWith(fsPath))
+        return new Response(JSON.stringify(sections, null, 2))
+      case 'section':
+        const [base, page, section] = fsPath.split('/').filter(Boolean)
+        const files = tree.children
+          ?.find(x => x.path.startsWith(join(base, page)))
+          ?.children?.find(x => x.name === section)
+        return new Response(JSON.stringify(files, null, 2))
+      case 'file':
+        const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
+        if (x.size) return new Response(x)
+        return new Response('404')
+    }
+
+    return new Response('404')
+  },
+})

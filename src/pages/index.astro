@@ -1,9 +1,9 @@
 ---
-import getHomeDocument from '~/utils/getHomeDocument'
-import getAllPageDocuments from '~/utils/getAllPageDocuments'
-import DefaultLayout from '~/components/DefaultLayout.astro'
-import HorizontalScroll from '~/components/HorizontalScroll.astro'
-import HomeItem from '~/components/HomeItem.astro'
+import getHomeDocument from 'src/utils/getHomeDocument'
+import getAllPageDocuments from 'src/utils/getAllPageDocuments'
+import DefaultLayout from 'src/components/DefaultLayout.astro'
+import HorizontalScroll from 'src/components/HorizontalScroll.astro'
+import HomeItem from 'src/components/HomeItem.astro'
 
 const { background, foreground, body } = (await getHomeDocument()) || {}
 const pages = await getAllPageDocuments()

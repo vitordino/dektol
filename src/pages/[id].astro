@@ -1,12 +1,12 @@
 ---
-import getAllPageDocuments from '~/utils/getAllPageDocuments'
-import getPageDocument from '~/utils/getPageDocument'
-import DefaultLayout from '~/components/DefaultLayout.astro'
-import type { Props as DefaultLayoutProps } from '~/components/DefaultLayout.astro'
-import Slice from '~/components/Slice.astro'
-import getHomeDocument from '~/utils/getHomeDocument'
-import HorizontalScroll from '~/components/HorizontalScroll.astro'
-import HomeItem from '~/components/HomeItem.astro'
+import getAllPageDocuments from 'src/utils/getAllPageDocuments'
+import getPageDocument from 'src/utils/getPageDocument'
+import DefaultLayout from 'src/components/DefaultLayout.astro'
+import type { Props as DefaultLayoutProps } from 'src/components/DefaultLayout.astro'
+import Slice from 'src/components/Slice.astro'
+import getHomeDocument from 'src/utils/getHomeDocument'
+import HorizontalScroll from 'src/components/HorizontalScroll.astro'
+import HomeItem from 'src/components/HomeItem.astro'
 
 export const getStaticPaths = async () => {
   const allPageDocuments = await getAllPageDocuments()

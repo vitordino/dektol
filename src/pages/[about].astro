@@ -1,9 +1,9 @@
 ---
 import { asHTML } from '@prismicio/helpers'
-import DefaultLayout from '~/components/DefaultLayout.astro'
-import type { Props as DefaultLayoutProps } from '~/components/DefaultLayout.astro'
-import getHomeDocument from '~/utils/getHomeDocument'
-import getAboutDocument from '~/utils/getAboutDocument'
+import DefaultLayout from 'src/components/DefaultLayout.astro'
+import type { Props as DefaultLayoutProps } from 'src/components/DefaultLayout.astro'
+import getHomeDocument from 'src/utils/getHomeDocument'
+import getAboutDocument from 'src/utils/getAboutDocument'
 
 export const getStaticPaths = async () => {
   const aboutDocument = await getAboutDocument()

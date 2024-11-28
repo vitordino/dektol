@@ -1,6 +1,6 @@
 ---
 import type { ImageFieldImage } from '@prismicio/types'
-import getBase64FromImageUrl from '~/utils/getBase64FromImageUrl'
+import getBase64FromImageUrl from 'src/utils/getBase64FromImageUrl'
 
 export type Props = ImageFieldImage
 const props = Astro.props as Props
@@ -15,7 +15,7 @@ const getFormat = (ratio: number) => {
 
 const src = `${url}&w=1600&q=50`
 
-const sizes = ` 
+const sizes = `
   (min-width: 720px) calc(calc(100vh - 128px) * ${ratio.toFixed(2)}),
   100vw
 `
