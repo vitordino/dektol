@@ -9,13 +9,19 @@ const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
 const tree = directoryTree(BASE_PATH, { exclude: /.*\/\./g })
 
 type Children = DirectoryTree['children']
-type Walk = (parts: string[]) => (children: Children) => Children
-const walk: Walk = _parts => children => {
+type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
+
+type Walk = (parts: string[]) => (input: DirectoryWithMeta) => DirectoryWithMeta | undefined
+const walk: Walk = _parts => input => {
+  if (!input) return
   const parts = _parts.filter(Boolean)
   const [head, ...rest] = parts
-  if (parts.length === 0) return children
-  if (parts.length === 1) return children?.find(x => x.name === head)?.children
-  return walk(rest)(children?.find(x => x.name === head)?.children)
+  console.log({ parts })
+  if (parts.length === 0) return input
+  if (parts.length === 1) return input?.children?.find(x => x.name === head)
+  const next = input?.children?.find(x => x.name === head)
+  if (!next) return
+  return walk(rest)(next)
 }
 
 type Meta = Partial<{ title: string }>
@@ -53,9 +59,9 @@ serve({
       case 'root':
       case 'page':
       case 'section':
-        const res = walk(pathname.split('/'))(tree.children)
-        const extracted = await extractMeta(tree)
-        return new Response(JSON.stringify({ res, tree, extracted }, null, 2))
+        const treeWithMeta = await extractMeta(tree)
+        const res = walk(pathname.split('/'))(treeWithMeta)
+        return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
         if (x.size) return new Response(x)
