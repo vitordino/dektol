@@ -23,6 +23,19 @@ const subtree: Subtree = _parts => input => {
   return subtree(rest)(next)
 }
 
+const removeBasePath = (path: string) => path.replace(BASE_PATH + '/', '')
+const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
+  if (!input) return
+  return {
+    ...input,
+    name: removeBasePath(input.name),
+    path: removeBasePath(input.path),
+    // @ts-expect-error
+    children: input?.children?.map(cleanBasePath)
+  }
+}
+
+
 type Meta = Partial<{ title: string }>
 
 const META_FILE_NAMES = ['meta.yaml', 'meta.yml', 'meta.json']
@@ -55,7 +68,7 @@ const extractMeta = async (
 const treeWithMeta = await extractMeta(tree)
 
 serve({
-  port: 3000,
+  port: 3001,
   fetch: async req => {
     const pathname = new URL(req.url).pathname
     const depth = pathname.split('/').filter(x => !!x).length
@@ -64,7 +77,7 @@ serve({
       case 'root':
       case 'page':
       case 'section':
-        const res = subtree(pathname.split('/'))(treeWithMeta)
+        const res = cleanBasePath(subtree(pathname.split('/'))(treeWithMeta))
         return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
