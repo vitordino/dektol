@@ -1,4 +1,5 @@
 import { serve, file } from 'bun'
+import yaml from 'js-yaml'
 import { join } from 'node:path'
 import directoryTree, { DirectoryTree } from 'directory-tree'
 
@@ -26,13 +27,17 @@ const walk: Walk = _parts => input => {
 
 type Meta = Partial<{ title: string }>
 
+const META_FILE_NAMES = ['meta.yaml', 'meta.yml', 'meta.json']
 const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> => {
   try {
-    const metaItem = input?.children?.find(x => x.name === 'meta.json')
+    const metaItem = input?.children?.find(x => META_FILE_NAMES.includes(x.name))
+    const isJson = metaItem?.name.endsWith('.json')
     if (!metaItem) return
     const metaFile = file(metaItem?.path)
     if (!metaFile) return
-    return metaFile.json()
+    if (isJson) return metaFile.json()
+    const text = await metaFile.text()
+    return yaml.load(text) as Meta | undefined
   } catch {
     return
   }
