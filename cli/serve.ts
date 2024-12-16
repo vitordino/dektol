@@ -23,7 +23,7 @@ const subtree: Subtree = _parts => input => {
   return subtree(rest)(next)
 }
 
-const removeBasePath = (path: string) => path.replace(BASE_PATH + '/', '')
+const removeBasePath = (path: string) => path === BASE_PATH ? '' : path.replace(BASE_PATH + '/', '')
 const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input) return
   return {
@@ -34,7 +34,14 @@ const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined
     children: input?.children?.map(cleanBasePath)
   }
 }
-
+const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
+  if (!input?.children?.length) return input
+  return {
+    ...input,
+    // @ts-expect-error
+    children: input?.children?.sort((a,b) => a.name < b.name ? -1 : 1).map(sortChildren)
+  }
+}
 
 type Meta = Partial<{ title: string }>
 
@@ -77,7 +84,7 @@ serve({
       case 'root':
       case 'page':
       case 'section':
-        const res = cleanBasePath(subtree(pathname.split('/'))(treeWithMeta))
+        const res = sortChildren(cleanBasePath(subtree(pathname.split('/'))(treeWithMeta)))
         return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
