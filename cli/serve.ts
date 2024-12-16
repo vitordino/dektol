@@ -18,6 +18,31 @@ const walk: Walk = _parts => children => {
   return walk(rest)(children?.find(x => x.name === head)?.children)
 }
 
+type Meta = Partial<{ title: string }>
+
+const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> => {
+  try {
+    const metaItem = input?.children?.find(x => x.name === 'meta.json')
+    if (!metaItem) return
+    const metaFile = file(metaItem?.path)
+    if (!metaFile) return
+    return metaFile.json()
+  } catch {
+    return
+  }
+}
+
+const extractMeta = async (
+  input: DirectoryTree & { meta?: Meta },
+): Promise<DirectoryTree & { meta?: Meta }> => {
+  const meta = await getMetaContents(input)
+  const extracted = input.children?.length
+    ? await Promise.all(input.children?.map(item => extractMeta(item)))
+    : []
+  const children = extracted?.filter(x => x.name !== 'meta.json')
+  return { ...input, meta, children }
+}
+
 serve({
   port: 3000,
   fetch: async req => {
@@ -29,7 +54,8 @@ serve({
       case 'page':
       case 'section':
         const res = walk(pathname.split('/'))(tree.children)
-        return new Response(JSON.stringify(res, null, 2))
+        const extracted = await extractMeta(tree)
+        return new Response(JSON.stringify({ res, tree, extracted }, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
         if (x.size) return new Response(x)
