@@ -1,4 +1,5 @@
 import { serve, file } from 'bun'
+import sharp from 'sharp'
 import yaml from 'js-yaml'
 import { join, extname } from 'node:path'
 import { imageSize } from 'image-size'
@@ -87,7 +88,7 @@ const treeWithMeta = await extractMeta(tree)
 serve({
   port: 3001,
   fetch: async req => {
-    const pathname = new URL(req.url).pathname
+    const { pathname, searchParams } = new URL(req.url)
     const depth = pathname.split('/').filter(x => !!x).length
     const pathType = PATH_TYPE_BY_DEPTH[depth]
     switch (pathType) {
@@ -98,8 +99,12 @@ serve({
         return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
-        if (x.size) return new Response(x)
-        return new Response('404')
+        if (!x?.size)  return new Response('404')
+        const height = Number.parseInt(searchParams.get('h') || '')
+        if (!Number.isFinite(height)) return new Response(x)
+        const buffer = await x.arrayBuffer()
+        const compressed = await sharp(buffer).resize({height}).jpeg().toBuffer()
+        return new Response(compressed, {headers: {'Content-Type': 'image/jpg'}, status: 200})
     }
     return new Response('404')
   },
