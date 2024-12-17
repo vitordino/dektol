@@ -1,6 +1,4 @@
 ---
-import getAllPageDocuments from 'src/utils/getAllPageDocuments'
-import getPageDocument from 'src/utils/getPageDocument'
 import DefaultLayout from 'src/components/DefaultLayout.astro'
 import type { Props as DefaultLayoutProps } from 'src/components/DefaultLayout.astro'
 import Slice from 'src/components/Slice.astro'
@@ -9,12 +7,13 @@ import HorizontalScroll from 'src/components/HorizontalScroll.astro'
 import HomeItem from 'src/components/HomeItem.astro'
 
 export const getStaticPaths = async () => {
-  const allPageDocuments = await getAllPageDocuments()
+  const allPageDocuments = []
   return allPageDocuments.map(({ uid }) => ({ params: { id: uid } }))
 }
 
-const { data, uid } = await getPageDocument(Astro.params.id || '')
-const homeData = await getHomeDocument()
+// const { data, uid } = await getPageDocument(Astro.params.id || '')
+const { data, uid } = {}
+const homeData = {}
 
 const layoutProps: DefaultLayoutProps = {
   headerTitle: data.title || uid,

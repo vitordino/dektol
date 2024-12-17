@@ -1,8 +1,7 @@
 ---
-import getHomeDocument from 'src/utils/getHomeDocument'
 import DefaultLayout from 'src/components/DefaultLayout.astro'
 
-const { background, foreground } = (await getHomeDocument()) || {}
+const { background, foreground } = {}
 ---
 
 <DefaultLayout background={background || undefined} foreground={foreground || undefined}>

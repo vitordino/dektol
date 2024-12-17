@@ -2,17 +2,15 @@
 import { asHTML } from '@prismicio/helpers'
 import DefaultLayout from 'src/components/DefaultLayout.astro'
 import type { Props as DefaultLayoutProps } from 'src/components/DefaultLayout.astro'
-import getHomeDocument from 'src/utils/getHomeDocument'
-import getAboutDocument from 'src/utils/getAboutDocument'
 
 export const getStaticPaths = async () => {
-  const aboutDocument = await getAboutDocument()
+  const aboutDocument = {}
   if (!aboutDocument?.uid) return []
   return [{ params: { about: aboutDocument?.uid } }]
 }
 
-const aboutDocument = await getAboutDocument()
-const homeData = await getHomeDocument()
+const aboutDocument = {}
+const homeData = {}
 
 const layoutProps: DefaultLayoutProps = {
   headerTitle: aboutDocument?.title || aboutDocument?.meta_title || aboutDocument?.uid,

@@ -2,7 +2,6 @@
 import 'wipe.css'
 import Header from 'src/components/Header.astro'
 import generateCssVariables from 'src/utils/generateCssVariables'
-import getHomeDocument from 'src/utils/getHomeDocument'
 import { AstroSeo } from '@astrolib/seo'
 
 type AstroSeoProps = Parameters<typeof AstroSeo>[0]
@@ -22,7 +21,7 @@ export type Props = {
 const props = Astro.props as Props
 const { headerTitle } = props
 
-const homeDocument = await getHomeDocument()
+const homeDocument: Record<string, unknown> = {}
 
 const background = props.background || homeDocument?.background
 const foreground = props.foreground || homeDocument?.foreground

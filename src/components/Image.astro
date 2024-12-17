@@ -1,11 +1,16 @@
 ---
-import type { ImageFieldImage } from '@prismicio/types'
 import getBase64FromImageUrl from 'src/utils/getBase64FromImageUrl'
 
-export type Props = ImageFieldImage
+export type Props = {
+  path: string,
+  name: string,
+  meta?: { size?: { width?: number; height?: number; } }
+}
 const props = Astro.props as Props
-const { url, dimensions } = props
-const ratio = dimensions ? dimensions.width / dimensions.height : 1
+const { path, meta, name } = props
+// [TODO]: flexible base url
+const url = `http://localhost:3001/${path}`
+const ratio = meta?.size?.width && meta.size.height ? meta?.size?.width / meta?.size?.height : 1
 
 const getFormat = (ratio: number) => {
   if (ratio === 1) return 'square'
@@ -13,7 +18,7 @@ const getFormat = (ratio: number) => {
   return 'portrait'
 }
 
-const src = `${url}&w=1600&q=50`
+const src = `${url}?w=1600&q=50`
 
 const sizes = `
   (min-width: 720px) calc(calc(100vh - 128px) * ${ratio.toFixed(2)}),
@@ -21,18 +26,18 @@ const sizes = `
 `
 
 const srcset = `
-  ${url}&w=400 400w,
-  ${url}&w=600 600w,
-  ${url}&w=800&q=70 800w,
-  ${url}&w=1000&q=70 1000w,
-  ${url}&w=1200&q=60 1200w,
-  ${url}&w=1600&q=50 1600w,
-  ${url}&w=2000&q=40 2000w,
-  ${url}&w=2400&q=40 2400w,
-  ${url}&w=3200&q=30 3200w,
+  ${url}?w=400 400w,
+  ${url}?w=600 600w,
+  ${url}?w=800&q=70 800w,
+  ${url}?w=1000&q=70 1000w,
+  ${url}?w=1200&q=60 1200w,
+  ${url}?w=1600&q=50 1600w,
+  ${url}?w=2000&q=40 2000w,
+  ${url}?w=2400&q=40 2400w,
+  ${url}?w=3200&q=30 3200w,
 `
 
-const filename = decodeURIComponent(new URL(props.url || '').pathname)
+const filename = decodeURIComponent(new URL(url || '').pathname)
   ?.split('_')
   ?.splice(1)
   ?.join(',')
@@ -50,7 +55,7 @@ const hasValidPhotoMeta = getPhotoMetaArray(filename).length >= 7
 
 const photoMeta = getPhotoMetaArray(filename)
 
-const alt = props.alt || hasValidPhotoMeta ? photoMeta.join('\n') : ''
+const alt = name || hasValidPhotoMeta ? photoMeta.join('\n') : ''
 
 const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 ---
@@ -66,7 +71,7 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
       loading='lazy'
       data-loaded='false'
       alt={alt}
-      {...dimensions}
+      {...meta?.size}
       onload='handleImageLoad(this)'
     />
   </div>
