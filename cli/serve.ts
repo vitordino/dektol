@@ -1,12 +1,14 @@
 import { serve, file } from 'bun'
 import yaml from 'js-yaml'
-import { join } from 'node:path'
+import { join, extname } from 'node:path'
+import { imageSize } from 'image-size'
 import directoryTree, { DirectoryTree } from 'directory-tree'
 import { DirectoryWithMeta, Meta } from '../types'
 
 // [TODO]: receive cli arg
 const BASE_PATH = 'input.example'
 const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.heic']
 
 const tree = directoryTree(BASE_PATH, { exclude: /.*\/\./g })
 
@@ -42,6 +44,17 @@ const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined 
   }
 }
 
+const extractImageSize = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
+  if (!input) return
+  // @ts-expect-error
+  if (input?.children?.length) return { ...input, children: input.children?.map(extractImageSize) }
+  const extension = extname(input.name || '')
+  const isImage = extension && IMAGE_EXTENSIONS.includes(extension)
+  if (!isImage) return input
+  const { width, height } = imageSize(input.path)
+  return { ...input, meta: { size: { width, height } } }
+}
+
 const META_FILE_NAMES = ['meta.yaml', 'meta.yml', 'meta.json']
 const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> => {
   try {
@@ -64,7 +77,7 @@ const extractMeta = async (
   const meta = await getMetaContents(input)
   const extracted = input.children?.length
     ? await Promise.all(input.children?.map(item => extractMeta(item)))
-    : []
+    : undefined
   const children = extracted?.filter(x => !META_FILE_NAMES.includes(x.name))
   return { ...input, meta, children }
 }
@@ -81,7 +94,7 @@ serve({
       case 'root':
       case 'page':
       case 'section':
-        const res = sortChildren(cleanBasePath(subtree(pathname.split('/'))(treeWithMeta)))
+        const res = sortChildren(cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))))
         return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
