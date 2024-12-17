@@ -11,9 +11,7 @@ const homeData = { header_links: [] }
 const headerLinks = homeData?.header_links
   ?.map(({ text, link }) => ({
     text,
-    // @ts-expect-error type missing uid
     url: link.uid ? `/${link.uid}` : link.url,
-    // @ts-expect-error type missing uid
     external: !!link.uid,
   }))
   .filter(x => x.text && x.url)

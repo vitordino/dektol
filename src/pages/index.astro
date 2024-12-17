@@ -3,25 +3,19 @@ import { getData } from 'src/utils/getData'
 import DefaultLayout from 'src/components/DefaultLayout.astro'
 import HorizontalScroll from 'src/components/HorizontalScroll.astro'
 import HomeItem from 'src/components/HomeItem.astro'
-// import HomeItem from 'src/components/HomeItem.astro'
 
-// const { background, foreground, body } = (await getHomeDocument()) || {}
-// const pages = await getAllPageDocuments()
-// const getPageData = (pageId: string) => pages.find(({ id }) => id === pageId)
-
-// // @ts-expect-error auto generated types is missing the id
-// const homeItems = body?.map(x => x.items.map(x => getPageData(x.items.id)))
-const {children, meta} = await getData()
-const {background, foreground } = meta || {}
-const homeItems = children.map(x => ({...x, children: x.children.flatMap(x => x.children)}))
+const { children, meta } = await getData()
+const { background, foreground } = meta || {}
+const homeItems = children
+  ?.map(x => ({ ...x, children: x?.children?.flatMap(x => x.children) }))
+  ?.filter(x => !x?.meta?.hidden)
 ---
 
 <DefaultLayout background={background} foreground={foreground}>
   <main class='home'>
-    <pre>{JSON.stringify({meta,homeItems},null,2)}</pre>
-        <HorizontalScroll class='home-items'>
-          {homeItems?.map(x => <HomeItem {...x} />)}
-        </HorizontalScroll>
+    <HorizontalScroll class='home-items'>
+      {homeItems?.map(x => <HomeItem {...x} />)}
+    </HorizontalScroll>
   </main>
 </DefaultLayout>
 

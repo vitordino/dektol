@@ -1,8 +1,9 @@
 ---
-import 'wipe.css'
+import { getData } from 'src/utils/getData'
 import Header from 'src/components/Header.astro'
 import generateCssVariables from 'src/utils/generateCssVariables'
 import { AstroSeo } from '@astrolib/seo'
+import 'wipe.css'
 
 type AstroSeoProps = Parameters<typeof AstroSeo>[0]
 type OpenGraphMedia = NonNullable<
@@ -21,14 +22,14 @@ export type Props = {
 const props = Astro.props as Props
 const { headerTitle } = props
 
-const homeDocument: Record<string, unknown> = {}
+const homeDocument = await getData()
 
 const background = props.background || homeDocument?.background
 const foreground = props.foreground || homeDocument?.foreground
 
 const title = props.metaTitle
-  ? `${props.metaTitle} ⸬ ${homeDocument?.meta_title}`
-  : homeDocument?.meta_title || undefined
+  ? `${props.metaTitle} ⸬ ${homeDocument?.meta?.title}`
+  : homeDocument?.meta?.title || undefined
 
 const seoProps: AstroSeoProps = {
   title,
@@ -36,17 +37,7 @@ const seoProps: AstroSeoProps = {
   openGraph: {
     title,
     description: props.metaDescription || homeDocument?.meta_description || undefined,
-    images: props.metaImage
-      ? [props.metaImage]
-      : homeDocument?.meta_image?.url
-      ? [
-          {
-            url: homeDocument.meta_image.url,
-            alt: homeDocument.meta_image.alt || undefined,
-            ...homeDocument.meta_image.dimensions,
-          },
-        ]
-      : undefined,
+    images: props.metaImage || undefined,
   },
 }
 

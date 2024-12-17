@@ -7,7 +7,7 @@ const { path, name, meta, children } = Astro.props as Props
 
 <a class='home-item' href={`/${path}`}>
   <div class='home-item-images'>
-    {children.map(image => <Image {...image} />)}
+    {children?.map(image => <Image {...image} />)}
   </div>
   <div class='home-item-title'>{meta?.title || name} <slot /></div>
 </a>

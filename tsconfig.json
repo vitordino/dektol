@@ -9,5 +9,5 @@
       "src/*": ["./src/*"]
     }
   },
-  "include": ["./types.ts", "./src/*",]
+  "include": ["./types.ts", "./src/*"]
 }

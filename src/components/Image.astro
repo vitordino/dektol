@@ -2,9 +2,9 @@
 import getBase64FromImageUrl from 'src/utils/getBase64FromImageUrl'
 
 export type Props = {
-  path: string,
-  name: string,
-  meta?: { size?: { width?: number; height?: number; } }
+  path: string
+  name: string
+  meta?: { size?: { width?: number; height?: number } }
 }
 const props = Astro.props as Props
 const { path, meta, name } = props
@@ -18,24 +18,24 @@ const getFormat = (ratio: number) => {
   return 'portrait'
 }
 
-const src = `${url}?w=1600&q=50`
+const src = `${url}?h=1200&q=50`
 
-const sizes = `
-  (min-width: 720px) calc(calc(100vh - 128px) * ${ratio.toFixed(2)}),
-  100vw
-`
+// const sizes = `
+//   (min-width: 720px) calc(calc(100vh - 128px) * ${ratio.toFixed(2)}),
+//   100vw
+// `
 
-const srcset = `
-  ${url}?w=400 400w,
-  ${url}?w=600 600w,
-  ${url}?w=800&q=70 800w,
-  ${url}?w=1000&q=70 1000w,
-  ${url}?w=1200&q=60 1200w,
-  ${url}?w=1600&q=50 1600w,
-  ${url}?w=2000&q=40 2000w,
-  ${url}?w=2400&q=40 2400w,
-  ${url}?w=3200&q=30 3200w,
-`
+// const srcset = `
+//   ${url}?w=400 400w,
+//   ${url}?w=600 600w,
+//   ${url}?w=800&q=70 800w,
+//   ${url}?w=1000&q=70 1000w,
+//   ${url}?w=1200&q=60 1200w,
+//   ${url}?w=1600&q=50 1600w,
+//   ${url}?w=2000&q=40 2000w,
+//   ${url}?w=2400&q=40 2400w,
+//   ${url}?w=3200&q=30 3200w,
+// `
 
 const filename = decodeURIComponent(new URL(url || '').pathname)
   ?.split('_')
@@ -57,7 +57,7 @@ const photoMeta = getPhotoMetaArray(filename)
 
 const alt = name || hasValidPhotoMeta ? photoMeta.join('\n') : ''
 
-const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
+const blurHash = await getBase64FromImageUrl(`${url}?h=16`)
 ---
 
 <div class='image-wrapper' data-format={getFormat(ratio)}>
@@ -66,8 +66,6 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
     <img
       class='image-main'
       src={src}
-      sizes={sizes}
-      srcset={srcset}
       loading='lazy'
       data-loaded='false'
       alt={alt}
@@ -79,16 +77,17 @@ const blurHash = await getBase64FromImageUrl(`${url}&h=16`)
 
 <style is:global>
   .image-wrapper {
-    position: relative;
-    display: block;
     pointer-events: auto;
+  }
+  .image-wrapper-inner {
+    position: relative;
+    overflow: hidden;
   }
 
   .image-blurhash {
     position: absolute;
-    left: 0;
+    inset: 0;
     width: 100%;
-    top: 0;
     height: 100%;
     object-fit: cover;
     image-rendering: pixelated;

@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config'
-// import webmanifest from 'astro-webmanifest'
-// @ts-expect-error for some reason is not getting the path properly
-// import getHomeDocument from './src/utils/getHomeDocument.ts'
+import webmanifest from 'astro-webmanifest'
+import { getData } from './src/utils/getData'
 
 export default defineConfig({
   site: 'https://photo.vitordino.com',
@@ -11,19 +10,19 @@ export default defineConfig({
       name: 'get-meta',
       hooks: {
         'astro:config:setup': async ({ config }) => {
-          // const homeData = await getHomeDocument()
+          const data = await getData()
           config.integrations = [
             ...config.integrations,
-            // webmanifest({
-            //   name: homeData?.meta_title || '',
-            //   icon: 'public/favicon.svg',
-            //   short_name: homeData?.meta_title || '',
-            //   description: homeData?.meta_description || '',
-            //   start_url: '/',
-            //   theme_color: '#fff',
-            //   background_color: '#151718',
-            //   display: 'standalone',
-            // }),
+            webmanifest({
+              name: data?.meta?.title || '',
+              icon: 'public/favicon.svg',
+              short_name: data?.meta?.title || '',
+              description: data?.meta?.description || '',
+              start_url: '/',
+              theme_color: '#fff',
+              background_color: '#151718',
+              display: 'standalone',
+            }),
           ]
         },
       },

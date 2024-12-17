@@ -25,7 +25,8 @@ const subtree: Subtree = _parts => input => {
   return subtree(rest)(next)
 }
 
-const removeBasePath = (path: string) => path === BASE_PATH ? '' : path.replace(BASE_PATH + '/', '')
+const removeBasePath = (path: string) =>
+  path === BASE_PATH ? '' : path.replace(BASE_PATH + '/', '')
 const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input) return
   return {
@@ -33,7 +34,7 @@ const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined
     name: removeBasePath(input.name),
     path: removeBasePath(input.path),
     // @ts-expect-error
-    children: input?.children?.map(cleanBasePath)
+    children: input?.children?.map(cleanBasePath),
   }
 }
 const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
@@ -41,7 +42,7 @@ const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined 
   return {
     ...input,
     // @ts-expect-error
-    children: input?.children?.sort((a,b) => a.name < b.name ? -1 : 1).map(sortChildren)
+    children: input?.children?.sort((a, b) => (a.name < b.name ? -1 : 1)).map(sortChildren),
   }
 }
 
@@ -95,16 +96,24 @@ serve({
       case 'root':
       case 'page':
       case 'section':
-        const res = sortChildren(cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))))
+        const res = sortChildren(
+          cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
+        )
         return new Response(JSON.stringify(res, null, 2))
       case 'file':
         const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
-        if (!x?.size)  return new Response('404')
-        const height = Number.parseInt(searchParams.get('h') || '')
-        if (!Number.isFinite(height)) return new Response(x)
+        if (!x?.size) return new Response('404')
+        const height = Number.parseInt(searchParams.get('h') || '') || undefined
+        const width = Number.parseInt(searchParams.get('w') || '') || undefined
+        const quality = Number.parseInt(searchParams.get('q') || '') || undefined
+        const hasParameters = !!height || !!width || !!quality
+        if (!hasParameters) return new Response(x)
         const buffer = await x.arrayBuffer()
-        const compressed = await sharp(buffer).resize({height}).jpeg().toBuffer()
-        return new Response(compressed, {headers: {'Content-Type': 'image/jpg'}, status: 200})
+        const compressed = await sharp(buffer)
+          .resize({ height, width, withoutEnlargement: true })
+          .jpeg({ quality })
+          .toBuffer()
+        return new Response(compressed, { headers: { 'Content-Type': 'image/jpg' }, status: 200 })
     }
     return new Response('404')
   },
