@@ -2,6 +2,7 @@ import { serve, file } from 'bun'
 import yaml from 'js-yaml'
 import { join } from 'node:path'
 import directoryTree, { DirectoryTree } from 'directory-tree'
+import { DirectoryWithMeta, Meta } from '../types'
 
 // [TODO]: receive cli arg
 const BASE_PATH = 'input.example'
@@ -9,9 +10,7 @@ const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
 
 const tree = directoryTree(BASE_PATH, { exclude: /.*\/\./g })
 
-type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
-
-type Subtree = (parts: string[]) => (input: DirectoryWithMeta) => DirectoryWithMeta | undefined
+type Subtree = (parts: string[]) => (input?: DirectoryWithMeta) => DirectoryWithMeta | undefined
 const subtree: Subtree = _parts => input => {
   if (!input) return
   const parts = _parts.filter(Boolean)
@@ -42,8 +41,6 @@ const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined 
     children: input?.children?.sort((a,b) => a.name < b.name ? -1 : 1).map(sortChildren)
   }
 }
-
-type Meta = Partial<{ title: string }>
 
 const META_FILE_NAMES = ['meta.yaml', 'meta.yml', 'meta.json']
 const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> => {
