@@ -1,7 +1,7 @@
 ---
 import Image from 'src/components/Image.astro'
-import { DirectoryWithMeta } from '../../types'
-export type Props = DirectoryWithMeta
+import type { FileSystemPageSchema } from 'src/types'
+export type Props = FileSystemPageSchema
 const { path, name, meta, children } = Astro.props as Props
 ---
 

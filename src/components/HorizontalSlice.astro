@@ -2,8 +2,8 @@
 import Section from 'src/components/Section.astro'
 import Image from 'src/components/Image.astro'
 import HorizontalScroll from './HorizontalScroll.astro'
-import { DirectoryWithMeta } from '../../types'
-export type Props = DirectoryWithMeta
+import type { FileSystemSectionSchema } from 'src/types'
+export type Props = FileSystemSectionSchema
 const props = Astro.props as Props
 const { meta, children } = props
 ---

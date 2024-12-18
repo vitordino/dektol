@@ -4,7 +4,14 @@ import yaml from 'js-yaml'
 import { join, extname } from 'node:path'
 import { imageSize } from 'image-size'
 import directoryTree, { DirectoryTree } from 'directory-tree'
-import { DirectoryWithMeta, Meta } from '../types'
+
+type Meta = Partial<{
+  title: string
+  size: { width?: number; height?: number }
+  foreground: string
+  background: string
+}>
+type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
 
 // [TODO]: receive cli arg
 const BASE_PATH = 'input.example'
