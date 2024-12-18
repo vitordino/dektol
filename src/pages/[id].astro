@@ -31,7 +31,8 @@ const paginationItems = homeData?.children
 
 <DefaultLayout {...layoutProps}>
   <div class='page-content'>
-    {children?.map(x => <Slice {...x} />)}
+    {/* [TODO]: image order control on api layer */}
+    {children?.map(x => <Slice {...x} children={x.children.reverse()} />)}
   </div>
   <div class='pagination-spacer'></div>
   <div class='pagination-wrapper'>
