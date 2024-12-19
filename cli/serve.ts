@@ -14,7 +14,7 @@ type Meta = Partial<{
 type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
 
 // [TODO]: receive cli arg
-const BASE_PATH = 'input.example'
+const BASE_PATH = 'input'
 const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.heic']
 
