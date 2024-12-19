@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@astrolib/seo": "^0.2.1",
-    "@types/node": "16",
+    "@types/node": "22.10.2",
     "base64-arraybuffer": "^1.0.2",
     "directory-tree": "^3.5.2",
     "image-size": "^1.1.1",
