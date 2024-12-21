@@ -4,9 +4,9 @@
 
 ### system dependencies
 
-| name  | min. version |
-| :---- | -----------: |
-| `bun` |      `1.0.0` |
+| name   | min. version |
+| :----- | -----------: |
+| `node` |     `22.6.0` |
 
 ### setup
 

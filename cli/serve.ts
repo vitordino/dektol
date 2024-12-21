@@ -1,12 +1,11 @@
-import express from 'express'
+import { readFile } from 'node:fs/promises'
+import { createServer } from 'node:http'
+import { join, extname } from 'node:path'
+import directoryTree from 'directory-tree'
+import type { DirectoryTree } from 'directory-tree'
 import sharp from 'sharp'
 import yaml from 'js-yaml'
-import { join, extname } from 'node:path'
 import { imageSize } from 'image-size'
-import directoryTree, { DirectoryTree } from 'directory-tree'
-import { readFileSync } from 'fs'
-
-const app = express()
 
 type Meta = Partial<{
   title: string
@@ -42,6 +41,7 @@ const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined
     ...input,
     name: removeBasePath(input.name),
     path: removeBasePath(input.path),
+    // @ts-expect-error typescript is not able to pull the typing
     children: input?.children?.map(cleanBasePath),
   }
 }
@@ -50,13 +50,20 @@ const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined 
   if (!input?.children?.length) return input
   return {
     ...input,
+    // @ts-expect-error typescript is not able to pull the typing
     children: input?.children?.sort((a, b) => (a.name < b.name ? -1 : 1)).map(sortChildren),
   }
 }
 
 const extractImageSize = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input) return
-  if (input?.children?.length) return { ...input, children: input.children?.map(extractImageSize) }
+  if (input?.children?.length) {
+    return {
+      ...input,
+      // @ts-expect-error typescript is not able to pull the typing
+      children: input.children?.map(extractImageSize),
+    }
+  }
   const extension = extname(input.name || '')
   const isImage = extension && IMAGE_EXTENSIONS.includes(extension)
   if (!isImage) return input
@@ -70,7 +77,7 @@ const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> 
     const metaItem = input?.children?.find(x => META_FILE_NAMES.includes(x.name))
     const isJson = metaItem?.name.endsWith('.json')
     if (!metaItem) return
-    const fileContent = readFileSync(metaItem.path, 'utf-8')
+    const fileContent = await readFile(metaItem.path, 'utf-8')
     if (isJson) return JSON.parse(fileContent)
     return yaml.load(fileContent) as Meta | undefined
   } catch {
@@ -78,9 +85,7 @@ const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> 
   }
 }
 
-const extractMeta = async (
-  input: DirectoryTree & { meta?: Meta },
-): Promise<DirectoryTree & { meta?: Meta }> => {
+const extractMeta = async (input: DirectoryTree): Promise<DirectoryWithMeta> => {
   const meta = await getMetaContents(input)
   const extracted = input.children?.length
     ? await Promise.all(input.children?.map(item => extractMeta(item)))
@@ -92,52 +97,58 @@ const extractMeta = async (
 const initializeServer = async () => {
   const treeWithMeta = await extractMeta(tree)
 
-  app.get('*', async (req, res) => {
-    const pathname = req.path
+  const server = createServer(async (req, res) => {
+    const url = new URL(req.url!, `http://${req.headers.host}`)
+    const pathname = url.pathname
     const depth = pathname.split('/').filter(x => !!x).length
     const pathType = PATH_TYPE_BY_DEPTH[depth]
 
     switch (pathType) {
       case 'root':
       case 'page':
-      case 'section':
+      case 'section': {
         const result = sortChildren(
           cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
         )
-        return res.json(result)
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        return res.end(JSON.stringify(result, null, 2))
+      }
 
-      case 'file':
+      case 'file': {
         const filePath = decodeURIComponent(join(BASE_PATH, pathname))
         try {
-          const height = Number.parseInt(req.query.h as string) || undefined
-          const width = Number.parseInt(req.query.w as string) || undefined
-          const quality = Number.parseInt(req.query.q as string) || undefined
+          const height = Number.parseInt(url.searchParams.get('h') || '') || undefined
+          const width = Number.parseInt(url.searchParams.get('w') || '') || undefined
+          const quality = Number.parseInt(url.searchParams.get('q') || '') || undefined
           const hasParameters = !!height || !!width || !!quality
 
           if (!hasParameters) {
-            return res.sendFile(filePath, { root: process.cwd() })
+            const fileContent = await readFile(filePath)
+            res.writeHead(200, { 'Content-Type': 'image/jpeg' })
+            return res.end(fileContent)
           }
 
-          const imageBuffer = readFileSync(filePath)
+          const imageBuffer = await readFile(filePath)
           const compressed = await sharp(imageBuffer)
             .resize({ height, width, withoutEnlargement: true })
             .jpeg({ quality })
             .toBuffer()
 
-          res.contentType('image/jpeg')
-          return res.send(compressed)
+          res.writeHead(200, { 'Content-Type': 'image/jpeg' })
+          return res.end(compressed)
         } catch (error) {
-          return res.status(404).send('404')
+          res.writeHead(404)
+          return res.end('404')
         }
+      }
 
       default:
-        return res.status(404).send('404')
+        res.writeHead(404)
+        return res.end('404')
     }
   })
 
-  app.listen(3001, () => {
-    console.log('Server running on port 3001')
-  })
+  server.listen(3001, () => console.log('Server running on port 3001'))
 }
 
 initializeServer().catch(console.error)

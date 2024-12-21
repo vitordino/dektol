@@ -36,7 +36,6 @@
     "@commitlint/cli": "^17.1.2",
     "@total-typescript/ts-reset": "^0.6.1",
     "@tsconfig/node14": "^1.0.1",
-    "@types/bun": "^1.1.14",
     "@types/js-yaml": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
