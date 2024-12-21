@@ -1,9 +1,12 @@
-import { serve, file } from 'bun'
+import express from 'express'
 import sharp from 'sharp'
 import yaml from 'js-yaml'
 import { join, extname } from 'node:path'
 import { imageSize } from 'image-size'
 import directoryTree, { DirectoryTree } from 'directory-tree'
+import { readFileSync } from 'fs'
+
+const app = express()
 
 type Meta = Partial<{
   title: string
@@ -13,7 +16,6 @@ type Meta = Partial<{
 }>
 type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
 
-// [TODO]: receive cli arg
 const BASE_PATH = 'input'
 const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.heic']
@@ -40,22 +42,20 @@ const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined
     ...input,
     name: removeBasePath(input.name),
     path: removeBasePath(input.path),
-    // @ts-expect-error
     children: input?.children?.map(cleanBasePath),
   }
 }
+
 const sortChildren = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input?.children?.length) return input
   return {
     ...input,
-    // @ts-expect-error
     children: input?.children?.sort((a, b) => (a.name < b.name ? -1 : 1)).map(sortChildren),
   }
 }
 
 const extractImageSize = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input) return
-  // @ts-expect-error
   if (input?.children?.length) return { ...input, children: input.children?.map(extractImageSize) }
   const extension = extname(input.name || '')
   const isImage = extension && IMAGE_EXTENSIONS.includes(extension)
@@ -70,11 +70,9 @@ const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> 
     const metaItem = input?.children?.find(x => META_FILE_NAMES.includes(x.name))
     const isJson = metaItem?.name.endsWith('.json')
     if (!metaItem) return
-    const metaFile = file(metaItem?.path)
-    if (!metaFile) return
-    if (isJson) return metaFile.json()
-    const text = await metaFile.text()
-    return yaml.load(text) as Meta | undefined
+    const fileContent = readFileSync(metaItem.path, 'utf-8')
+    if (isJson) return JSON.parse(fileContent)
+    return yaml.load(fileContent) as Meta | undefined
   } catch {
     return
   }
@@ -91,37 +89,55 @@ const extractMeta = async (
   return { ...input, meta, children }
 }
 
-const treeWithMeta = await extractMeta(tree)
+const initializeServer = async () => {
+  const treeWithMeta = await extractMeta(tree)
 
-serve({
-  port: 3001,
-  fetch: async req => {
-    const { pathname, searchParams } = new URL(req.url)
+  app.get('*', async (req, res) => {
+    const pathname = req.path
     const depth = pathname.split('/').filter(x => !!x).length
     const pathType = PATH_TYPE_BY_DEPTH[depth]
+
     switch (pathType) {
       case 'root':
       case 'page':
       case 'section':
-        const res = sortChildren(
+        const result = sortChildren(
           cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
         )
-        return new Response(JSON.stringify(res, null, 2))
+        return res.json(result)
+
       case 'file':
-        const x = file(decodeURIComponent(join(BASE_PATH, pathname)))
-        if (!x?.size) return new Response('404')
-        const height = Number.parseInt(searchParams.get('h') || '') || undefined
-        const width = Number.parseInt(searchParams.get('w') || '') || undefined
-        const quality = Number.parseInt(searchParams.get('q') || '') || undefined
-        const hasParameters = !!height || !!width || !!quality
-        if (!hasParameters) return new Response(x)
-        const buffer = await x.arrayBuffer()
-        const compressed = await sharp(buffer)
-          .resize({ height, width, withoutEnlargement: true })
-          .jpeg({ quality })
-          .toBuffer()
-        return new Response(compressed, { headers: { 'Content-Type': 'image/jpg' }, status: 200 })
+        const filePath = decodeURIComponent(join(BASE_PATH, pathname))
+        try {
+          const height = Number.parseInt(req.query.h as string) || undefined
+          const width = Number.parseInt(req.query.w as string) || undefined
+          const quality = Number.parseInt(req.query.q as string) || undefined
+          const hasParameters = !!height || !!width || !!quality
+
+          if (!hasParameters) {
+            return res.sendFile(filePath, { root: process.cwd() })
+          }
+
+          const imageBuffer = readFileSync(filePath)
+          const compressed = await sharp(imageBuffer)
+            .resize({ height, width, withoutEnlargement: true })
+            .jpeg({ quality })
+            .toBuffer()
+
+          res.contentType('image/jpeg')
+          return res.send(compressed)
+        } catch (error) {
+          return res.status(404).send('404')
+        }
+
+      default:
+        return res.status(404).send('404')
     }
-    return new Response('404')
-  },
-})
+  })
+
+  app.listen(3001, () => {
+    console.log('Server running on port 3001')
+  })
+}
+
+initializeServer().catch(console.error)
