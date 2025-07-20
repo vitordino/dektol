@@ -6,13 +6,18 @@ import type { DirectoryTree } from 'directory-tree'
 import sharp from 'sharp'
 import yaml from 'js-yaml'
 import { imageSize } from 'image-size'
+// @ts-expect-error using --experimental-strip-types
+import { SCHEMA_BY_PATH_TYPE } from '../types.ts'
 
-type Meta = Partial<{
+type SiteMeta = Partial<{
   title: string
   size: { width?: number; height?: number }
   foreground: string
   background: string
 }>
+
+type Meta = SiteMeta
+
 type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
 
 const BASE_PATH = 'input'
@@ -34,7 +39,7 @@ const subtree: Subtree = _parts => input => {
 }
 
 const removeBasePath = (path: string) =>
-  path === BASE_PATH ? '' : path.replace(BASE_PATH + '/', '')
+  path === BASE_PATH ? '' : path.replace(`${BASE_PATH}/`, '')
 const cleanBasePath = (input?: DirectoryWithMeta): DirectoryWithMeta | undefined => {
   if (!input) return
   return {
@@ -78,6 +83,7 @@ const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> 
     const isJson = metaItem?.name.endsWith('.json')
     if (!metaItem) return
     const fileContent = await readFile(metaItem.path, 'utf-8')
+    // [todo]: runtime typesafety (eg.: zod)
     if (isJson) return JSON.parse(fileContent)
     return yaml.load(fileContent) as Meta | undefined
   } catch {
@@ -98,7 +104,8 @@ const initializeServer = async () => {
   const treeWithMeta = await extractMeta(tree)
 
   const server = createServer(async (req, res) => {
-    const url = new URL(req.url!, `http://${req.headers.host}`)
+    if (!req.url) return res.writeHead(400)
+    const url = new URL(req.url, `http://${req.headers.host}`)
     const pathname = url.pathname
     const depth = pathname.split('/').filter(x => !!x).length
     const pathType = PATH_TYPE_BY_DEPTH[depth]
@@ -110,8 +117,13 @@ const initializeServer = async () => {
         const result = sortChildren(
           cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
         )
+        const parsed = SCHEMA_BY_PATH_TYPE[pathType].safeParse(result)
+        if (parsed.error || !parsed.data) {
+          res.writeHead(400)
+          return res.end(JSON.stringify(parsed.error, null, 2))
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' })
-        return res.end(JSON.stringify(result, null, 2))
+        return res.end(JSON.stringify(parsed.data, null, 2))
       }
 
       case 'file': {
@@ -136,7 +148,7 @@ const initializeServer = async () => {
 
           res.writeHead(200, { 'Content-Type': 'image/jpeg' })
           return res.end(compressed)
-        } catch (error) {
+        } catch {
           res.writeHead(404)
           return res.end('404')
         }

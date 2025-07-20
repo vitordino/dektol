@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export type PathType = 'image' | 'section' | 'page' | 'root'
+
 export const BaseFileSystemSchema = z.object({ name: z.string(), path: z.string() })
 export type BaseFileSystemSchema = z.infer<typeof BaseFileSystemSchema>
 
@@ -44,3 +46,10 @@ export const FileSystemRootSchema = BaseFileSystemSchema.extend({
     .optional(),
 })
 export type FileSystemRootSchema = z.infer<typeof FileSystemRootSchema>
+
+export const SCHEMA_BY_PATH_TYPE = {
+  image: FileSystemImageSchema,
+  section: FileSystemSectionSchema,
+  page: FileSystemPageSchema,
+  root: FileSystemRootSchema,
+} as const
