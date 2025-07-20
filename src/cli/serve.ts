@@ -104,31 +104,28 @@ const initializeServer = async () => {
   const treeWithMeta = await extractMeta(tree)
 
   const server = createServer(async (req, res) => {
-    if (!req.url) return res.writeHead(400)
-    const url = new URL(req.url, `http://${req.headers.host}`)
-    const pathname = url.pathname
-    const depth = pathname.split('/').filter(x => !!x).length
-    const pathType = PATH_TYPE_BY_DEPTH[depth]
+    try {
+      if (!req.url) return res.writeHead(400)
+      const url = new URL(req.url, `http://${req.headers.host}`)
+      const pathname = url.pathname
+      const depth = pathname.split('/').filter(x => !!x).length
+      const pathType = PATH_TYPE_BY_DEPTH[depth]
 
-    switch (pathType) {
-      case 'root':
-      case 'page':
-      case 'section': {
-        const result = sortChildren(
-          cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
-        )
-        const parsed = SCHEMA_BY_PATH_TYPE[pathType].safeParse(result)
-        if (parsed.error || !parsed.data) {
-          res.writeHead(400)
-          return res.end(JSON.stringify(parsed.error, null, 2))
+      switch (pathType) {
+        case 'root':
+        case 'page':
+        case 'section': {
+          const result = sortChildren(
+            cleanBasePath(extractImageSize(subtree(pathname.split('/'))(treeWithMeta))),
+          )
+          const parsed = SCHEMA_BY_PATH_TYPE[pathType].parse(result)
+          res.writeHead(200, { 'Content-Type': 'application/json' })
+          return res.end(JSON.stringify(parsed, null, 2))
         }
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        return res.end(JSON.stringify(parsed.data, null, 2))
-      }
 
-      case 'file': {
-        const filePath = decodeURIComponent(join(BASE_PATH, pathname))
-        try {
+        case 'file': {
+          const filePath = decodeURIComponent(join(BASE_PATH, pathname))
+
           const height = Number.parseInt(url.searchParams.get('h') || '') || undefined
           const width = Number.parseInt(url.searchParams.get('w') || '') || undefined
           const quality = Number.parseInt(url.searchParams.get('q') || '') || undefined
@@ -148,15 +145,15 @@ const initializeServer = async () => {
 
           res.writeHead(200, { 'Content-Type': 'image/jpeg' })
           return res.end(compressed)
-        } catch {
+        }
+
+        default:
           res.writeHead(404)
           return res.end('404')
-        }
       }
-
-      default:
-        res.writeHead(404)
-        return res.end('404')
+    } catch (error) {
+      res.writeHead(400)
+      return res.end(JSON.stringify(error, null, 2))
     }
   })
 
