@@ -5,9 +5,12 @@ import directoryTree from 'directory-tree'
 import type { DirectoryTree } from 'directory-tree'
 import sharp from 'sharp'
 import yaml from 'js-yaml'
+import type { ZodAny } from 'zod'
 import { imageSize } from 'image-size'
 // @ts-expect-error using --experimental-strip-types
 import { SCHEMA_BY_PATH_TYPE } from '../types.ts'
+// @ts-expect-error using --experimental-strip-types
+import type { PathType } from '../types.ts'
 
 type SiteMeta = Partial<{
   title: string
@@ -21,7 +24,7 @@ type Meta = SiteMeta
 type DirectoryWithMeta = DirectoryTree & { meta?: Meta }
 
 const BASE_PATH = 'input'
-const PATH_TYPE_BY_DEPTH = ['root', 'page', 'section', 'file', 'invalid']
+const PATH_TYPE_BY_DEPTH: PathType[] = ['root', 'page', 'section', 'file', 'invalid']
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.svg', '.gif', '.webp', '.heic']
 
 const tree = directoryTree(BASE_PATH, { exclude: /.*\/\./g })
@@ -77,24 +80,29 @@ const extractImageSize = (input?: DirectoryWithMeta): DirectoryWithMeta | undefi
 }
 
 const META_FILE_NAMES = ['meta.yaml', 'meta.yml', 'meta.json']
-const getMetaContents = async (input: DirectoryTree): Promise<Meta | undefined> => {
+const getMetaContents = async (
+  input: DirectoryTree,
+  depth: number = 0,
+): Promise<Meta | undefined> => {
+  const pathType: PathType = PATH_TYPE_BY_DEPTH[depth]
+  if (!pathType || pathType === 'invalid') return
   try {
+    const schema: ZodAny = SCHEMA_BY_PATH_TYPE[pathType]
     const metaItem = input?.children?.find(x => META_FILE_NAMES.includes(x.name))
     const isJson = metaItem?.name.endsWith('.json')
     if (!metaItem) return
     const fileContent = await readFile(metaItem.path, 'utf-8')
-    // [todo]: runtime typesafety (eg.: zod)
-    if (isJson) return JSON.parse(fileContent)
-    return yaml.load(fileContent) as Meta | undefined
+    if (isJson) return schema.parse(JSON.parse(fileContent))
+    return schema.parse(yaml.load(fileContent)) as Meta | undefined
   } catch {
     return
   }
 }
 
-const extractMeta = async (input: DirectoryTree): Promise<DirectoryWithMeta> => {
-  const meta = await getMetaContents(input)
+const extractMeta = async (input: DirectoryTree, depth: number = 0): Promise<DirectoryWithMeta> => {
+  const meta = await getMetaContents(input, depth)
   const extracted = input.children?.length
-    ? await Promise.all(input.children?.map(item => extractMeta(item)))
+    ? await Promise.all(input.children?.map(item => extractMeta(item, depth + 1)))
     : undefined
   const children = extracted?.filter(x => !META_FILE_NAMES.includes(x.name))
   return { ...input, meta, children }
