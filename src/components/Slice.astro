@@ -1,11 +1,11 @@
 ---
-import HorizontalSlice from '~/components/HorizontalSlice.astro'
-import type { PageDocument } from '~/prismic.generated'
-export type Props = PageDocument['data']['body'][0]
+import HorizontalSlice from 'src/components/HorizontalSlice.astro'
+import type { FileSystemSectionSchema } from 'src/types'
+export type Props = FileSystemSectionSchema
 const props = Astro.props as Props
 ---
 
-{props?.slice_type === 'horizontal' && <HorizontalSlice {...props} />}
+<HorizontalSlice {...props} />
 
 <style is:global>
   .slice {

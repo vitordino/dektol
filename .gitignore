@@ -1,3 +1,7 @@
+# input files
+input
+data.json
+
 # build output
 dist
 

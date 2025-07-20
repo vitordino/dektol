@@ -1,21 +1,21 @@
 ---
-import Section from '~/components/Section.astro'
-import Image from '~/components/Image.astro'
-import type { PageDocumentDataBodyHorizontalSlice } from '~/prismic.generated'
+import Section from 'src/components/Section.astro'
+import Image from 'src/components/Image.astro'
 import HorizontalScroll from './HorizontalScroll.astro'
-export type Props = PageDocumentDataBodyHorizontalSlice
+import type { FileSystemSectionSchema } from 'src/types'
+export type Props = FileSystemSectionSchema
 const props = Astro.props as Props
-const { items, primary } = props
+const { meta, children } = props
 ---
 
 <Section
   class='slice horizontal-slice'
-  foreground={primary.foreground}
-  background={primary.background}
+  foreground={meta?.foreground}
+  background={meta?.background}
   renderBackground={true}
 >
   <HorizontalScroll map>
-    {items.map(({ image }) => (image ? <Image {...image} /> : null))}
+    {children?.map(image => (image ? <Image {...image} /> : null))}
   </HorizontalScroll>
 </Section>
 
@@ -69,12 +69,6 @@ const { items, primary } = props
 
     .horizontal-slice .image-wrapper {
       padding: 64px 0;
-    }
-
-    .horizontal-slice .image-blurhash {
-      top: 64px;
-      bottom: 64px;
-      height: calc(100vh - 128px);
     }
 
     .horizontal-slice .image-main {

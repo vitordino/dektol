@@ -1,20 +1,15 @@
 ---
-import type { PageDocument } from '~/prismic.generated'
-import Image from '~/components/Image.astro'
-export type Props = PageDocument
-const { uid, data } = Astro.props as Props
-
-const images = data.body
-  .flatMap(({ items }) => items)
-  .map(({ image }) => image)
-  .filter(({ url }) => url)
+import Image from 'src/components/Image.astro'
+import type { FileSystemPageSchema } from 'src/types'
+export type Props = FileSystemPageSchema
+const { path, name, meta, children } = Astro.props as Props
 ---
 
-<a class='home-item' href={`/${uid}`}>
+<a class='home-item' href={`/${path}`}>
   <div class='home-item-images'>
-    {images.map(image => <Image {...image} />)}
+    {children?.map(image => <Image {...image} />)}
   </div>
-  <div class='home-item-title'>{data.title || uid} <slot /></div>
+  <div class='home-item-title'>{meta?.title || name} <slot /></div>
 </a>
 <script>
   const HOME_ITEM_INTERVAL = 250
